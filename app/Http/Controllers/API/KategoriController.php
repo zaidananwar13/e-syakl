@@ -11,8 +11,12 @@ use Illuminate\Support\Facades\DB;
 class KategoriController extends Controller
 {
     public function index() {
-        
         header('Content-Type: application/json; charset=utf-8');
+        $message = [
+            'title' => 'E - Syakl | Kategori API',
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
 
         $kategori = Kategori::select('id_kategori', 'judul', 'gambar', 'deskripsi')->get();
 
@@ -39,7 +43,16 @@ class KategoriController extends Controller
             ->get();
 
         }
+        
+        if(count($kategori) > 0) {
+            $message = [
+                'title' => 'E - Syakl | Kategori API',
+                'code'=> 200,
+                'message'=> 'Retrieving data successful!',
+                'data' => $kategori
+            ];
+        }
 
-        return $kategori;
+        return $message;
     }
 }
