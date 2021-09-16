@@ -36,7 +36,7 @@ class KelasController extends Controller
             ->get();
         }
         
-        return json_encode($kelas);
+        return $kelas;
     }
 
     public function filter(Request $request, $keywords = null) {
@@ -91,6 +91,6 @@ class KelasController extends Controller
             ];
         }
         
-        return json_encode($message);
+        return $message;
     }
 }
