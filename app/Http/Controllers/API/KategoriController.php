@@ -37,8 +37,9 @@ class KategoriController extends Controller
             $v->kelas = DB::table('kelas')
             ->where('id_kategori', '=', $v->id_kategori)
             ->get();
+
         }
 
-        return $kategori;
+        return json_encode($kategori);
     }
 }

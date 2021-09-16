@@ -1,0 +1,44 @@
+
+
+        foreach($kelas as $kel) {
+            foreach($filters['rules'] as $f_key => $f_value) {
+                echo $kel[$f_key] . " => $f_value \n";
+                if($kel[$f_key] == $f_value) {
+                    echo "true\n";
+                    $stat = true; 
+                }else {
+                    $stat = false;
+                }
+            }echo "\n";
+            if($stat == true) {
+                echo "true 2";
+                $filtered[]= $kel;
+            }
+        }die;
+
+        
+
+        foreach($kelas as $kel) {
+            $stats = [];
+            
+            foreach($filters['rules'] as $f_key => $f_value) {
+                if($kel[$f_key] == $f_value) {
+                    $stats[]= true;
+                }else {
+                    $stats[]= false;
+                }
+            }
+
+            $pointer = count($stats);
+            foreach($stats as $stat) {
+                if($stat == true) {
+                    $pointer--;
+                }
+            }
+
+            echo "pointer: $pointer" . "\n";
+
+            if($pointer == 0) {
+                $filtered[]= $kel;
+            }
+        }die;

@@ -36,19 +36,20 @@ class KelasController extends Controller
             ->get();
         }
         
-        return $kelas;
+        return json_encode($kelas);
     }
 
     public function filter(Request $request, $keywords = null) {
-        // header('Content-Type: application/json; charset=utf-8');
+        header('Content-Type: application/json; charset=utf-8');
         $message = [
             'code' => 404,
             'message' => 'Not Found'
         ];
         
-        $filters = $request->get('filters');
+        $filters = json_decode($request->getContent(), true);
+        $filters = $filters['filters'];
+
         $filtered = [];
-        $stat = false;
         $kelas = Kelas::all()->toArray();
 
         if($keywords != null) {
@@ -60,14 +61,24 @@ class KelasController extends Controller
         }
 
         foreach($kelas as $kel) {
+            $stats = [];
+
             foreach($filters['rules'] as $f_key => $f_value) {
                 if($kel[$f_key] == $f_value) {
-                    $stat = true; 
+                    $stats[]= true;
                 }else {
-                    $stat = false;
+                    $stats[]= false;
                 }
             }
-            if($stat == true) {
+
+            $pointer = count($stats);
+            foreach($stats as $stat) {
+                if($stat == true) {
+                    $pointer--;
+                }
+            }
+
+            if($pointer == 0) {
                 $filtered[]= $kel;
             }
         }
@@ -80,6 +91,6 @@ class KelasController extends Controller
             ];
         }
         
-        return $message;
+        return json_encode($message);
     }
 }
