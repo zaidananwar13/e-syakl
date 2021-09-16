@@ -25,6 +25,7 @@ class Kelas extends Migration
             $table->string('deskripsi_singkat');
             $table->string('durasi');
             $table->string('deskripsi_kelas');
+            $table->boolean('tipe_kelas');
             $table->timestamps();
             
             $table->foreign('id_kategori')->references('id_kategori')->on('kategori');

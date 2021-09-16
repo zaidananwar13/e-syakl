@@ -30,6 +30,7 @@ class KelasSeeder extends Seeder
                 'deskripsi_singkat' => Str::random(30),
                 'durasi' => random_int(1, 20),
                 'deskripsi_kelas' => Str::random(40),
+                'tipe_kelas' => random_int(0, 1),
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]);

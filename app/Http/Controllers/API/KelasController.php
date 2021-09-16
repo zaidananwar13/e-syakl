@@ -38,4 +38,48 @@ class KelasController extends Controller
         
         return $kelas;
     }
+
+    public function filter(Request $request, $keywords = null) {
+        // header('Content-Type: application/json; charset=utf-8');
+        $message = [
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
+        
+        $filters = $request->get('filters');
+        $filtered = [];
+        $stat = false;
+        $kelas = Kelas::all()->toArray();
+
+        if($keywords != null) {
+            $kelas = Kelas::select('*')
+                ->where('judul', 'like', '%' . $keywords . '%')
+                ->get();
+
+            $kelas = $kelas->toArray();
+        }
+
+        foreach($kelas as $kel) {
+            foreach($filters['rules'] as $f_key => $f_value) {
+                if($kel[$f_key] == $f_value) {
+                    $stat = true; 
+                }else {
+                    $stat = false;
+                }
+            }
+            if($stat == true) {
+                $filtered[]= $kel;
+            }
+        }
+
+        if(count($filtered) > 0) {
+            $message = [
+                'code'=> 200,
+                'message'=> 'Retrieving data successful!',
+                'data' => $filtered
+            ];
+        }
+        
+        return $message;
+    }
 }

@@ -23,3 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('kategori', [KategoriController::class, 'index']);
 Route::get('kelas/{id}', [KelasController::class, 'index']);
+Route::post('kelas/filter', [KelasController::class, 'filter']);
+Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
