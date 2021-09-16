@@ -17,6 +17,11 @@ class KelasController extends Controller
         }
 
         header('Content-Type: application/json; charset=utf-8');
+        $message = [
+            'title' => 'E - Syakl | Kelas API',
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
 
         $kelas = Kelas::select('id_kelas', 'judul', 'gambar', 'deskripsi_singkat', 'deskripsi_kelas')
             ->where('id_kelas', '=', $id)
@@ -35,13 +40,23 @@ class KelasController extends Controller
             ->where('id_reviewer', '=', $kel->id_reviewer)
             ->get();
         }
+
+        if(count($kelas) > 0) {
+            $message = [            'title' => 'E - Syakl | Kategori API',            'title' => 'E - Syakl | Kategori API',
+            'title' => 'E - Syakl | Kelas API',
+                'code'=> 200,
+                'message'=> 'Retrieving data successful!',
+                'data' => $kelas
+            ];
+        }
         
-        return $kelas;
+        return $message;
     }
 
     public function filter(Request $request, $keywords = null) {
         header('Content-Type: application/json; charset=utf-8');
         $message = [
+            'title' => 'E - Syakl | Kelas API',
             'code' => 404,
             'message' => 'Not Found'
         ];
@@ -84,7 +99,8 @@ class KelasController extends Controller
         }
 
         if(count($filtered) > 0) {
-            $message = [
+            $message = [                'title' => 'E - Syakl | Kategori API',                'title' => 'E - Syakl | Kategori API',
+            'title' => 'E - Syakl | Kelas API',
                 'code'=> 200,
                 'message'=> 'Retrieving data successful!',
                 'data' => $filtered
