@@ -40,6 +40,6 @@ class KategoriController extends Controller
 
         }
 
-        return json_encode($kategori);
+        return $kategori;
     }
 }
