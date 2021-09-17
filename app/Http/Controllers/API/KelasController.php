@@ -23,7 +23,7 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
-        $kelas = Kelas::select('id_kelas', 'id_kategori', 'judul', 'gambar', 'deskripsi_singkat', 'deskripsi_kelas')
+        $kelas = Kelas::select('id_kelas', 'id_reviewer', 'judul', 'gambar', 'deskripsi_singkat', 'deskripsi_kelas')
             ->where('id_kelas', '=', $id)
             ->get();
 
