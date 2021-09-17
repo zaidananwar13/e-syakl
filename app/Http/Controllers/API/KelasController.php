@@ -23,7 +23,7 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
-        $kelas = Kelas::select('id_kelas', 'judul', 'gambar', 'deskripsi_singkat', 'deskripsi_kelas')
+        $kelas = Kelas::select('id_kelas', 'id_kategori', 'judul', 'gambar', 'deskripsi_singkat', 'deskripsi_kelas')
             ->where('id_kelas', '=', $id)
             ->get();
 
@@ -33,6 +33,7 @@ class KelasController extends Controller
             ->count();
 
             $kel->silabus = DB::table('kategori_silabus')
+            ->select('id_kategori_silabus', 'judul')
             ->where('id_kelas', '=', $kel->id_kelas)
             ->get();
 
