@@ -38,6 +38,7 @@ class KelasController extends Controller
             ->get();
 
             $kel->tim_reviewer = DB::table('reviewer')
+            ->select('id_kategori_silabus', 'nama', 'foto', 'jabatan', 'portofolio')
             ->where('id_reviewer', '=', $kel->id_reviewer)
             ->get();
         }
