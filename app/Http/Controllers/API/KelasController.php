@@ -66,6 +66,13 @@ class KelasController extends Controller
             ->select('id_kategori_silabus', 'judul')
             ->where('id_kelas', '=', $kel->id_kelas)
             ->get();
+            
+            foreach($kel->silabus as $silabus) {
+                $silabus->sub_silabus = DB::table('sub_kategori_silabus')
+                ->select('id_sub_kategori_silabus', 'judul')
+                ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
+                ->get();
+            }
 
             $kel->tim_reviewer = DB::table('reviewer')
             ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
