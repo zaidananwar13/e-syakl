@@ -32,11 +32,6 @@ class KelasController extends Controller
             ->where('id_kelas', '=', $kel->id_kelas)
             ->count();
 
-            $kel->silabus = DB::table('kategori_silabus')
-            ->select('id_kategori_silabus', 'judul')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->get();
-
             $komentar = DB::table('kelas_user')
             ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
             ->where('id_kelas', '=', $kel->id_kelas)
@@ -65,6 +60,11 @@ class KelasController extends Controller
 
             $kel->rating = $rating /= count($ratings);
             $kel->komentar = $komentar;
+
+            $kel->silabus = DB::table('kategori_silabus')
+            ->select('id_kategori_silabus', 'judul')
+            ->where('id_kelas', '=', $kel->id_kelas)
+            ->get();
 
             $kel->tim_reviewer = DB::table('reviewer')
             ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
