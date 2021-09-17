@@ -87,6 +87,7 @@ class KelasController extends Controller
                 'deskripsi_kelas' => 'required',
             ]);
 
+            header('Content-Type: application/json; charset=utf-8');
             $input = $request->all();
 
             if ($image = $request->file('gambar')) {

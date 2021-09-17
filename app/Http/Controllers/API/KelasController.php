@@ -37,6 +37,35 @@ class KelasController extends Controller
             ->where('id_kelas', '=', $kel->id_kelas)
             ->get();
 
+            $komentar = DB::table('kelas_user')
+            ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
+            ->where('id_kelas', '=', $kel->id_kelas)
+            ->get();
+
+            
+            foreach($komentar as $kom) {
+                $nama_komentar = DB::table('user')
+                ->select('username')
+                ->where('id_user', '=', $kom->id_user)
+                ->first();
+    
+                $kom->nama = $nama_komentar->username;
+            }
+
+            $ratings = [];
+            $rating = 0;
+            
+            foreach($komentar as $kom) {
+                $rating = array_push($ratings, $kom->point_review);
+            }
+            
+            foreach($ratings as $rat) {
+                $rating += $rat;
+            }
+
+            $kel->rating = $rating /= count($ratings);
+            $kel->komentar = $komentar;
+
             $kel->tim_reviewer = DB::table('reviewer')
             ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
             ->where('id_reviewer', '=', $kel->id_reviewer)
