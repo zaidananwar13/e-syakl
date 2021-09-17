@@ -51,14 +51,15 @@ class KelasController extends Controller
             $rating = 0;
             
             foreach($komentar as $kom) {
-                $rating = array_push($ratings, $kom->point_review);
+                $ratings[]= $kom->point_review;
             }
             
             foreach($ratings as $rat) {
                 $rating += $rat;
             }
 
-            $kel->rating = $rating /= count($ratings);
+
+            $kel->rating = (float) number_format($rating /= count($ratings), 2);
             $kel->komentar = $komentar;
 
             $kel->silabus = DB::table('kategori_silabus')
