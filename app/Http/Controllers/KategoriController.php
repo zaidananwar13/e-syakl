@@ -149,7 +149,7 @@ class KategoriController extends Controller
         $kategori = Kategori::find($id);
         $data['kategori'] = $kategori;
         $kategori->delete();
-        return redirect('/kategori') > with('success', 'Kategori Berhasil Dihapus.');
+        return redirect('/kategori')->with('success', 'Kategori Berhasil Dihapus.');
     }
 
     /**
