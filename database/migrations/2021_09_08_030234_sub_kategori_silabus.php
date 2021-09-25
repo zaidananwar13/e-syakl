@@ -18,6 +18,7 @@ class SubKategoriSilabus extends Migration
             $table->increments('id_sub_kategori_silabus');
             $table->unsignedInteger('id_kategori_silabus');
             $table->string('judul');
+            $table->text('konten');
             $table->timestamps();
             
             $table->foreign('id_kategori_silabus')->references('id_kategori_silabus')->on('kategori_silabus');

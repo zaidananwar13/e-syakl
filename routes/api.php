@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\KategoriController;
 use App\Http\Controllers\API\KelasController;
+use App\Http\Controllers\API\SilabusController;
+use App\Http\Controllers\API\UserController;
 use Facade\FlareClient\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,11 +19,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+// Route::middleware('auth:api')->get('/user', [UserController::class, 'index']);
+// Route::get('/user', [UserController::class, 'index']);
 
 Route::get('kategori', [KategoriController::class, 'index']);
 Route::get('kelas/{id}', [KelasController::class, 'index']);
+Route::get('getusertoken', [UserController::class, 'index']);
+
 Route::post('kelas/filter', [KelasController::class, 'filter']);
 Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
+
+// Route::middleware('checkapitoken')->get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
+
+Route::middleware(['checkapitoken'])->group(function () {
+    Route::get('/kategori-silabus/{id_kelas}', [SilabusController::class, 'index']);
+    Route::get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
+});

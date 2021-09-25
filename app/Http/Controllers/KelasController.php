@@ -89,6 +89,8 @@ class KelasController extends Controller
 
             header('Content-Type: application/json; charset=utf-8');
             $input = $request->all();
+            $input['tipe_kelas'] = false;
+
 
             if ($image = $request->file('gambar')) {
                 $destinationPath = 'image/';
@@ -96,6 +98,8 @@ class KelasController extends Controller
                 $image->move($destinationPath, $profileImage);
                 $input['gambar'] = "$profileImage";
             }
+
+            
             Kelas::create($input);
             return redirect('/kelas')->with('success', 'Kelas Berhasil Ditambahkan.');
         }
