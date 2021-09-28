@@ -68,6 +68,7 @@ class Sub_Kategori_SilabusController extends Controller
             ]);
 
             $input = $request->all();
+            $input['konten'] = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad vitae itaque molestias magnam ea nam animi quaerat ullam veritatis et ut fugiat asperiores facere nisi, dolorem unde? Quo, eum consequuntur?';
 
             Sub_Kategori_Silabus::create($input);
             return redirect('/sub_kategori_silabus')->with('success', 'Sub Kategori Silabus Berhasil Ditambahkan.');

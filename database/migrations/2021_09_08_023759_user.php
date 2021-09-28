@@ -18,6 +18,11 @@ class User extends Migration
             $table->increments('id_user');
             $table->string('username');
             $table->string('password');
+            $table->string('api_token')
+                ->after('password')
+                ->unique()
+                ->nullable()
+                ->default(null);
             $table->timestamps();
         });
     }
