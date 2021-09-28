@@ -26,8 +26,8 @@ class SilabusController extends Controller
             $k_silabus->sub_kategori_silabus = Sub_Kategori_Silabus::select('id_sub_kategori_silabus', 'id_kategori_silabus', 'judul', 'konten')
                 ->where('id_kategori_silabus', $k_silabus->id_kategori_silabus)->get();
         }
-        
-        if($kategori_silabus != null) {
+
+        if(count($kategori_silabus) > 0) {
             $message = [
                 'title' => 'E - Syakl | Silabus API',
                 'code'=> 200,

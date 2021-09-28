@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class LoginController extends Controller
@@ -67,6 +68,7 @@ class LoginController extends Controller
             $data =  new User();
             $data->username = $request->username;
             $data->password = bcrypt($request->password);
+            $data->api_token = hash('sha256', Str::random(60));
             $data->save();
             return redirect('login')->with('alert-success', 'Kamu berhasil Register');
         }
