@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/user', [UserController::class, 'index']);
 
 Route::get('kategori', [KategoriController::class, 'index']);
+Route::get('kelas', [KelasController::class, 'kelas']);
 Route::get('kelas/{id}', [KelasController::class, 'index']);
 Route::get('getusertoken', [UserController::class, 'index']);
 
