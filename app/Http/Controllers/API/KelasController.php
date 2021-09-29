@@ -92,6 +92,82 @@ class KelasController extends Controller
         return $message;
     }
 
+    public function kelas() {
+
+        header('Content-Type: application/json; charset=utf-8');
+        $message = [
+            'title' => 'E - Syakl | Kelas API',
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
+
+        $kelas = Kelas::select('id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
+            ->get();
+
+        foreach($kelas as $kel) {
+            $kel->jumlah_user = DB::table('kelas_user')
+            ->where('id_kelas', '=', $kel->id_kelas)
+            ->count();
+
+            $komentar = DB::table('kelas_user')
+            ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
+            ->where('id_kelas', '=', $kel->id_kelas)
+            ->get();
+
+            
+            foreach($komentar as $kom) {
+                $nama_komentar = DB::table('user')
+                ->select('username')
+                ->where('id_user', '=', $kom->id_user)
+                ->first();
+    
+                $kom->nama = $nama_komentar->username;
+            }
+
+            $ratings = [];
+            $rating = 0;
+            
+            foreach($komentar as $kom) {
+                $ratings[]= $kom->point_review;
+            }
+            
+            foreach($ratings as $rat) {
+                $rating += $rat;
+            }
+
+            $kel->rating = (float) number_format($rating /= ((count($ratings) == 0) ? 1 : count($ratings)), 2);
+            $kel->komentar = $komentar;
+
+            $kel->silabus = DB::table('kategori_silabus')
+            ->select('id_kategori_silabus', 'judul')
+            ->where('id_kelas', '=', $kel->id_kelas)
+            ->get();
+            
+            foreach($kel->silabus as $silabus) {
+                $silabus->sub_silabus = DB::table('sub_kategori_silabus')
+                ->select('id_sub_kategori_silabus', 'judul')
+                ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
+                ->get();
+            }
+
+            $kel->tim_reviewer = DB::table('reviewer')
+            ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
+            ->where('id_reviewer', '=', $kel->id_reviewer)
+            ->get();
+        }
+
+        if(count($kelas) > 0) {
+            $message = [            'title' => 'E - Syakl | Kategori API',            'title' => 'E - Syakl | Kategori API',
+            'title' => 'E - Syakl | Kelas API',
+                'code'=> 200,
+                'message'=> 'Retrieving data successful!',
+                'data' => $kelas
+            ];
+        }
+        
+        return $message;
+    }
+
     public function filter(Request $request, $keywords = null) {
         header('Content-Type: application/json; charset=utf-8');
         $message = [
