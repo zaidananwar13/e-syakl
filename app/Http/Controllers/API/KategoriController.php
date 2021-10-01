@@ -12,6 +12,7 @@ class KategoriController extends Controller
 {
     public function index() {
         header('Content-Type: application/json; charset=utf-8');
+
         $message = [
             'title' => 'E - Syakl | Kategori API',
             'code' => 404,

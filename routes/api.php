@@ -39,4 +39,6 @@ Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
 Route::middleware(['checkapitoken'])->group(function () {
     Route::get('/kategori-silabus/{id_kelas}', [SilabusController::class, 'index']);
     Route::get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
+    
+    Route::post('/silabus/auth', [SilabusController::class, 'auth']);
 });
