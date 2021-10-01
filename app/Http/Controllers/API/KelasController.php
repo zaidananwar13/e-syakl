@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 use App\Models\Kelas;
@@ -101,10 +102,18 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
-        $kelas = Kelas::select('id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
+        $kelas = Kelas::select('id_kategori', 'id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
             ->get();
 
         foreach($kelas as $kel) {
+            $kategori = Kategori::select('judul')
+                ->where('id_kategori', $kel->id_kategori)
+                ->first()
+                ->toArray();
+
+            $kel->kategori = $kategori['judul'];
+            unset($kel->id_kategori);
+
             $kel->jumlah_user = DB::table('kelas_user')
             ->where('id_kelas', '=', $kel->id_kelas)
             ->count();
