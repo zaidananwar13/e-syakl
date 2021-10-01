@@ -233,6 +233,22 @@
         });
     </script>
     @yield('js')
+
+    
+    <script type="text/javascript" src="{{ asset('js/ckfinder/ckfinder.js') }}"></script>
+    <script>CKFinder.config( { connectorPath: '/ckfinder/connector' } );</script>
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+    <script>
+    var konten = document.getElementById("konten");
+        CKEDITOR
+    let editor = CKEDITOR;
+    CKFinder.setupCKEditor( editor );
+
+    editor.replace(konten,{
+            language:'en-gb'
+        });
+    editor.editorconfig.allowedContent = true;
+    </script>
 </body>
 
 </html>

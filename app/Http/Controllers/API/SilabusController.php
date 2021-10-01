@@ -44,7 +44,7 @@ class SilabusController extends Controller
 
     public function silabus($id)
     {
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
 
         $secureKey = Help::checkSilabusAccessUser(1, 1, 1);
         $message = [
@@ -74,6 +74,8 @@ class SilabusController extends Controller
             }
 
         }
+
+        // echo $message['data']->konten; die;
 
         return $message;
     }
