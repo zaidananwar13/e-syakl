@@ -2,6 +2,7 @@
 @section('judul', 'Form Sub Kategori Silabus')
 @section('content')
 @if ($errors->any())
+
 <div class="alert alert-danger">
     <strong>Ups!</strong> Ada yang salah dengan isian mu.<br><br>
     <ul>
@@ -11,6 +12,7 @@
     </ul>
 </div>
 @endif
+
 <form role="form" action="{{($action!='sub_kategori_silabus.store') ? url($action): route($action) }}" method="POST">
     {{ csrf_field() }}
     <input type="hidden" name="id_sub_kategori_silabus" value="{{ ($action!='sub_kategori_silabus.store') ? $sub_kategori_silabus->id_sub_kategori_silabus : '' }}">
@@ -27,6 +29,12 @@
         <div class="form-group">
             <label for="judul">Judul</label>
             <input type="text" class="form-control" name="judul" value="{{ ($action!='sub_kategori_silabus.store') ? $sub_kategori_silabus->judul : '' }}" placeholder="Judul">
+        </div>
+        
+        <div class="form-group">
+            <label for="konten">Konten</label>
+            
+            <textarea class="form-control" name="konten" id="konten">{{ ($action!='sub_kategori_silabus.store') ? $sub_kategori_silabus->konten : '' }}</textarea>
         </div>
 
 
