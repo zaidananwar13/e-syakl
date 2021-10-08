@@ -66,9 +66,10 @@ class SilabusController extends Controller
 
             return $message;
         }
+        
+        $secureKey = $secureKey[0];
 
         if($secureKey['id_sub_kategori_silabus'] == $id) {
-            $secureKey = $secureKey[0];
             $silabus = Sub_Kategori_Silabus::select('id_sub_kategori_silabus', 'id_kategori_silabus', 'judul', 'konten')
                 ->where('id_sub_kategori_silabus', $id)->first();
             
