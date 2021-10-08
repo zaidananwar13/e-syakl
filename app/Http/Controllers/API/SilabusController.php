@@ -88,7 +88,77 @@ class SilabusController extends Controller
         return $message;
     }
 
-    public function auth(Request $request) {
+    public function authKategori(Request $request) {
+        echo "still demo version"; die;
+
+        $req = $request->all();
+        $message = [
+            'title' => 'E - Syakl | Silabus Auth API',
+            'code' => 401,
+            'message' => 'Unauthorized'
+        ];
+
+        try {
+            
+            $user = User::select('id_user')
+                ->where('api_token', $req['api_token'])
+                ->first();
+
+            if($user != null) {
+                $user = $user->toArray();
+                $userSilabus = Help::checkSilabusAccessUser($user['id_user'], $req['x-key']);
+
+                if($userSilabus == null) {
+                    $message['code'] = 409;
+                    $message['message'] = 'Unauthorized register!';
+                }else {
+                    if($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
+                        $silabus = new SilabusChecker();
+                        $silabus->id_user = $user['id_user'];
+                        $silabus->id_kategori_silabus = $req['x-key'];
+                        $silabus->id_sub_kategori_silabus = $req['y-key'];
+                        $silabus->save();
+        
+                        $message['code'] = 200;
+                        $message['message'] = 'Auth register success!';
+                    }else {
+                        $message['code'] = 409;
+                        $message['message'] = 'Already registered';
+                    }
+                }
+
+            }
+        }catch (Exception $e) {
+            $error_handler = [
+                "23503" => "Foreign key violates",
+                "23505" => "Duplicate key"
+            ];
+            $data = json_encode($e);
+            $data = json_decode($data);
+            
+            $message['status'] = $error_handler[$data->errorInfo[0]];
+            $message['code'] = 409;
+            $message['message'] = 'Already registered';
+
+            switch($message['status']) {
+                case "Foreign key violates":
+                    $message['message'] = 'Illegal access detected ';
+                    
+                    break;
+                case "Duplicate key":
+                    $message['message'] = 'Already registered';
+                    
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        return $message;
+    }
+
+    public function authSubKategori(Request $request) {
         $req = $request->all();
         $message = [
             'title' => 'E - Syakl | Silabus Auth API',
