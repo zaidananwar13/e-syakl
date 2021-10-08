@@ -16,15 +16,32 @@ class KategoriSeeder extends Seeder
      */
     public function run()
     {
-        //
-        for($i = 0; $i < 10; $i++) {
-            DB::table('kategori')->insert([
-                'judul' => Str::random(10),
-                'gambar' => Str::random(10).'.jpg',
-                'deskripsi' => Str::random(2) . ". Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+        $kategori = [
+            [
+                'judul' => 'Nahwu',
+                'gambar' => 'nahwu.jpg',
+                'deskripsi' => 'Kategori untuk pembelajaran nahwu',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]);
+            ],
+            [
+                'judul' => 'Sorof',
+                'gambar' => 'sorof.jpg',
+                'deskripsi' => 'Kategori untuk pembelajaran sorof',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'judul' => 'Kaligrafi',
+                'gambar' => 'kaligrafi.jpg',
+                'deskripsi' => 'Kategori untuk pembelajaran kaligrafi',
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]
+        ];
+
+        foreach($kategori as $k) {
+            DB::table('kategori')->insert($k);
         }
     }
 }
