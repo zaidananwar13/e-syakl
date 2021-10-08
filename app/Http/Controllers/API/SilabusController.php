@@ -8,6 +8,7 @@ use App\Models\Kategori_Silabus;
 use App\Models\SilabusChecker;
 use App\Models\Sub_Kategori_Silabus;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 
 use function Ramsey\Uuid\v1;
@@ -81,7 +82,7 @@ class SilabusController extends Controller
     }
 
     public function auth(Request $request) {
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         
         $req = $request->all();
         $message = [
@@ -90,21 +91,47 @@ class SilabusController extends Controller
             'message' => 'Unauthorized'
         ];
 
-        $user = User::select('id_user')
-            ->where('api_token', $req['api_token'])
-            ->first();
+        try {
+            
+            $user = User::select('id_user')
+                ->where('api_token', $req['api_token'])
+                ->first();
 
-        if($user != null) {
-            $user = $user->toArray();
+            if($user != null) {
+                $user = $user->toArray();
 
-            $silabus = new SilabusChecker();
-            $silabus->id_user = $user['id_user'];
-            $silabus->id_kategori_silabus = $req['id_kategori_silabus'];
-            $silabus->id_sub_kategori_silabus = $req['id_sub_kategori_silabus'];
-            $silabus->save();
+                $silabus = new SilabusChecker();
+                $silabus->id_user = $user['id_user'];
+                $silabus->id_kategori_silabus = $req['x-key'];
+                $silabus->id_sub_kategori_silabus = $req['y-key'];
+                $silabus->save();
 
-            $message['code'] = 200;
-            $message['message'] = 'Auth register success!';
+                $message['code'] = 200;
+                $message['message'] = 'Auth register success!';
+            }
+        }catch (Exception $e) {
+            $code = [];
+
+            foreach($e as $items) {
+                foreach($items as $item) {
+                    $code[]= $item;
+                    break;
+                }
+            }
+            $code = (int) $code[0];
+
+            $error_handler = [
+                "23503" => "Foreign key violates",
+                "23505" => "Duplicate key"
+            ];
+
+            $data = json_encode($e);
+            $data = json_decode($data);
+            
+            $message['status'] = $error_handler[$data->errorInfo[0]];
+            $message['code'] = 409;
+            $message['message'] = 'Already registered';
+
         }
 
         return $message;
