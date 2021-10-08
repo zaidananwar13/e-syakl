@@ -20,7 +20,7 @@ class SilabusCheckerSeeder extends Seeder
 
         foreach($users as $user) {
             DB::table('silabus_checker')->insert([
-                'id_user' => $user->id_user,
+                'id_user' => $user['id_user'],
                 'id_kategori_silabus' => 1,
                 'id_sub_kategori_silabus' => 1,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

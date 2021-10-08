@@ -47,6 +47,11 @@ class SilabusController extends Controller
     {
         header('Content-Type: application/json; charset=utf-8');
 
+        
+        $users = User::select('id_user')->get()->toArray();
+
+        var_dump($users); die;
+
         $user = User::select('id_user')
             ->where('api_token', $request->api_token)
             ->firstOrFail()
