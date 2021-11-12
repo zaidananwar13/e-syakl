@@ -102,6 +102,8 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
+        var_dump(session()->all()); die;
+
         $kelas = Kelas::select('id_kategori', 'id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
             ->get();
 
