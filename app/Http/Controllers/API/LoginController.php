@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -33,9 +34,9 @@ class LoginController extends Controller
 
         $existingUser = User::where('email', $user->email)->first();
 
-        $existingUser = $existingUser->toArray();
-
         if($existingUser) {
+            $existingUser = $existingUser->toArray();
+
             auth()->attempt($existingUser);
             Help::setCookie('ssid', Hash::make($existingUser['name']));
         
@@ -45,8 +46,11 @@ class LoginController extends Controller
             $newUser->email           = $user->email;
             $newUser->google_id       = $user->id;
             $newUser->avatar          = $user->avatar;
+            $newUser->api_token       = hash('sha256', Str::random(60));
             $newUser->avatar_original = $user->avatar_original;
             $newUser->save();
+
+            $newUser = $newUser->toArray();
 
             auth()->attempt($newUser);
         }

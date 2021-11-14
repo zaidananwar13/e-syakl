@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\SilabusChecker;
+use App\Models\KelasChecker;
 
 class Helper {
   public static function setCookie($key, $val){
@@ -36,6 +37,20 @@ class Helper {
         ->orderBy('id_silabus_checker', 'desc')
         ->first();
     }
+
+    if($result != null) $result = $result->toArray();
+    
+    return $result;
+  }
+  
+  public static function checkKelasAccessUser($id_user, $id_kelas) { 
+    $result = KelasChecker::select('id_user', 'id_kelas')
+    ->where([
+      'id_user' => $id_user,
+      'id_kelas' => $id_kelas,
+    ])
+    ->orderBy('id_kelas_checker', 'desc')
+    ->first();
 
     if($result != null) $result = $result->toArray();
     
