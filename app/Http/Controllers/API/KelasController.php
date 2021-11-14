@@ -44,11 +44,11 @@ class KelasController extends Controller
             
             foreach($komentar as $kom) {
                 $nama_komentar = DB::table('user')
-                ->select('username')
+                ->select('name')
                 ->where('id_user', '=', $kom->id_user)
                 ->first();
     
-                $kom->nama = $nama_komentar->username;
+                $kom->nama = $nama_komentar->name;
             }
 
             $ratings = [];
@@ -129,11 +129,11 @@ class KelasController extends Controller
             
             foreach($komentar as $kom) {
                 $nama_komentar = DB::table('user')
-                ->select('username')
+                ->select('name')
                 ->where('id_user', '=', $kom->id_user)
                 ->first();
     
-                $kom->nama = $nama_komentar->username;
+                $kom->nama = $nama_komentar->name;
             }
 
             $ratings = [];
