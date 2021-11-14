@@ -11,7 +11,7 @@ class Sub_Kategori_Silabus extends Model
     protected $table = 'sub_kategori_silabus';
     protected $primaryKey = 'id_sub_kategori_silabus';
     protected $fillable = [
-        'id_kategori_silabus', 'judul', 'konten'
+        'id_kategori_silabus', 'judul', 'deskripsi', 'konten'
     ];
     public $timestamps = false;
 }
