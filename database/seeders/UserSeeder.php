@@ -30,7 +30,9 @@ class UserSeeder extends Seeder
         $user = 'nocty';
 
         DB::table('user')->insert([
-            'username' => $user,
+            'name' => $user,
+            'google_id' => 'default',
+            'email' => 'default',
             'password' => Hash::make($user),
             'api_token' => hash('sha256', Str::random(60)),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
