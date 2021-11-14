@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helper as Help;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
+use App\Models\User;
+use App\Models\KelasChecker;
 use Illuminate\Http\Request;
 
 use App\Models\Kelas;
@@ -231,6 +234,68 @@ class KelasController extends Controller
             ];
         }
         
+        return $message;
+    }
+
+    public function authKelas(Request $request) {
+        $req = $request->all();
+        $message = [
+            'title' => 'E - Syakl | Silabus Auth API',
+            'code' => 401,
+            'message' => 'Unauthorized'
+        ];
+
+        try {
+            
+            $user = User::select('id_user')
+                ->where('api_token', $req['api_token'])
+                ->first();
+
+            if($user != null) {
+                $user = $user->toArray();
+                $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['z-key']);
+
+                if($userKelas == null) {
+                    $kelasChecker = new KelasChecker();
+                    $kelasChecker->id_user = $user['id_user'];
+                    $kelasChecker->id_kelas = $req['z-key'];
+                    $kelasChecker->save();
+    
+                    $message['code'] = 200;
+                    $message['message'] = 'Class register success!';
+                }else {
+                    $message['code'] = 409;
+                    $message['message'] = 'Already registered';
+                }
+
+            }
+        }catch (Exception $e) {
+            $error_handler = [
+                "23503" => "Foreign key violates",
+                "23505" => "Duplicate key"
+            ];
+            $data = json_encode($e);
+            $data = json_decode($data);
+            
+            $message['status'] = $error_handler[$data->errorInfo[0]];
+            $message['code'] = 409;
+            $message['message'] = 'Already registered';
+
+            switch($message['status']) {
+                case "Foreign key violates":
+                    $message['message'] = 'Illegal access detected ';
+                    
+                    break;
+                case "Duplicate key":
+                    $message['message'] = 'Already registered';
+                    
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
         return $message;
     }
 }

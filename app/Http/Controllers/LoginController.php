@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\User;
+use App\Models\Admin;
 
 class LoginController extends Controller
 {
@@ -24,7 +24,7 @@ class LoginController extends Controller
         $username = $request->username;
         $password = $request->password;
 
-        $data = User::where('username', $username)->first();
+        $data = Admin::where('username', $username)->first();
         if ($data) {
             if (Hash::check($password, $data->password)) {
                 Session::put('username', $data->username);
@@ -58,14 +58,14 @@ class LoginController extends Controller
             'agreeTerms' => 'checked'
         ]);
 
-        $data = User::where('username', $request->username)->first();
+        $data = Admin::where('username', $request->username)->first();
         if ($data) {
             return redirect('register')->with('alert', 'Username sudah terdaftar');
         } elseif ($request->password != $request->repassword) {
             return redirect('register')->with('alert', 'Password harus diisi sama');
         } else {
 
-            $data =  new User();
+            $data =  new Admin();
             $data->username = $request->username;
             $data->password = bcrypt($request->password);
             $data->api_token = hash('sha256', Str::random(60));

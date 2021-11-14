@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class User extends Migration
+class Admin extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,10 @@ class User extends Migration
     public function up()
     {
         //
-        Schema::create('user', function (Blueprint $table) {
-            $table->increments('id_user');
-            $table->string('name');
-            $table->string('google_id');
-            $table->string('email')->unique();
-            $table->string('password')->nullable();
-            $table->string('avatar')->nullable();
-            $table->string('avatar_original')->nullable();
-            $table->rememberToken();
+        Schema::create('admin', function (Blueprint $table) {
+            $table->increments('id_admin');
+            $table->string('username');
+            $table->string('password');
             $table->string('api_token')
                 ->after('password')
                 ->unique()

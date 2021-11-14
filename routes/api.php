@@ -4,8 +4,10 @@ use App\Http\Controllers\API\KategoriController;
 use App\Http\Controllers\API\KelasController;
 use App\Http\Controllers\API\SilabusController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\LoginController;
 use Facade\FlareClient\Api;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,6 +42,13 @@ Route::middleware(['checkapitoken'])->group(function () {
     Route::get('/kategori-silabus/{id_kelas}', [SilabusController::class, 'index']);
     Route::get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
     
+    Route::post('/kelas/auth', [KelasController::class, 'authKelas']);
     Route::post('/silabus/auth/kategori', [SilabusController::class, 'authKategori']);
     Route::post('/silabus/auth/sub-kategori', [SilabusController::class, 'authSubKategori']);
+});
+
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/auth/redirect', [LoginController::class, 'redirectToProvider']);
+    Route::get('/auth/callback', [LoginController::class, 'handleProviderCallback']);
 });
