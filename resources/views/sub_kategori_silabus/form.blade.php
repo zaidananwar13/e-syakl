@@ -32,6 +32,12 @@
         </div>
         
         <div class="form-group">
+            <label for="deskripsi">Deskripsi</label>
+            
+            <input class="form-control" name="deskripsi" id="deskripsi" value="{{ ($action!='sub_kategori_silabus.store') ? $sub_kategori_silabus->deskripsi : '' }}">
+        </div>
+        
+        <div class="form-group">
             <label for="konten">Konten</label>
             
             <textarea class="form-control" name="konten" id="konten">{{ ($action!='sub_kategori_silabus.store') ? $sub_kategori_silabus->konten : '' }}</textarea>

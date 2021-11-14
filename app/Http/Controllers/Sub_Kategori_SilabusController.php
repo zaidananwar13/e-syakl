@@ -65,6 +65,7 @@ class Sub_Kategori_SilabusController extends Controller
             $request->validate([
                 'id_kategori_silabus' => 'required',
                 'judul' => 'required',
+                'deskripsi' => 'required',
                 'konten' => 'required'
             ]);
 
