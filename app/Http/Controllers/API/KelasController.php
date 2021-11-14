@@ -256,13 +256,22 @@ class KelasController extends Controller
                 $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['z-key']);
 
                 if($userKelas == null) {
-                    $kelasChecker = new KelasChecker();
-                    $kelasChecker->id_user = $user['id_user'];
-                    $kelasChecker->id_kelas = $req['z-key'];
-                    $kelasChecker->save();
-    
-                    $message['code'] = 200;
-                    $message['message'] = 'Class register success!';
+                    $kelasCheck = Kelas::select('id_kelas')
+                        ->where('id_kelas', $req['z-key'])->get()->toArray();
+                    
+                    if($kelasCheck != null) {
+
+                        $kelasChecker = new KelasChecker();
+                        $kelasChecker->id_user = $user['id_user'];
+                        $kelasChecker->id_kelas = $req['z-key'];
+                        $kelasChecker->save();
+        
+                        $message['code'] = 200;
+                        $message['message'] = 'Class register success!';
+                    }else {
+                        $message['code'] = 410;
+                        $message['message'] = 'Illegal class Access!';
+                    }
                 }else {
                     $message['code'] = 409;
                     $message['message'] = 'Already registered';
