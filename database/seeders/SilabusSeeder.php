@@ -18,7 +18,7 @@ class SilabusSeeder extends Seeder
     {
         DB::table('kategori_silabus')->insert([
             'id_kelas' => 1,
-            'judul' => "Pendahuluan",
+            'judul' => "ND - Pendahuluan",
             'deskripsi' => "Sebelum memulai sesi untuk kelas Nahwu Dasar hendaknya kita menyimak pendahuluan terlebih dahulu.",
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -26,7 +26,7 @@ class SilabusSeeder extends Seeder
 
         DB::table('kategori_silabus')->insert([
             'id_kelas' => 2,
-            'judul' => "Pendahuluan",
+            'judul' => "SD - Pendahuluan",
             'deskripsi' => "Sebelum memulai sesi untuk kelas Shorof Dasar  hendaknya kita menyimak pendahuluan terlebih dahulu.",
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -34,7 +34,7 @@ class SilabusSeeder extends Seeder
 
         DB::table('kategori_silabus')->insert([
             'id_kelas' => 3,
-            'judul' => "Pendahuluan",
+            'judul' => "KD - Pendahuluan",
             'deskripsi' => "Sebelum memulai sesi untuk kelas Kaligrafi Dasar hendaknya kita menyimak pendahuluan terlebih dahulu.",
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
