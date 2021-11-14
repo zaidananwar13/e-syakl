@@ -21,7 +21,7 @@
             <select class="form-control" name="id_user">
                 @foreach ($user as $key => $value)
                 <option value="{{ $value->id_user }}" @if($action !="kelas_user.store" && $value->id_user == $kelas_user->id_user) selected="selected" @endif>
-                    {{ $value->username }}
+                    {{ $value->name }}
                 </option>
                 @endforeach
             </select>

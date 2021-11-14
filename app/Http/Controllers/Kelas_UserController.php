@@ -44,6 +44,7 @@ class Kelas_UserController extends Controller
             $kelass = Kelas::all();
             $data['kelas'] = $kelass;
             $users = User::all();
+
             $data['user'] = $users;
             $data['action'] = 'kelas_user.store';
             return view('kelas_user.form', $data);
