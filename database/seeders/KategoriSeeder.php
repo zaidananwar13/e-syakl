@@ -19,21 +19,21 @@ class KategoriSeeder extends Seeder
         $kategori = [
             [
                 'judul' => 'Nahwu',
-                'gambar' => 'nahwu.jpg',
+                'gambar' => 'nahwu-d.png',
                 'deskripsi' => 'Kategori untuk pembelajaran nahwu',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                'judul' => 'Sorof',
-                'gambar' => 'sorof.jpg',
+                'judul' => 'Shorof',
+                'gambar' => 'shorof-d.png',
                 'deskripsi' => 'Kategori untuk pembelajaran sorof',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
                 'judul' => 'Kaligrafi',
-                'gambar' => 'kaligrafi.jpg',
+                'gambar' => 'kaligrafi-d.png',
                 'deskripsi' => 'Kategori untuk pembelajaran kaligrafi',
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')

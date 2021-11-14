@@ -18,22 +18,52 @@ class KelasSeeder extends Seeder
     {
         //
         $level = ["Pemula", "Menengah", "Lanjutan", "Ahli"];
+        
+        DB::table('kelas')->insert([
+            'id_kategori' => 1,
+            'id_reviewer' => 1,
+            'judul' => "Kelas Nahwu Dasar",
+            'gambar' => "nahwu-d.png",
+            'langkah' => "3 Langkah",
+            'level' => "Pemula",
+            'deskripsi_singkat' => "Kelas Nahwu Dasar",
+            'durasi' => "3 Jam",
+            'deskripsi_kelas' => "Kelas Nahwu Dasar cocok untuk pemula yang ingin belajar bahasa arab dari awal",
+            'tipe_kelas' => 0,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
 
-        for($i = 0; $i < 3; $i++) {
-            DB::table('kelas')->insert([
-                'id_kategori' => random_int(1, 10),
-                'id_reviewer' => random_int(1, 10),
-                'judul' => Str::random(7),
-                'gambar' => Str::random(4) . ".jpg",
-                'langkah' => random_int(3, 7),
-                'level' => $level[random_int(0, 3)],
-                'deskripsi_singkat' => Str::random(30),
-                'durasi' => random_int(1, 20),
-                'deskripsi_kelas' => Str::random(40),
-                'tipe_kelas' => random_int(0, 1),
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]);
-        }
+        
+        DB::table('kelas')->insert([
+            'id_kategori' => 2,
+            'id_reviewer' => 1,
+            'judul' => "Kelas Shorof Dasar",
+            'gambar' => "shorof-d.png",
+            'langkah' => "4 Langkah",
+            'level' => "Pemula",
+            'deskripsi_singkat' => "Kelas Shorof Dasar",
+            'durasi' => "5 Jam",
+            'deskripsi_kelas' => "Kelas Shorof untuk pemula yang ingin belajar bahasa arab dari awal",
+            'tipe_kelas' => 0,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        
+        DB::table('kelas')->insert([
+            'id_kategori' => 3,
+            'id_reviewer' => 1,
+            'judul' => "Kelas Kaligrafi Dasar",
+            'gambar' => "kaligrafi-d.png",
+            'langkah' => "3 Langkah",
+            'level' => "Pemula",
+            'deskripsi_singkat' => "Kelas Kaligrafi Dasar",
+            'durasi' => "2 Jam",
+            'deskripsi_kelas' => "Kelas Kaligrafi  Dasar untuk pemula yang ingin belajar mengenai cara menulis kaligrafi dengan konsep yang mudah untuk dipahami",
+            'tipe_kelas' => 0,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
     }
 }

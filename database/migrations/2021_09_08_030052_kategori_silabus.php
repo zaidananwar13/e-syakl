@@ -18,6 +18,7 @@ class KategoriSilabus extends Migration
             $table->increments('id_kategori_silabus');
             $table->unsignedInteger('id_kelas');
             $table->string('judul');
+            $table->string('deskripsi');
             $table->timestamps();
             
             $table->foreign('id_kelas')->references('id_kelas')->on('kelas');

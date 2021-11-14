@@ -18,6 +18,7 @@ class SubKategoriSilabus extends Migration
             $table->increments('id_sub_kategori_silabus');
             $table->unsignedInteger('id_kategori_silabus');
             $table->string('judul');
+            $table->string('deskripsi');
             $table->text('konten');
             $table->timestamps();
             

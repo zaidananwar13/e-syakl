@@ -16,16 +16,13 @@ class ReviewerSeeder extends Seeder
      */
     public function run()
     {
-        //
-        for($i = 0; $i < 10; $i++) {
-            DB::table('reviewer')->insert([
-                'nama' => Str::random(10),
-                'foto' => Str::random(15).'.jpg',
-                'jabatan' => Str::random(7),
-                'portofolio' => Str::random(4),
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ]);
-        }
+        DB::table('reviewer')->insert([
+            'nama' => "Nocty",
+            'foto' => 'nocty.png',
+            'jabatan' => "Programmer",
+            'portofolio' => "Beberapa",
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
     }
 }
