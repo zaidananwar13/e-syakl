@@ -29,17 +29,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
-    
+
     'google' => [
-<<<<<<< HEAD
-        'client_id'     => "45447758441-l337r1gce7j0geh2q44jqfadg23cin9g.apps.googleusercontent.com",
-        'client_secret' => "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",
-        'redirect'      => "https://dashboard.e-esyakl.org/api/auth/callback"
-=======
         'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect'      => env('GOOGLE_REDIRECT')
->>>>>>> 3d4eab541bd32e301359a84a5d077c8443db9a70
     ],
 
 ];
