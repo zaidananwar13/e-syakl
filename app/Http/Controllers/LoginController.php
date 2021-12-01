@@ -13,7 +13,7 @@ class LoginController extends Controller
     public function index()
     {
         if (!Session::get('login')) {
-            return view('login.login');
+            return view('login.login2');
         } else {
             return redirect('home');
         }
@@ -46,7 +46,7 @@ class LoginController extends Controller
 
     public function register()
     {
-        return view('login.register');
+        return view('login.register2');
     }
 
     public function registerPost(Request $request)
@@ -79,7 +79,7 @@ class LoginController extends Controller
         if (!Session::get('login')) {
             return redirect('login');
         } else {
-            return view('home.master');
+            return view('home.index');
         }
     }
 }

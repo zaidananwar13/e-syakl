@@ -19,7 +19,7 @@ class User extends Migration
             $table->string('name');
             $table->string('google_id');
             $table->string('email')->unique();
-            $table->date('email_verified_at');
+            $table->date('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
             $table->string('avatar_original')->nullable();
