@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -52,6 +53,8 @@ class LoginController extends Controller
             $newUser->avatar          = $user->avatar;
             $newUser->api_token       = hash('sha256', Str::random(60));
             $newUser->avatar_original = $user->avatar_original;
+            $newUser->email_verified_at = Carbon::now();
+            $newUser->password = null;
             $newUser->save();
 
             $newUser = $newUser->toArray();
