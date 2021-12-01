@@ -33,6 +33,10 @@ Route::get('kelas', [KelasController::class, 'kelas']);
 Route::get('kelas/{id}', [KelasController::class, 'index']);
 Route::get('getusertoken', [UserController::class, 'index']);
 
+
+Route::get('register', [UserController::class, 'register']);
+Route::post('registerPost', [UserController::class, 'registerPost']);
+
 Route::post('kelas/filter', [KelasController::class, 'filter']);
 Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
 
