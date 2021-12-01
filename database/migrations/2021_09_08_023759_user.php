@@ -19,11 +19,12 @@ class User extends Migration
             $table->string('name');
             $table->string('google_id');
             $table->string('email')->unique();
+            $table->date('email_verified_at');
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
             $table->string('avatar_original')->nullable();
             $table->rememberToken();
-            $table->string('api_token')
+            $table->string('api_token') 
                 ->after('password')
                 ->unique()
                 ->nullable()

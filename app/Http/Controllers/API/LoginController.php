@@ -13,7 +13,11 @@ use Illuminate\Support\Str;
 class LoginController extends Controller
 {
     public function redirectToProvider() {
-        return Socialite::driver('google')->stateless()->redirect();
+        $url = url('/api/auth/callback');
+
+        return Socialite::driver('google')
+            ->with(["redirect_uri"  => $url])
+            ->stateless()->redirect();
     }
 
     public function handleProviderCallback(Request $request) {
