@@ -151,13 +151,13 @@ class KelasController extends Controller
             $kel->komentar = $komentar;
 
             $kel->silabus = DB::table('kategori_silabus')
-            ->select('id_kategori_silabus', 'judul')
+            ->select('id_kategori_silabus', 'judul', 'deskripsi')
             ->where('id_kelas', '=', $kel->id_kelas)
             ->get();
             
             foreach($kel->silabus as $silabus) {
                 $silabus->sub_silabus = DB::table('sub_kategori_silabus')
-                ->select('id_sub_kategori_silabus', 'judul')
+                ->select('id_sub_kategori_silabus', 'judul', 'deskripsi')
                 ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
                 ->get();
             }
