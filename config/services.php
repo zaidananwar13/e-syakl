@@ -37,7 +37,7 @@ return [
     'google' => [
         'client_id'     => "45447758441-l337r1gce7j0geh2q44jqfadg23cin9g.apps.googleusercontent.com",
         'client_secret' => "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",
-        'redirect'      => "http://127.0.0.1:8000/api/auth/callback"
+        'redirect'      => "https://dashboard.e-esyakl.org/api/auth/callback"
     ],
 
 ];
