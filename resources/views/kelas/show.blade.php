@@ -1,9 +1,27 @@
-@extends('master')
+@extends('home/master2')
 @section('judul', 'Show Kelas')
+@section('data-controller', 'active')
+@section('kelas', 'text-active')
+@section('css')
+<link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+<style>
+    .custom-container {
+        background-color: white;
+        padding-top: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    }
+
+    .text-active {
+        color: #009ef7 !important;
+    }
+</style>
+
 @section('content')
 
-
-<div class="card-body">
+<div class="container custom-container">
+    <div class="card-body">
 
     <div class="row">
         <div class="col-md-4">
@@ -77,15 +95,14 @@
         </div>
 
     </div>
-</div>
 
 
-</div>
-<!-- /.card-body -->
+    </div>
+    <!-- /.card-body -->
 
-<div class="card-footer">
+    <div class="card-footer">
     <a class="btn btn-success" href="{{ route('kelas.index') }}"> Kembali</a>
+    </div>
 </div>
-
 
 @endsection

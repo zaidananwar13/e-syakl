@@ -1,3 +1,7 @@
+<?php
+
+use Illuminate\Contracts\Session\Session;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +12,7 @@
 </head>
 <body>
   <form action="registerPost" method="post">    
-  {{ csrf_field() }}
+    {{ csrf_field() }}
 
     <input type="mail" name="email" id="email" placeholder="example@mail.com">
     <input type="password" name="password" id="password">
@@ -16,5 +20,15 @@
 
     <button type="submit">Okey</button>
   </form>
+
+  <?php var_dump(session('success')) ?>
+
+  @if (session('success'))
+    <div class="alert alert-success">
+        <ul>
+            <li>{!! \Session::get('success') !!}</li>
+        </ul>
+    </div>
+    @endif
 </body>
 </html>

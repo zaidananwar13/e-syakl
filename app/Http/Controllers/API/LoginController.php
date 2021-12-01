@@ -13,6 +13,9 @@ use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
+    /* Email Login */
+
+    /* Google API */
     public function redirectToProvider() {
         $url = url('/api/auth/callback');
 
