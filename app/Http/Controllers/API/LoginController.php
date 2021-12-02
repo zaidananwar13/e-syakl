@@ -44,17 +44,26 @@ class LoginController extends Controller
 
         if($existingUser) {
             $existingUser = $existingUser->toArray();
+            $api_token = $existingUser['api_token'];
+            $name = $existingUser['name'];
+            $email = $existingUser['email'];
+            $img = $existingUser['avatar_original'];
 
             auth()->attempt($existingUser);
             Help::setCookie('ssid', Hash::make($existingUser['name']));
         
         }else {
+            $api_token = hash('sha256', Str::random(60));
+            $name = $user->name;
+            $email = $user->email;
+            $img = $user->avatar_original;
+
             $newUser                  = new User;
             $newUser->name            = $user->name;
             $newUser->email           = $user->email;
             $newUser->google_id       = $user->id;
             $newUser->avatar          = $user->avatar;
-            $newUser->api_token       = hash('sha256', Str::random(60));
+            $newUser->api_token       = $api_token;
             $newUser->avatar_original = $user->avatar_original;
             $newUser->email_verified_at = Carbon::now();
             $newUser->password = null;
@@ -65,6 +74,26 @@ class LoginController extends Controller
             auth()->attempt($newUser);
         }
 
+        $body = "<body>
+            <form action=\"http://localhost:5000/\" method=\"post\">
+                <input type=\"hidden\" name=\"api_token\" value=\"$api_token\" />
+                <input type=\"hidden\" name=\"name\" value=\"$name\" />
+                <input type=\"hidden\" name=\"email\" value=\"$email\" />
+                <input type=\"hidden\" name=\"img\" value=\"$img\" />
+            </form>
+        </body>";
+
+        echo $body;
+
+        $script = "
+            <script>
+                var form = document.querySelector('form');
+                form.submit();
+            </script>
+        ";
+        echo $script;
+
+        die;
         return redirect()->to('/api/kelas');
     }
 }
