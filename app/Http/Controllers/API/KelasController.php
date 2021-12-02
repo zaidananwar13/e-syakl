@@ -5,11 +5,14 @@ namespace App\Http\Controllers\API;
 use App\Helper as Help;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
+use App\Models\Kategori_Silabus;
 use App\Models\User;
 use App\Models\KelasChecker;
 use Illuminate\Http\Request;
 
 use App\Models\Kelas;
+use App\Models\SilabusChecker;
+use App\Models\Sub_Kategori_Silabus;
 use Hamcrest\Type\IsString;
 use Illuminate\Support\Facades\DB;
 
@@ -265,9 +268,27 @@ class KelasController extends Controller
                         $kelasChecker->id_user = $user['id_user'];
                         $kelasChecker->id_kelas = $req['z-key'];
                         $kelasChecker->save();
-        
+
                         $message['code'] = 200;
                         $message['message'] = 'Class register success!';
+
+                        $silabus = Kategori_Silabus::select("id_kategori_silabus")
+                            ->first()
+                            ->where("id_kelas", $req['z-key'])->get()->toArray();
+
+                        $silabus = $silabus[0];
+
+                        $subSilabus = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
+                        ->first()
+                        ->where("id_kategori_silabus", $silabus['id_kategori_silabus'])->get()->toArray();
+                        $subSilabus = $subSilabus[0];
+
+                        $silabuscheck = new SilabusChecker;
+                        $silabuscheck->id_user = $user['id_user'];
+                        $silabuscheck->id_kategori_silabus = $silabus['id_kategori_silabus'];
+                        $silabuscheck->id_sub_kategori_silabus = $subSilabus['id_sub_kategori_silabus'];
+                        $silabuscheck->save();
+
                     }else {
                         $message['code'] = 410;
                         $message['message'] = 'Illegal class Access!';
