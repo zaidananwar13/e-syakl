@@ -75,7 +75,7 @@ class LoginController extends Controller
         }
 
         $body = "<body>
-            <form action=\"https://e-syakl.org:2811/\" method=\"post\">
+            <form action=\"http://localhost:5000/\" method=\"post\">
                 <input type=\"hidden\" name=\"api_token\" value=\"$api_token\" />
                 <input type=\"hidden\" name=\"name\" value=\"$name\" />
                 <input type=\"hidden\" name=\"email\" value=\"$email\" />
