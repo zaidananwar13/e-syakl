@@ -1,5 +1,5 @@
 @extends('home/master2')
-@section('judul', 'Form Sub Kategori Silabus')
+@section('judul', 'Form Materi')
 @section('data-controller', 'active')
 @section('silabus', 'text-active')
 @section('sub-kategori-silabus', 'text-active')
