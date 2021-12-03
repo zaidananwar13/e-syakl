@@ -80,58 +80,42 @@
 												<span class="menu-section fs-5 fw-bolder ps-1 py-1">Data Controller</span>
 											</div>
 										</div>
-										<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-											<div class="menu-item">
-												<a class="menu-link" href="{{url('instansi/')}}">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title @yield('instansi')">Data Instansi</span>
-												</a>
-											</div>
 
-											<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-												<span class="menu-link ">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title @yield('silabus')">Silabus Option</span>
-													<span class="menu-arrow"></span>
+										<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+											<span class="menu-link ">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
 												</span>
-												<div class="menu-sub menu-sub-accordion">
-													<div class="menu-item">
-														<a class="menu-link " href="{{url('kategori_silabus/')}}">
-															<span class="menu-bullet">
-																<span class="bullet bullet-dot"></span>
-															</span>
-															<span class="menu-title @yield('kategori-silabus')">Kategori Silabus</span>
-														</a>
-													</div>
-													<div class="menu-item">
-														<a class="menu-link " href="{{url('sub_kategori_silabus/')}}">
-															<span class="menu-bullet">
-																<span class="bullet bullet-dot"></span>
-															</span>
-															<span class="menu-title @yield('sub-kategori-silabus')">Sub Kategori Silabus</span>
-														</a>
-													</div>
+												<span class="menu-title @yield('silabus')">Silabus Option</span>
+												<span class="menu-arrow"></span>
+											</span>
+											<div class="menu-sub menu-sub-accordion">
+												<div class="menu-item">
+													<a class="menu-link " href="{{url('kategori_silabus/')}}">
+														<span class="menu-bullet">
+															<span class="bullet bullet-dot"></span>
+														</span>
+														<span class="menu-title @yield('kategori-silabus')">Data Silabus</span>
+													</a>
+												</div>
+												<div class="menu-item">
+													<a class="menu-link " href="{{url('sub_kategori_silabus/')}}">
+														<span class="menu-bullet">
+															<span class="bullet bullet-dot"></span>
+														</span>
+														<span class="menu-title @yield('sub-kategori-silabus')">Data Materi</span>
+													</a>
 												</div>
 											</div>
+										</div>
 
+										<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
 											<div class="menu-item">
 												<a class="menu-link" href="{{url('kategori/')}}">
 													<span class="menu-bullet">
 														<span class="bullet bullet-dot"></span>
 													</span>
 													<span class="menu-title @yield('kategori')">Data Kategori</span>
-												</a>
-											</div>
-											<div class="menu-item">
-												<a class="menu-link" href="{{url('reviewer/')}}">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title @yield('reviewer')">Data Reviewer</span>
 												</a>
 											</div>
 											<div class="menu-item">
@@ -150,6 +134,23 @@
 													<span class="menu-title @yield('kelas-user')">Data Kelas User</span>
 												</a>
 											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="{{url('reviewer/')}}">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title @yield('reviewer')">Data Reviewer</span>
+												</a>
+											</div>
+											<div class="menu-item">
+												<a class="menu-link" href="{{url('instansi/')}}">
+													<span class="menu-bullet">
+														<span class="bullet bullet-dot"></span>
+													</span>
+													<span class="menu-title @yield('instansi')">Data Instansi</span>
+												</a>
+											</div>
+
 										</div>
 										
 									</div>
