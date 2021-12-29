@@ -73,9 +73,16 @@ class LoginController extends Controller
 
             auth()->attempt($newUser);
         }
+        
+        $migrasi = \App\Models\Migrasi::find(1);
+        $migrasi = ($migrasi->mode == 'local') ? 'http://localhost:5000/' : 'https://e-syakl.org/';
 
         $body = "<body>
+<<<<<<< HEAD
             <form action=\"https://e-syakl.org/\" method=\"get\">
+=======
+            <form action=\"$migrasi\" method=\"get\">
+>>>>>>> d184829a2da2139cd8378f603097c7a412d5e89a
                 <input type=\"hidden\" name=\"api_token\" value=\"$api_token\" />
                 <input type=\"hidden\" name=\"name\" value=\"$name\" />
                 <input type=\"hidden\" name=\"email\" value=\"$email\" />

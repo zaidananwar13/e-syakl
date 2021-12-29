@@ -5,6 +5,7 @@ use App\Http\Controllers\API\KelasController;
 use App\Http\Controllers\API\SilabusController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\LoginController;
+use App\Http\Controllers\API\Migrasi;
 use Facade\FlareClient\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,8 @@ Route::get('kelas', [KelasController::class, 'kelas']);
 Route::get('kelas/{id}', [KelasController::class, 'index']);
 Route::get('getusertoken', [UserController::class, 'index']);
 
+Route::get('migrasi', [Migrasi::class, 'index']);
+Route::get('migrasi/{mode}', [Migrasi::class, 'index']);
 
 Route::get('register', [UserController::class, 'register']);
 Route::post('registerPost', [UserController::class, 'registerPost']);
