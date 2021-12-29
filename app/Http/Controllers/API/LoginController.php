@@ -75,7 +75,7 @@ class LoginController extends Controller
         }
 
         $body = "<body>
-            <form action=\"https://esyakl-dev.web.app/\" method=\"get\">
+            <form action=\"https://e-syakl.org/\" method=\"get\">
                 <input type=\"hidden\" name=\"api_token\" value=\"$api_token\" />
                 <input type=\"hidden\" name=\"name\" value=\"$name\" />
                 <input type=\"hidden\" name=\"email\" value=\"$email\" />
