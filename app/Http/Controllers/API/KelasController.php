@@ -184,12 +184,13 @@ class KelasController extends Controller
     }
 
     public function filter(Request $request, $keywords = null) {
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Kelas API',
             'code' => 404,
             'message' => 'Not Found'
         ];
+
         
         $filters = json_decode($request->getContent(), true);
         $filters = $filters['filters'];
@@ -209,7 +210,7 @@ class KelasController extends Controller
             $stats = [];
 
             foreach($filters['rules'] as $f_key => $f_value) {
-                if($kel[$f_key] == $f_value) {
+                if(strtolower($kel[$f_key]) == strtolower($f_value)) {
                     $stats[]= true;
                 }else {
                     $stats[]= false;
@@ -229,7 +230,7 @@ class KelasController extends Controller
         }
 
         if(count($filtered) > 0) {
-            $message = [                'title' => 'E - Syakl | Kategori API',                'title' => 'E - Syakl | Kategori API',
+            $message = [
             'title' => 'E - Syakl | Kelas API',
                 'code'=> 200,
                 'message'=> 'Retrieving data successful!',

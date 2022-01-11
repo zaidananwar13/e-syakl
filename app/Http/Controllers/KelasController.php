@@ -75,31 +75,34 @@ class KelasController extends Controller
         if (!Session::get('login')) {
             return redirect('login');
         } else {
-            $request->validate([
-                'id_kategori' => 'required',
-                'id_reviewer' => 'required',
-                'judul' => 'required',
-                'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'langkah' => 'required',
-                'level' => 'required',
-                'deskripsi_singkat' => 'required',
-                'durasi' => 'required',
-                'deskripsi_kelas' => 'required',
-            ]);
+            // $request->validate([
+            //     'id_kategori' => 'required',
+            //     'id_reviewer' => 'required',
+            //     'judul' => 'required',
+            //     'gambar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            //     'langkah' => 'required',
+            //     'level' => 'required',
+            //     'deskripsi_singkat' => 'required',
+            //     'durasi' => 'required',
+            //     'deskripsi_kelas' => 'required',
+            // ]);
 
             header('Content-Type: application/json; charset=utf-8');
-            $input = $request->all();
-            $input['tipe_kelas'] = false;
+            // $input = $request->all();
+            // $input['tipe_kelas'] = false;
 
 
-            if ($image = $request->file('gambar')) {
-                $destinationPath = 'image/';
-                $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                $image->move($destinationPath, $profileImage);
-                $input['gambar'] = "$profileImage";
-            }
+            // if ($image = $request->file('gambar')) {
+            //     $destinationPath = 'image/';
+            //     $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            //     $image->move($destinationPath, $profileImage);
+            //     $input['gambar'] = "$profileImage";
+            // }
 
-            
+            $data = $request->data;
+            var_dump($data);
+
+            die;
             Kelas::create($input);
             return redirect('/kelas')->with('success', 'Kelas Berhasil Ditambahkan.');
         }

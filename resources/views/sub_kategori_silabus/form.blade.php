@@ -81,15 +81,18 @@
 <script>CKFinder.config( { connectorPath: '/ckfinder/connector' } );</script>
 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 <script>
-var konten = document.getElementById("konten");
-    CKEDITOR
-let editor = CKEDITOR;
-CKFinder.setupCKEditor( editor );
+    let createCKEditor = (id) => {
+        let konten = document.getElementById(id);
+        let editor = CKEDITOR;
+        CKFinder.setupCKEditor(editor);
 
-editor.replace(konten,{
-        language:'en-gb'
-    });
-editor.editorconfig.allowedContent = true;
+        editor.replace(konten,{
+            language:'en-gb'
+        });
+        editor.editorconfig.allowedContent = true;
+    }
+
+    createCKEditor("konten");
 </script>
 </body>
 @endsection
