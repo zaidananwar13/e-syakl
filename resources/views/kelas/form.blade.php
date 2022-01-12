@@ -133,7 +133,7 @@
         </div>
 
         <div class="card-footer">
-            <button type="button" id="btnSubmit" class="btn btn-success">{{ ($action!='kelas.store') ? 'Update' : 'Simpan' }}</button>
+            <button type="submit" id="btnSubmit" class="btn btn-success">{{ ($action!='kelas.store') ? 'Update' : 'Simpan' }}</button>
         </div>
     </form>
 

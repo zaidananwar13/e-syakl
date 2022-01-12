@@ -184,7 +184,7 @@ class KelasController extends Controller
     }
 
     public function filter(Request $request, $keywords = null) {
-        // header('Content-Type: application/json; charset=utf-8');
+        header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Kelas API',
             'code' => 404,
