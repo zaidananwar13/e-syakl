@@ -376,9 +376,6 @@
 											</span>
 											<!--end::Svg Icon-->
 											<!--end::Icon-->
-											<!--begin::Input-->
-											<input type="text" class="form-control custom-form-control ps-13" name="search" value="" placeholder="Find Goods" data-kt-search-element="input" />
-											<!--end::Input-->
 											<!--begin::Spinner-->
 											<span class="position-absolute top-50 end-0 translate-middle-y lh-0 d-none me-5" data-kt-search-element="spinner">
 												<span class="spinner-border h-15px w-15px align-middle text-gray-400"></span>
