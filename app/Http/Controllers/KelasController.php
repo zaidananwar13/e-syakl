@@ -108,13 +108,17 @@ class KelasController extends Controller
 		var_dump("count1: " . $count);
 		var_dump("count2: " . $count2);
 		var_dump("count3: " . $count3);
+		var_dump($materi[$i]);
+		echo "iteration: ". $i . "<br>";
 
         if($count3 > 0) {
-            for($c = 0; $c < $count3; $c++) {
+            for($c = 1; $c <= $count3; $c++) {
+		echo "angka: " . ($i * $c ) . "<br>";
+
                 $tempData = [
-                    "judul" => $materi[$i]["modal" . $count . "_" . $c .  "-judul"],
-                    "deskripsi" => $materi[$i + 1]["modal" . $count . "_" . $c .  "-deskripsi"],
-                    "konten" => $materi[$i + 2]["modal" . $count . "_" . $c .  "_konten"],
+                    "judul" => $materi[$i * $c]["modal" . $count . "_" . ($c - 1) .  "-judul"],
+                    "deskripsi" => $materi[$i * $c + 1]["modal" . $count . "_" . ($c - 1) .  "-deskripsi"],
+                    "konten" => $materi[$i * $c + 2]["modal" . $count . "_" . ($c - 1) .  "_konten"],
                 ];
 
                 array_push($dataMateri[$count], $tempData);
@@ -136,8 +140,6 @@ class KelasController extends Controller
                 array_push($dataSilabus[$i]["materi"], $dataMateri[$i][$j]);
             }
         }
-
-	var_dump($dataMateri); die;
 
         // $kelas = new Kelas;
         // $kelas->id_kategori = $request->id_kategori;
