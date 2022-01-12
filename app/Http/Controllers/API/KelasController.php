@@ -290,6 +290,7 @@ class KelasController extends Controller
                         $silabuscheck->id_sub_kategori_silabus = $subSilabus['id_sub_kategori_silabus'];
                         $silabuscheck->save();
 
+                        return $message;
                     }else {
                         $message['code'] = 410;
                         $message['message'] = 'Illegal class Access!';
