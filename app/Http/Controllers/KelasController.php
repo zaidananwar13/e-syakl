@@ -98,8 +98,8 @@ class KelasController extends Controller
         for($i = 0; $i < count($materi); $i++) {
             if($i % 3 == 0) {
                 foreach($materi as $key => $val) {
-		    $tempKey = array_keys($val);
-		    $tempKey = $tempKey[0];
+                    $tempKey = array_keys($val);
+                    $tempKey = $tempKey[0];
                     if(strpos($tempKey, "modal" . $count . "_") !== false ) {
                         $count2++;
                     }$count3 = $count2 / 3;
@@ -109,19 +109,22 @@ class KelasController extends Controller
 		var_dump("count2: " . $count2);
 		var_dump("count3: " . $count3);
 
-		for($c = 0; $c < $count3; $c++) {
-		
-		}
-
-/*                $tempData = [
-                    "judul" => $materi[$i]["modal" . $count . "_" . $count2 .  "-judul"],
-                    "deskripsi" => $materi[$i + 1]["modal" . $count . "_" . $count2 .  "-deskripsi"],
-                    "konten" => $materi[$i + 2]["modal" . $count . "_" . $count2 .  "_konten"],
+        if($count3 > 0) {
+            for($c = 0; $c < $count3; $c++) {
+                $tempData = [
+                    "judul" => $materi[$i]["modal" . $count . "_" . $c .  "-judul"],
+                    "deskripsi" => $materi[$i + 1]["modal" . $count . "_" . $c .  "-deskripsi"],
+                    "konten" => $materi[$i + 2]["modal" . $count . "_" . $c .  "_konten"],
                 ];
 
-                array_push($dataMateri[$count], $tempData); 
-*/
-                $count++;
+                array_push($dataMateri[$count], $tempData);
+            }
+        }
+
+
+
+               
+        $count++;
 		$count2 = 0;
                 $dataMateri[$count] = [];
             }
