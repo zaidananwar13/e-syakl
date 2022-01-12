@@ -92,25 +92,37 @@ class KelasController extends Controller
         // Materi decrypt
         $count = 0;
         $count2 = 0;
-        
+        $count3 = 0;
+
         $dataMateri[$count] = [];
         for($i = 0; $i < count($materi); $i++) {
             if($i % 3 == 0) {
                 foreach($materi as $key => $val) {
-                    if(strpos($key, "modal" . $count . "_") !== false ) {
+		    $tempKey = array_keys($val);
+		    $tempKey = $tempKey[0];
+                    if(strpos($tempKey, "modal" . $count . "_") !== false ) {
                         $count2++;
-                    }
-                } $count2 = $count2 % 3;
+                    }$count3 = $count2 / 3;
+                }
 
-                $tempData = [
+		var_dump("count1: " . $count);
+		var_dump("count2: " . $count2);
+		var_dump("count3: " . $count3);
+
+		for($c = 0; $c < $count3; $c++) {
+		
+		}
+
+/*                $tempData = [
                     "judul" => $materi[$i]["modal" . $count . "_" . $count2 .  "-judul"],
                     "deskripsi" => $materi[$i + 1]["modal" . $count . "_" . $count2 .  "-deskripsi"],
                     "konten" => $materi[$i + 2]["modal" . $count . "_" . $count2 .  "_konten"],
                 ];
 
                 array_push($dataMateri[$count], $tempData); 
-
+*/
                 $count++;
+		$count2 = 0;
                 $dataMateri[$count] = [];
             }
         }array_pop($dataMateri);
@@ -121,6 +133,8 @@ class KelasController extends Controller
                 array_push($dataSilabus[$i]["materi"], $dataMateri[$i][$j]);
             }
         }
+
+	var_dump($dataMateri); die;
 
         // $kelas = new Kelas;
         // $kelas->id_kategori = $request->id_kategori;
