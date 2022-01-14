@@ -33,7 +33,7 @@
 					<div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
 						<!--begin::Form-->
 						<form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" method="post" action="loginPost">
-							{{ csrf_field() }}
+							@csrf
 							<!--begin::Heading-->
 							<div class="text-center mb-10">
 								<!--begin::Title-->

@@ -3,6 +3,7 @@
 /public/storage
 /views/template
 /storage/*.key
+/config/session.php
 /vendor
 .env
 .env.backup
