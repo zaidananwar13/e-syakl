@@ -124,7 +124,7 @@
             
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <a href="#" onclick="addSilabus()" class="btn btn-primary"><i class="fas fa-envelope-open-text fs-4 me-2"></i> Tambah silabus baru</a>
+                    <a href="#" onclick="addSilabus()" style="display: none;" class="btn btn-primary"><i class="fas fa-envelope-open-text fs-4 me-2"></i> Tambah silabus baru</a>
                 </div>
             </div>
         </div>
