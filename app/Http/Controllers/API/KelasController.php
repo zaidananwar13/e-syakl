@@ -199,8 +199,9 @@ class KelasController extends Controller
         $kelas = Kelas::all()->toArray();
 
         if($keywords != null) {
+	    $keywords = strtolower($keywords);
             $kelas = Kelas::select('*')
-                ->where('judul', 'like', '%' . $keywords . '%')
+                ->where(DB::raw('lower(judul)'), 'like', '%' . $keywords . '%')
                 ->get();
 
             $kelas = $kelas->toArray();
