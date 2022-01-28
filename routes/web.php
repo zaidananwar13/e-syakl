@@ -49,6 +49,10 @@ Route::resource('kelas_user', 'Kelas_UserController');
 Route::get('kelas_user/delete/{id}', 'Kelas_UserController@delete');
 Route::post('kelas_user/update', 'Kelas_UserController@update');
 
+Route::resource('quiz', 'QuizController');
+Route::get('quiz/delete/{id}', 'QuizController@delete');
+Route::post('quiz/update', 'QuizController@update');
+
 Route::resource('products', 'ProductController');
 Route::resource('kategori_silabus', 'Kategori_SilabusController');
 Route::get('kategori_silabus/delete/{id}', 'Kategori_SilabusController@delete');
