@@ -199,8 +199,13 @@ class KelasController extends Controller
         $kelas = Kelas::all()->toArray();
 
         if($keywords != null) {
+            $keywords = strtolower($keywords);
             $kelas = Kelas::select('*')
-                ->where('judul', 'like', '%' . $keywords . '%')
+                ->where(DB::raw('lower(judul)'), 'like', '%' . $keywords . '%')
+                ->where(DB::raw('lower(level)'), 'like', '%' . $keywords . '%')
+                ->where(DB::raw('lower(deskripsi_singkat)'), 'like', '%' . $keywords . '%')
+                ->where(DB::raw('lower(deskripsi_kelas)'), 'like', '%' . $keywords . '%')
+                ->where(DB::raw('lower(durasi)'), 'like', '%' . $keywords . '%')
                 ->get();
 
             $kelas = $kelas->toArray();
@@ -235,6 +240,39 @@ class KelasController extends Controller
                 'code'=> 200,
                 'message'=> 'Retrieving data successful!',
                 'data' => $filtered
+            ];
+        }
+        
+        return $message;
+    }
+
+    public function search(Request $request, $keyword) {
+        header('Content-Type: application/json; charset=utf-8');
+        $message = [
+            'title' => 'E - Syakl | Search API',
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
+
+        $kelas = [];
+
+        if($keyword != null) {
+            $keyword = strtolower($keyword);
+            $kelas = Kelas::select('*')
+                ->where(DB::raw('lower(judul)'), 'like', '%' . $keyword . '%')
+                ->orWhere(DB::raw('lower(level)'), 'like', '%' . $keyword . '%')
+                ->orWhere(DB::raw('lower(deskripsi_singkat)'), 'like', '%' . $keyword . '%')
+                ->orWhere(DB::raw('lower(deskripsi_kelas)'), 'like', '%' . $keyword . '%')
+                ->orWhere(DB::raw('lower(durasi)'), 'like', '%' . $keyword . '%')
+                ->get();
+        }
+
+        if(count($kelas) > 0) {
+            $message = [
+            'title' => 'E - Syakl | Kelas API',
+                'code'=> 200,
+                'message'=> 'Retrieving data successful!',
+                'data' => $kelas
             ];
         }
         

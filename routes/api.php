@@ -43,6 +43,8 @@ Route::post('registerPost', [UserController::class, 'registerPost']);
 Route::post('kelas/filter', [KelasController::class, 'filter']);
 Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
 
+Route::post('kelas/search/{keywords}', [KelasController::class, 'search']);
+
 // Route::middleware('checkapitoken')->get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
 
 Route::middleware(['checkapitoken'])->group(function () {

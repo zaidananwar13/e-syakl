@@ -51,13 +51,6 @@ class LoginController extends Controller
 
     public function registerPost(Request $request)
     {
-        $this->validate($request, [
-            'username' => 'required',
-            'password' => 'required',
-            'repassword' => 'required',
-            'agreeTerms' => 'checked'
-        ]);
-
         $data = Admin::where('username', $request->username)->first();
         if ($data) {
             return redirect('register')->with('alert', 'Username sudah terdaftar');
