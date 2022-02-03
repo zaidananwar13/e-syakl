@@ -52,9 +52,7 @@
             
             <div class="form-group mb-4">
                 <label for="judul">Deskripsi</label>
-                <textarea class="form-control" name="deskripsi" id="deskripsi" cols="30" rows="10">
-                    {{ ($action!='kategori_silabus.store') ? $kategori_silabus->deskripsi : '' }}
-                </textarea>
+                <textarea class="form-control" name="deskripsi" id="deskripsi" cols="30" rows="10">{{ ($action!='kategori_silabus.store') ? $kategori_silabus->deskripsi : '' }}</textarea>
             </div>
 
 

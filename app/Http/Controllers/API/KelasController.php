@@ -258,13 +258,19 @@ class KelasController extends Controller
 
         if($keyword != null) {
             $keyword = strtolower($keyword);
-            $kelas = Kelas::select('*')
-                ->where(DB::raw('lower(judul)'), 'like', '%' . $keyword . '%')
-                ->orWhere(DB::raw('lower(level)'), 'like', '%' . $keyword . '%')
-                ->orWhere(DB::raw('lower(deskripsi_singkat)'), 'like', '%' . $keyword . '%')
-                ->orWhere(DB::raw('lower(deskripsi_kelas)'), 'like', '%' . $keyword . '%')
-                ->orWhere(DB::raw('lower(durasi)'), 'like', '%' . $keyword . '%')
-                ->get();
+            $keyword = explode(' ', $keyword);
+            
+            foreach($keyword as $key) {
+                $data = Kelas::select('*')
+                    ->where(DB::raw('lower(judul)'), 'like', '%' . $key . '%')
+                    ->orWhere(DB::raw('lower(level)'), 'like', '%' . $key . '%')
+                    ->orWhere(DB::raw('lower(deskripsi_singkat)'), 'like', '%' . $key . '%')
+                    ->orWhere(DB::raw('lower(deskripsi_kelas)'), 'like', '%' . $key . '%')
+                    ->orWhere(DB::raw('lower(durasi)'), 'like', '%' . $key . '%')
+                    ->get();
+
+                array_push($kelas, $data);
+            }
         }
 
         if(count($kelas) > 0) {
