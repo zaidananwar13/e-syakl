@@ -313,7 +313,8 @@ class KelasController extends Controller
                         $silabus = Kategori_Silabus::select("id_kategori_silabus")
                             ->first()
                             ->where("id_kelas", $req['z-key'])->get()->toArray();
-
+			
+			// bakal error kalo silabus kosong
                         $silabus = $silabus[0];
 
                         $subSilabus = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
