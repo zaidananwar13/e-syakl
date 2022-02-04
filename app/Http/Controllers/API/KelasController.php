@@ -321,7 +321,7 @@ class KelasController extends Controller
                             ->first()
                             ->where("id_kelas", $req['z-key'])->get()->toArray();
 
-                        $silabus = $silabus[0];
+                        // $silabus = $silabus[0];
 
                         $subSilabus = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
                         ->first()
