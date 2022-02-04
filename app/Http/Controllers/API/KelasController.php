@@ -307,32 +307,33 @@ class KelasController extends Controller
                     $kelasCheck = Kelas::select('id_kelas')
                         ->where('id_kelas', $req['z-key'])->get()->toArray();
                     
+                        
                     if($kelasCheck != null) {
-
-                        $kelasChecker = new KelasChecker();
-                        $kelasChecker->id_user = $user['id_user'];
-                        $kelasChecker->id_kelas = $req['z-key'];
-                        $kelasChecker->save();
-
-                        $message['code'] = 200;
-                        $message['message'] = 'Class register success!';
 
                         $silabus = Kategori_Silabus::select("id_kategori_silabus")
                             ->first()
                             ->where("id_kelas", $req['z-key'])->get()->toArray();
 
-                        // $silabus = $silabus[0];
+                        $silabus = $silabus[0];
 
                         $subSilabus = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
                         ->first()
                         ->where("id_kategori_silabus", $silabus['id_kategori_silabus'])->get()->toArray();
                         $subSilabus = $subSilabus[0];
 
+                        $kelasChecker = new KelasChecker();
+                        $kelasChecker->id_user = $user['id_user'];
+                        $kelasChecker->id_kelas = $req['z-key'];
+                        $kelasChecker->save();
+
                         $silabuscheck = new SilabusChecker;
                         $silabuscheck->id_user = $user['id_user'];
                         $silabuscheck->id_kategori_silabus = $silabus['id_kategori_silabus'];
                         $silabuscheck->id_sub_kategori_silabus = $subSilabus['id_sub_kategori_silabus'];
                         $silabuscheck->save();
+
+                        $message['code'] = 200;
+                        $message['message'] = 'Class register success!';
 
                         return $message;
                     }else {

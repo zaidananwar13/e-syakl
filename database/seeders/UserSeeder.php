@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
         DB::table('user')->insert([
             'name' => $user,
             'google_id' => 'default',
-            'email' => 'default',
+            'email' => Str::random(12) . '@mail.com',
             'password' => Hash::make($user),
             'api_token' => hash('sha256', Str::random(60)),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
