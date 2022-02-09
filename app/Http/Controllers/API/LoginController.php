@@ -75,7 +75,7 @@ class LoginController extends Controller
         }
         
         $migrasi = \App\Models\Migrasi::find(1);
-        $migrasi = ($migrasi->mode == 'local') ? 'http://localhost:5000/' : 'https://e-syakl.org/';
+        $migrasi = ($migrasi->mode == 'local') ? 'http://localhost:5000/' : 'https://arabic-go.com/';
 
         $body = "<body>
             <form action=\"$migrasi\" method=\"get\">
