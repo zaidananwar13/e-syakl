@@ -376,4 +376,31 @@ class KelasController extends Controller
 
         return $message;
     }
+
+    
+    public function checkKelas(Request $request) {
+        $req = $request->all();
+        $message = [
+            'title' => 'E - Syakl | Silabus Auth API',
+            'code' => 401,
+            'message' => 'Unauthorized'
+        ];
+            
+        $user = User::select('id_user')
+            ->where('api_token', $req['api_token'])
+            ->first();
+            
+        $user = $user->toArray();
+        $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['z-key']);
+
+        if($userKelas == null) {
+            $message['code'] = 1919;
+            $message['message'] = "Haven't enlisted yet";
+        }else {
+            $message['code'] = 409;
+            $message['message'] = 'Already registered';
+        }
+
+        return $message;
+    }
 }
