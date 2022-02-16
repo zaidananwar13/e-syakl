@@ -180,6 +180,17 @@ class SilabusController extends Controller
                 if($userSilabus == null) {
                     $message['code'] = 409;
                     $message['message'] = 'Unauthorized register!';
+
+                    if($user != null) {
+                        $silabus = new SilabusChecker();
+                        $silabus->id_user = $user['id_user'];
+                        $silabus->id_kategori_silabus = $req['x-key'];
+                        $silabus->id_sub_kategori_silabus = $req['y-key'];
+                        $silabus->save();
+        
+                        $message['code'] = 200;
+                        $message['message'] = 'Auth register success!';
+                    }
                 }else {
                     if($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
                         $silabus = new SilabusChecker();
