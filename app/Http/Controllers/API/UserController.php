@@ -6,6 +6,7 @@ use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\ClassProgress;
 use App\Models\CompletedClass;
+use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -69,13 +70,22 @@ class UserController extends Controller
             ->where("id_user", $user["id_user"])
             ->where("progress", "!=", "100")->get()->toArray();
 
+        $temp = [];
+        if(count($classProgress) > 0) {
+            foreach($classProgress as $class) {
+                $class = Kelas::select("judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
+                $class["days_left"] = 59;
+                array_push($temp, $class);
+            }
+        }
+
         $profile = [
             "name" => $user["name"],
             "email" => $user["email"],
             "joined" => "Joined since " . Helper::time_elapsed_string($user["created_at"]),
             "class_on_progress" => count($classProgress),
             "completed_classes" => count(CompletedClass::where("id_user", $user["id_user"])->get()->toArray()),
-            "class_progress" => $classProgress
+            "class_progress" => $temp
         ];
 
         
