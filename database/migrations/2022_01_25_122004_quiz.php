@@ -18,8 +18,8 @@ class Quiz extends Migration
             $table->unsignedInteger('id_sub_kategori_silabus');
             $table->text('soal');
             $table->string('tipe_soal');
+            $table->string('pilihan');
             $table->string('kunci');
-            $table->string('jawaban');
             $table->timestamps();
             
             $table->foreign('id_sub_kategori_silabus')->references('id_sub_kategori_silabus')->on('sub_kategori_silabus');

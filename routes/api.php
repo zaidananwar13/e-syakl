@@ -6,6 +6,7 @@ use App\Http\Controllers\API\SilabusController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\LoginController;
 use App\Http\Controllers\API\Migrasi;
+use App\Http\Controllers\API\QuizController;
 use Facade\FlareClient\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,9 @@ Route::middleware(['checkapitoken'])->group(function () {
     Route::post('/kelas/check', [KelasController::class, 'checkKelas']);
     Route::post('/silabus/auth/kategori', [SilabusController::class, 'authKategori']);
     Route::post('/silabus/auth/sub-kategori', [SilabusController::class, 'authSubKategori']);
+    
+    Route::post('/quiz', [QuizController::class, 'index']);
+    Route::post('/quiz/submit', [QuizController::class, 'submit']);
 });
 
 

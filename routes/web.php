@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\QuizController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,3 +68,5 @@ Route::get('logout', 'LoginController@logout');
 Route::get('register', 'LoginController@register');
 Route::post('registerPost', 'LoginController@registerPost');
 Route::get('/home', 'LoginController@indexHome');
+
+Route::get('/quiz/simulation/{id}', [QuizController::class, 'simulation']);

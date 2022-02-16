@@ -56,6 +56,34 @@ class Helper {
     
     return $result;
   }
+
+  public static function generateQuiz($params) {
+    $data = [];
+    $array = [];
+
+    foreach($params as $param => $value) {
+      $temp = [];
+      if((strpos($param, "pilihan")) !== false) {
+        $temp["pilihan"] = $value;
+      }else if((strpos($param, "id_quiz")) !== false) {
+        $temp["id_quiz"] = $value;
+      }
+
+      if(count($temp) > 0) {
+        array_push($data, $temp);
+      }
+    }
+
+    for($i = 0; $i < count($data); $i = $i + 2) {
+      $temp = [
+        "id_quiz" => $data[$i]["id_quiz"],
+        "pilihan" => $data[$i + 1]["pilihan"]
+      ];
+      array_push($array, $temp);
+    }
+
+    return $array;
+  }
 }
 
 
