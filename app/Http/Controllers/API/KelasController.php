@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Helper as Help;
 use App\Http\Controllers\Controller;
+use App\Models\ClassProgress;
+use App\Models\CompletedClass;
 use App\Models\Kategori;
 use App\Models\Kategori_Silabus;
 use App\Models\User;
@@ -307,8 +309,12 @@ class KelasController extends Controller
                     $kelasCheck = Kelas::select('id_kelas')
                         ->where('id_kelas', $req['z-key'])->get()->toArray();
                     
-                        
                     if($kelasCheck != null) {
+                        $progress = new ClassProgress();
+                        $progress->id_user = $user["id_user"];
+                        $progress->id_kelas = $req['z-key'];
+                        $progress->progress = "5";
+                        $progress->save();
 
                         $silabus = Kategori_Silabus::select("id_kategori_silabus")
                             ->first()
@@ -399,6 +405,33 @@ class KelasController extends Controller
         }else {
             $message['code'] = 409;
             $message['message'] = 'Already registered';
+        }
+
+        return $message;
+    }
+
+    public function completeClass(Request $request) {
+        $message = [
+            'title' => 'E - Syakl | Silabus Auth API',
+            'code' => 401,
+            'message' => 'Unauthorized'
+        ];
+
+        $user = User::select("id_user")->where("api_token", $request->input("api_token"))->first()->toArray();
+        ClassProgress::where("id_user", $user["id_user"])->where("id_kelas", $request->input("x-key"))
+            ->update(["progress" => "100"]);
+            
+
+        $class = new CompletedClass();
+        $class->id_user = $user["id_user"];
+        $class->id_kelas = $request->input("x-key");
+        
+        if($class->save()) {
+            $message = [
+                'title' => 'E - Syakl | Kelas Auth API',
+                'code' => 200,
+                'message' => "Class Completed!"
+            ];
         }
 
         return $message;

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\ClassProgress;
+use App\Models\CompletedClass;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -48,5 +51,41 @@ class UserController extends Controller
                 
             return redirect('api/register')->with('success', 'Kamu berhasil Register');
         }
+    }
+
+    public function profile(Request $request) {
+        header('Content-Type: application/json; charset=utf-8');
+        $message = [
+            'title' => 'E - Syakl | Quiz API',
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
+
+        $user = User::select("id_user", "name", "email", "created_at")
+            ->where("api_token", $request->input("api_token"))
+            ->first()->toArray();
+        
+        $classProgress = ClassProgress::select("id_kelas", "progress")->distinct()
+            ->where("id_user", $user["id_user"])
+            ->where("progress", "!=", "100")->get()->toArray();
+
+        $profile = [
+            "name" => $user["name"],
+            "email" => $user["email"],
+            "joined" => "Joined since " . Helper::time_elapsed_string($user["created_at"]),
+            "class_on_progress" => count($classProgress),
+            "completed_classes" => count(CompletedClass::where("id_user", $user["id_user"])->get()->toArray()),
+            "class_progress" => $classProgress
+        ];
+
+        
+        $message = [
+            'title' => 'E - Syakl | User API',
+            'code' => 200,
+            'message' => 'Ok.',
+            'data' => $profile
+        ];
+
+        return $message;
     }
 }
