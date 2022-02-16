@@ -74,6 +74,8 @@ class QuizController extends Controller
 
             array_push($bank_soal, $input);
             Quiz::create($input);
+
+            return redirect('/quiz')->with('success', 'Data Input  Success!');
         }
     }
     

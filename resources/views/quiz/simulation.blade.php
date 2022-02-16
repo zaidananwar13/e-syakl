@@ -56,7 +56,7 @@
         <form role="form" action="/api/quiz/submit" method="POST">
             {{ csrf_field() }}
             <input type="hidden" id="id_silabus" value="{{ $id }}" name="count"/>
-            <input type="hidden" value="f400390024f0ec8dac1e973b526f31e223116483fce0261b38b7d1ab5d75512a" name="api_token">
+            <input type="hidden" value="45ce6433af5c319fcb62c7b7815c4ab43267cd5c2b937fd5b070a72a977ce876" name="api_token">
             
             <?php $i=1; ?>
             <div class="container">
