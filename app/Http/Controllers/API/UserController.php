@@ -73,9 +73,10 @@ class UserController extends Controller
         $temp = [];
         if(count($classProgress) > 0) {
             foreach($classProgress as $class) {
-                $class = Kelas::select("judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
-                $class["days_left"] = 59;
-                array_push($temp, $class);
+                $class_temp = Kelas::select("judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
+                $class_temp["days_left"] = 59;
+                $class_temp["progress"] = $class["progress"];
+                array_push($temp, $class_temp);
             }
         }
 
