@@ -21,7 +21,7 @@ class QuizProgressController extends Controller
             ->where("api_token", $request->input("api_token"))
             ->first()->toArray();
 
-        $quiz = QuizProgress::select("id_kategori_silabus", "id_user", "grade", "updated_at")
+        $quiz = QuizProgress::select("id_kategori_silabus", "grade", "updated_at")
             ->where("id_user", $user["id_user"])->get()->toArray();
         
         if(count($quiz) > 0) {
