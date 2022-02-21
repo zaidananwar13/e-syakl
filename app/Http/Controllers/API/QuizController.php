@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Quiz;
+use App\Models\QuizProgress;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
@@ -44,6 +46,11 @@ class QuizController extends Controller
             'message' => 'Not Found'
         ];
 
+        $user = User::select("id_user")
+            ->where("api_token", $request->input("api_token"))
+            ->first()
+            ->toArray();
+
         $quizzes = Helper::generateQuiz($request->all());
         $counter = count($quizzes); $grade = 0; $rightChoice = 0;
         
@@ -57,6 +64,12 @@ class QuizController extends Controller
 
         if($counter != 0) {
             $grade = $rightChoice / $counter * 100;
+
+            $quizProg = new QuizProgress();
+            $quizProg->id_user = $user["id_user"];
+            $quizProg->id_kategori_silabus = $request->input("id_silabus");
+            $quizProg->grade = $grade;
+            $quizProg->save();
 
             $message = [
                 'title' => 'E - Syakl | Quiz API',

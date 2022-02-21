@@ -7,6 +7,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\LoginController;
 use App\Http\Controllers\API\Migrasi;
 use App\Http\Controllers\API\QuizController;
+use App\Http\Controllers\API\QuizProgressController;
 use Facade\FlareClient\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +61,8 @@ Route::middleware(['checkapitoken'])->group(function () {
     
     Route::post('/quiz', [QuizController::class, 'index']);
     Route::post('/quiz/submit', [QuizController::class, 'submit']);
+    Route::post('/quiz/clear', [QuizProgressController::class, 'index']);
+    Route::post('/quiz/is-clear', [QuizProgressController::class, 'isClear']);
     
     Route::post('/user/profile', [UserController::class, 'profile']);
 });
