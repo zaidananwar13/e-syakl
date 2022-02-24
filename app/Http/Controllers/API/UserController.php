@@ -85,7 +85,10 @@ class UserController extends Controller
         $temp2 = [];
         if(count($classCompleted) > 0) {
             foreach($classCompleted as $class) {
-                $class_temp = Kelas::select("id_kelas", "created_at", "gambar", "judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
+                $class_temp = Kelas::select("id_kelas", "gambar", "judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
+                $class_temp["date"] = CompletedClass::select("created_at")->where("id_kelas", $class["id_kelas"])
+                    ->where("id_user", $user["id_user"])->first()->toArray();
+                $class_temp["date"] = $class_temp["date"]["created_at"];
                 array_push($temp2, $class_temp);
             }
         }
