@@ -6,6 +6,7 @@ use App\Http\Controllers\API\SilabusController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\LoginController;
 use App\Http\Controllers\API\Migrasi;
+use App\Http\Controllers\API\Overview;
 use App\Http\Controllers\API\QuizController;
 use App\Http\Controllers\API\QuizProgressController;
 use Facade\FlareClient\Api;
@@ -30,6 +31,8 @@ use Illuminate\Support\Facades\Route;
 
 // Route::middleware('auth:api')->get('/user', [UserController::class, 'index']);
 // Route::get('/user', [UserController::class, 'index']);
+
+Route::get('overview-{id}', [Overview::class, 'index']);
 
 Route::get('kategori', [KategoriController::class, 'index']);
 Route::get('kelas', [KelasController::class, 'kelas']);

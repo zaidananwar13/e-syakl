@@ -18,6 +18,7 @@ class Kelas extends Migration
             $table->increments('id_kelas');
             $table->unsignedInteger('id_kategori');
             $table->unsignedInteger('id_reviewer');
+            $table->unsignedInteger('id_bahasa');
             $table->string('judul');
             $table->string('gambar');
             $table->string('langkah');
@@ -30,6 +31,7 @@ class Kelas extends Migration
             
             $table->foreign('id_kategori')->references('id_kategori')->on('kategori');
             $table->foreign('id_reviewer')->references('id_reviewer')->on('reviewer');
+            $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
         });
     }
 

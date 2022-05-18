@@ -17,12 +17,14 @@ class SubKategoriSilabus extends Migration
         Schema::create('sub_kategori_silabus', function (Blueprint $table) {
             $table->increments('id_sub_kategori_silabus');
             $table->unsignedInteger('id_kategori_silabus');
+            $table->unsignedInteger('id_bahasa');
             $table->string('judul');
             $table->string('deskripsi');
             $table->text('konten');
             $table->timestamps();
             
             $table->foreign('id_kategori_silabus')->references('id_kategori_silabus')->on('kategori_silabus');
+            $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
         });
     }
 

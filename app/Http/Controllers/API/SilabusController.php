@@ -10,6 +10,7 @@ use App\Models\Sub_Kategori_Silabus;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 use function Ramsey\Uuid\v1;
 
@@ -45,14 +46,13 @@ class SilabusController extends Controller
 
     public function silabus(Request $request, $id)
     {
-        header('Content-Type: application/json; charset=utf-8');
 
         $user = User::select('id_user')
             ->where('api_token', $request->api_token)
             ->firstOrFail()
             ->toArray();
         $user = $user['id_user'];
-
+        
         $secureKey = Help::checkSilabusAccess($user, $id);
         $message = [
             'title' => 'E - Syakl | Silabus API',
@@ -61,14 +61,49 @@ class SilabusController extends Controller
         ];
 
         if($secureKey == null) {
-            $message['code'] = '401';
-            $message['message'] = 'Unauthorized';
+            if($id == 1) {    
+                $materi = Sub_Kategori_Silabus::select("id_kategori_silabus", "id_sub_kategori_silabus")
+                    ->where("id_sub_kategori_silabus", $id)
+                    ->get()
+                    ->toArray();
+                $materi = $materi[0];
 
-            return $message;
+                $secureKey = [
+                    ["id_sub_kategori_silabus" => $materi["id_sub_kategori_silabus"]],
+                ];
+
+                $silabusChecker = new SilabusChecker();
+                $silabusChecker->id_user = $user;
+                $silabusChecker->id_kategori_silabus = $materi["id_kategori_silabus"];
+                $silabusChecker->id_sub_kategori_silabus = $materi["id_sub_kategori_silabus"];
+                $silabusChecker->save();
+            }else {
+                $materi = Sub_Kategori_Silabus::select("id_kategori_silabus", "id_sub_kategori_silabus")
+                    ->where("id_sub_kategori_silabus", $id)
+                    ->get()
+                    ->toArray();
+                $materi = $materi[0];
+
+
+                $response = Http::post('https://dashboard.e-syakl.org/api/silabus/auth/sub-kategori', [
+                    'api_token' => $request->input("api_token"),
+                    'x-key' => $materi["id_kategori_silabus"],
+                    'y-key' => $materi["id_sub_kategori_silabus"],
+                ]);
+
+                if($response->body() == "\"Invalid Token\"") {
+                    header('Content-Type: application/json; charset=utf-8');
+    
+                    $message['code'] = '401';
+                    $message['message'] = 'Unauthorized User';
+    
+                    return $message;
+                }
+            }
         }
         
         $secureKey = $secureKey[0];
-
+        
         if($secureKey['id_sub_kategori_silabus'] == $id) {
             $silabus = Sub_Kategori_Silabus::select('id_sub_kategori_silabus', 'id_kategori_silabus', 'judul', 'konten')
                 ->where('id_sub_kategori_silabus', $id)->first();
