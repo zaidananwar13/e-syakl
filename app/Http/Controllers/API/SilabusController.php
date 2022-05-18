@@ -84,7 +84,6 @@ class SilabusController extends Controller
                     ->toArray();
                 $materi = $materi[0];
 
-
                 $response = Http::post('https://dashboard.e-syakl.org/api/silabus/auth/sub-kategori', [
                     'api_token' => $request->input("api_token"),
                     'x-key' => $materi["id_kategori_silabus"],
@@ -98,6 +97,10 @@ class SilabusController extends Controller
                     $message['message'] = 'Unauthorized User';
     
                     return $message;
+                }else {
+                    $secureKey = [
+                        ["id_sub_kategori_silabus" => $materi["id_sub_kategori_silabus"]],
+                    ];
                 }
             }
         }
