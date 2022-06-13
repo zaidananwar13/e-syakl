@@ -23,6 +23,10 @@ class Bahasa extends Migration
      */
     public function down()
     {
-        //
+        Schema::create('bahasa', function (Blueprint $table) {
+            $table->increments('id_bahasa');
+            $table->string('bahasa');
+            $table->timestamps();
+        });
     }
 }

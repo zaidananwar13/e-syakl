@@ -22,6 +22,7 @@ class KelasSeeder extends Seeder
         DB::table('kelas')->insert([
             'id_kategori' => 1,
             'id_reviewer' => 1,
+            'id_bahasa' => 1,
             'judul' => "Kelas Nahwu Dasar",
             'gambar' => "nahwu-d.png",
             'langkah' => "3 Langkah",
@@ -38,6 +39,7 @@ class KelasSeeder extends Seeder
         DB::table('kelas')->insert([
             'id_kategori' => 2,
             'id_reviewer' => 1,
+            'id_bahasa' => 1,
             'judul' => "Kelas Shorof Dasar",
             'gambar' => "shorof-d.png",
             'langkah' => "4 Langkah",
@@ -54,6 +56,7 @@ class KelasSeeder extends Seeder
         DB::table('kelas')->insert([
             'id_kategori' => 3,
             'id_reviewer' => 1,
+            'id_bahasa' => 1,
             'judul' => "Kelas Kaligrafi Dasar",
             'gambar' => "kaligrafi-d.png",
             'langkah' => "3 Langkah",

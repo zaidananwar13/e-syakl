@@ -19,8 +19,8 @@ class Kelas_userSeeder extends Seeder
         //
         for($i = 0; $i < 10; $i++) {
             DB::table('kelas_user')->insert([
-                'id_kelas' => random_int(1, 3),
-                'id_user' => random_int(1, 6),
+                'id_kelas' => random_int(7, 8),
+                'id_user' => random_int(1, 3),
                 'point_review' => random_int(1, 5),
                 'komentar_review' => Str::random(18),
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),

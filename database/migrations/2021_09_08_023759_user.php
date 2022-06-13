@@ -16,10 +16,13 @@ class User extends Migration
         //
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id_user');
+            $table->string('type')->nullable();
+            $table->string('sub_type')->nullable();
             $table->string('name');
-            $table->string('google_id');
+            $table->string('google_id')->nullable();
             $table->string('email')->unique();
             $table->date('email_verified_at')->nullable();
+            $table->string('social_media')->nullable();
             $table->string('password')->nullable();
             $table->string('avatar')->nullable();
             $table->string('avatar_original')->nullable();
