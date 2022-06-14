@@ -106,9 +106,7 @@ class Overview extends Controller
         ->get();
 
         foreach($kelas as $kel) {
-            $kel->jumlah_user = DB::table('kelas_user')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->count();
+            $kel->link = "/class?id=" . $kel->id_kelas;
 
             $komentar = DB::table('kelas_user')
             ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
@@ -141,7 +139,8 @@ class Overview extends Controller
             if($rating != 0) {
                 $kel->rating = (float) number_format($rating /= count($ratings), 2);
             }
-        }
+            unset($kel->id_kelas);
+        } 
 
         $overview["items"] = $kelas;
 
