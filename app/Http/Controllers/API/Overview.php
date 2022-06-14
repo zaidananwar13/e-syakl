@@ -71,7 +71,26 @@ class Overview extends Controller
             ->where("id_overview", 2)->get();
 
         $overview = $overview[0];
-        $overview["items"] = "on working";
+        $overview["items"] = [
+            [
+                "title" => "100%",
+                "subTitle" => "COMPLETION RATE",
+                "desc" => "For context, typical online courses have a 12.6% completion rate. We're proud to have a 100% completion rate.",
+                "image" => "Sports medal.svg",
+            ],
+            [
+                "title" => "$0",
+                "subTitle" => "WE'RE FUNDING",
+                "desc" => "We're fully bootstrapped & take pride in growing organically ensure we serve our community vs investor interests.",
+                "image" => "Money with wings.svg",
+            ],
+            [
+                "title" => "500+",
+                "subTitle" => "OUR ALUMNI",
+                "desc" => "We have taught over 500 students online and our awesome alumni have gone on to work Google and more.",
+                "image" => "student.svg",
+            ],
+        ];
 
         return $overview;
     }
