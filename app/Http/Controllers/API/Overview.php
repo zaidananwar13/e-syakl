@@ -179,6 +179,21 @@ class Overview extends Controller
         $overview = $overview[0];
         $overview["items"] = "on working";
 
+        $review = Kelas_User::select("id_user", "komentar_review", "point_review")->get();
+        foreach($review as $view) {
+            $view->comment = $view->komentar_review;
+            unset($view->komentar_review);
+            
+            $view->rating = $view->point_review;
+            unset($view->point_review);
+
+            $user = User::where('id_user', '=', $view->id_user)->first();
+            $view->name = $user->name;
+            $view->img = $user->avatar_original;
+        }
+
+        $overview["items"] = $review;
+
         return $overview;
     }
 }
