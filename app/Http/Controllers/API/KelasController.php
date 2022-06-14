@@ -17,6 +17,7 @@ use App\Models\SilabusChecker;
 use App\Models\Sub_Kategori_Silabus;
 use Hamcrest\Type\IsString;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Exception;
 
 class KelasController extends Controller
 {

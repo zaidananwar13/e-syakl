@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kelas;
 use App\Models\Kelas_User;
 use App\Models\Overview as ModelsOverview;
 use Illuminate\Http\Request;
@@ -101,7 +102,49 @@ class Overview extends Controller
             ->where("id_overview", 3)->get();
 
         $overview = $overview[0];
-        $overview["items"] = "on working";
+        $kelas = Kelas::select('id_kelas', 'judul', 'gambar', 'langkah', 'level')
+        ->get();
+
+        foreach($kelas as $kel) {
+            $kel->jumlah_user = DB::table('kelas_user')
+            ->where('id_kelas', '=', $kel->id_kelas)
+            ->count();
+
+            $komentar = DB::table('kelas_user')
+            ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
+            ->where('id_kelas', '=', $kel->id_kelas)
+            ->get();
+
+            
+            foreach($komentar as $kom) {
+                $nama_komentar = DB::table('user')
+                ->select('name')
+                ->where('id_user', '=', $kom->id_user)
+                ->first();
+    
+                $kom->nama = $nama_komentar->name;
+            }
+
+            $ratings = [];
+            $rating = 0;
+            
+            foreach($komentar as $kom) {
+                $ratings[]= $kom->point_review;
+            }
+            
+            foreach($ratings as $rat) {
+                $rating += $rat;
+            }
+
+            $kel->rating = 0;
+
+            if($rating != 0) {
+                $kel->rating = (float) number_format($rating /= count($ratings), 2);
+            }
+        }
+
+        $overview["items"] = $kelas;
+
 
         return $overview;
     }
