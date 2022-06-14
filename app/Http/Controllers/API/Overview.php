@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\Kelas_User;
 use App\Models\Overview as ModelsOverview;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use KelasUser;
@@ -154,8 +155,19 @@ class Overview extends Controller
             ->where("id_overview", 4)->get();
 
         $overview = $overview[0];
-        $overview["items"] = "on working";
+        $review = Kelas_User::first();
+        $user = User::where('id_user', '=', $review->id_user)->first();
 
+        $overview["items"] = [
+            "title" => "Learning is easier with the giving harakat featured",
+            "desc" => "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore mag.",
+            "link" => "https://e-syakl.org/",
+            "comments" => [
+                "name" => $user->name,
+                "comment" => $review->komentar_review,
+                "img" => $user->avatar_original,
+            ],
+        ];
         return $overview;
     }
 
