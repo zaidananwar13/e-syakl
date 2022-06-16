@@ -81,7 +81,7 @@ class KelasController extends Controller
             ->get();
             
             foreach($kel->silabus as $silabus) {
-                $silabus->sub_silabus = DB::table('sub_kategori_silabus')
+                $silabus->materi = DB::table('sub_kategori_silabus')
                 ->select('id_sub_kategori_silabus', 'judul', 'deskripsi')
                 ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
                 ->get();
@@ -165,7 +165,7 @@ class KelasController extends Controller
             ->get();
             
             foreach($kel->silabus as $silabus) {
-                $silabus->sub_silabus = DB::table('sub_kategori_silabus')
+                $silabus->materi = DB::table('sub_kategori_silabus')
                 ->select('id_sub_kategori_silabus', 'judul', 'deskripsi')
                 ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
                 ->get();
