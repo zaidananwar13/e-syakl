@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\KategoriController;
 use App\Http\Controllers\API\KelasController;
+use App\Http\Controllers\API\LearningPathController;
 use App\Http\Controllers\API\SilabusController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\LoginController;
@@ -49,6 +50,8 @@ Route::post('kelas/filter', [KelasController::class, 'filter']);
 Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
 
 Route::post('kelas/search/{keywords}', [KelasController::class, 'search']);
+
+Route::get('learningpath', [LearningPathController::class, 'index']);
 
 // Route::middleware('checkapitoken')->get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
 
