@@ -143,6 +143,7 @@ class KelasController extends Controller
                 ->first();
     
                 $kom->nama = $nama_komentar->name;
+                $kom->img = $nama_komentar->avatar_original;
             }
 
             $ratings = [];
