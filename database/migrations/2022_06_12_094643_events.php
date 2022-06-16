@@ -13,21 +13,20 @@ class Events extends Migration
      */
     public function up()
     {
-        Schema::create('blog', function (Blueprint $table) {
+        Schema::create('event', function (Blueprint $table) {
             $table->increments('id_event');
             $table->unsignedInteger('hoster');
-            $table->unsignedInteger('title');
+            $table->string('title');
             $table->string('image');
             $table->string('desc');
             $table->timestamp('start');
             $table->timestamp('end');
             $table->string('location');
-            $table->int('tickets');
-            $table->int('available_tickets');
+            $table->unsignedInteger('tickets');
+            $table->unsignedInteger('available_tickets');
             $table->timestamps();
             
-            $table->foreign('id_user')->references('id_user')->on('user');
-            $table->foreign('id_blog')->references('id_blog')->on('blog');
+            $table->foreign('hoster')->references('id_user')->on('user');
         });
     }
 

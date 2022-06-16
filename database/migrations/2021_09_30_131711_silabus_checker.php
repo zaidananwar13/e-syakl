@@ -27,7 +27,7 @@ class SilabusChecker extends Migration
             $table->foreign('id_user')->references('id_user')->on('user');
             $table->foreign('id_kategori_silabus')->references('id_kategori_silabus')->on('kategori_silabus');
             $table->foreign('id_sub_kategori_silabus')->references('id_sub_kategori_silabus')->on('sub_kategori_silabus');
-            $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
+            // $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
         });
     }
 

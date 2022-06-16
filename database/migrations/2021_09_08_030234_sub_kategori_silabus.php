@@ -24,7 +24,7 @@ class SubKategoriSilabus extends Migration
             $table->timestamps();
             
             $table->foreign('id_kategori_silabus')->references('id_kategori_silabus')->on('kategori_silabus');
-            $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
+            // $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
         });
     }
 

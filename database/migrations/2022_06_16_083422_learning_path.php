@@ -13,7 +13,12 @@ class LearningPath extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('learning_path', function (Blueprint $table) {
+            $table->increments('id_learning_path');
+            $table->string("name");
+            $table->string("desc");
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,11 +28,5 @@ class LearningPath extends Migration
      */
     public function down()
     {
-        Schema::create('learning_path', function (Blueprint $table) {
-            $table->increments('id_learning_path');
-            $table->string("name");
-            $table->string("desc");
-            $table->timestamps();
-        });
     }
 }

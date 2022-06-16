@@ -31,7 +31,7 @@ class Kelas extends Migration
             
             $table->foreign('id_kategori')->references('id_kategori')->on('kategori');
             $table->foreign('id_reviewer')->references('id_reviewer')->on('reviewer');
-            $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
+            // $table->foreign('id_bahasa')->references('id_bahasa')->on('bahasa');
         });
     }
 

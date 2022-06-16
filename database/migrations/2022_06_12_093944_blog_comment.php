@@ -13,7 +13,7 @@ class BlogComment extends Migration
      */
     public function up()
     {
-        Schema::create('blog', function (Blueprint $table) {
+        Schema::create('blog_comment', function (Blueprint $table) {
             $table->increments('id_blog_comment');
             $table->unsignedInteger('id_user');
             $table->unsignedInteger('id_blog');

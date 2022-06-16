@@ -19,8 +19,8 @@ class LearningPathClass extends Migration
             $table->unsignedInteger('id_kelas');
             $table->timestamps();
             
-            $table->foreign('id_learning_path')->references('id_learning_path')->on('learning_path');
             $table->foreign('id_kelas')->references('id_kelas')->on('kelas');
+            $table->foreign('id_learning_path')->references('id_learning_path')->on('learning_path');
         });
     }
 

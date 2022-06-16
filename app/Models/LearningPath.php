@@ -11,4 +11,7 @@ class LearningPath extends Model
     
     protected $table = 'learning_path';
     protected $primaryKey = 'id_learning_path';
+    protected $fillable = [
+        'id_learning_path', 'name', 'desc', 'created_at', 'updated_at'
+    ];
 }
