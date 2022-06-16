@@ -15,8 +15,8 @@ class LearningPathClass extends Migration
     {
         Schema::create('learning_path_class', function (Blueprint $table) {
             $table->increments('id_learning_path_class');
-            $table->increments('id_learning_path');
-            $table->increments('id_learning_kelas');
+            $table->unsignedInteger('id_learning_path');
+            $table->unsignedInteger('id_learning_kelas');
             $table->timestamps();
             
             $table->foreign('id_learning_path')->references('id_learning_path')->on('learning_path');
