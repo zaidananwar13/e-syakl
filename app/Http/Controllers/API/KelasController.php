@@ -68,8 +68,11 @@ class KelasController extends Controller
                 $rating += $rat;
             }
 
+            $kel->rating = 0;
+            if($rating != 0) {            
+                $kel->rating = (float) number_format($rating /= count($ratings), 2);
+            } 
 
-            $kel->rating = (float) number_format($rating /= count($ratings), 2);
             $kel->komentar = $komentar;
 
             $kel->silabus = DB::table('kategori_silabus')
