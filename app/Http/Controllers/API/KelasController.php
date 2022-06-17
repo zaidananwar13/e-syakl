@@ -13,6 +13,8 @@ use App\Models\KelasChecker;
 use Illuminate\Http\Request;
 
 use App\Models\Kelas;
+use App\Models\LearningPath;
+use App\Models\LearningPathClass;
 use App\Models\SilabusChecker;
 use App\Models\Sub_Kategori_Silabus;
 use Hamcrest\Type\IsString;
@@ -157,8 +159,14 @@ class KelasController extends Controller
                 $rating += $rat;
             }
 
+            $learningPath = LearningPathClass::where("id_kelas",$kel->id_kelas)->first();
+
             $kel->rating = (float) number_format($rating /= ((count($ratings) == 0) ? 1 : count($ratings)), 2);
             $kel->komentar = $komentar;
+            $kel->learningPath = LearningPath::select("name")
+                ->where("id_learning_path", $learningPath->id_learning_path)->first();
+            $kel->learningPath = $kel->learningPath->name;
+            $kel->classType = "free";
 
             $kel->silabus = DB::table('kategori_silabus')
             ->select('id_kategori_silabus', 'judul', 'deskripsi')
