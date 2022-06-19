@@ -121,7 +121,7 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
-        $kelas = Kelas::select('id_kategori', 'id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'points_review', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
+        $kelas = Kelas::select('id_kategori', 'id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'key_points', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
             ->get();
 
         foreach ($kelas as $kel) {
