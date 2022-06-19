@@ -35,6 +35,14 @@ class KelasSeeder extends Seeder
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
+        
+        DB::table('project')->insert([
+            'id_kelas' => 1,
+            'judul' => "Project Kecil-kecilan",
+            'deskripsi' => "Ini project 1",
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
 
         
         DB::table('kelas')->insert([
@@ -53,6 +61,14 @@ class KelasSeeder extends Seeder
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
+        
+        DB::table('project')->insert([
+            'id_kelas' => 2,
+            'judul' => "Project Kecil-kecilan",
+            'deskripsi' => "Ini project 1",
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
 
         
         DB::table('kelas')->insert([
@@ -68,6 +84,14 @@ class KelasSeeder extends Seeder
             'durasi' => "2 Jam",
             'deskripsi_kelas' => "Kelas Kaligrafi  Dasar untuk pemula yang ingin belajar mengenai cara menulis kaligrafi dengan konsep yang mudah untuk dipahami",
             'tipe_kelas' => 0,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+        
+        DB::table('project')->insert([
+            'id_kelas' => 3,
+            'judul' => "Project Kecil-kecilan",
+            'deskripsi' => "Ini project 1",
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
         ]);

@@ -15,9 +15,12 @@ use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\LearningPath;
 use App\Models\LearningPathClass;
+use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Models\SilabusChecker;
 use App\Models\Sub_Kategori_Silabus;
 use Hamcrest\Type\IsString;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Exception;
 
@@ -173,7 +176,7 @@ class KelasController extends Controller
                 $kel->learningPath = LearningPath::select("name")
                     ->where("id_learning_path", $learningPath->id_learning_path)->first();
                 $kel->learningPath = $kel->learningPath->name;
-            }else {
+            } else {
                 $kel->learningPath = "Unsorted";
             }
 
@@ -367,6 +370,16 @@ class KelasController extends Controller
                         $silabuscheck->id_sub_kategori_silabus = $subSilabus['id_sub_kategori_silabus'];
                         $silabuscheck->id_bahasa = $subSilabus['id_sub_kategori_silabus'];
                         $silabuscheck->save();
+
+                        $projectCheck = Project::where("id_kelas", $req['kelas'])->first();
+                        if ($projectCheck != null) {
+    
+                            $project = new ProjectUser();
+                            $project->id_user = $user["id_user"];
+                            $project->id_project = $projectCheck->id_project;
+                            $project->expired = Carbon::now()->addDays(30);
+                            $project->save();
+                        }
 
                         $message['code'] = 200;
                         $message['message'] = 'Class register success!';

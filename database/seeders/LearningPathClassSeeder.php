@@ -20,7 +20,7 @@ class LearningPathClassSeeder extends Seeder
             DB::table('learning_path_class')->insert([
                 'id_learning_path_class' => $i,
                 'id_learning_path' => rand(1, 3),
-                'id_kelas' => rand(2, 7),
+                'id_kelas' => rand(1, 3),
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]);

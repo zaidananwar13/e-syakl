@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Models\ClassProgress;
 use App\Models\CompletedClass;
 use App\Models\Kelas;
+use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -82,6 +85,40 @@ class UserController extends Controller
             }
         }
 
+        $project = ProjectUser::select("id_project", "expired")
+            ->where("id_user", $user["id_user"])->get();
+
+        if(count($project) > 0) {
+            foreach($project as $userProject) {
+                $projectID = Project::select("judul")->where("id_project", $userProject->id_project)->first();
+                $userProject->title = $projectID->judul;
+                $userProject->status = "";
+                $userProject->due = "";
+                unset($userProject->id_project);
+
+                $present = Carbon::now();
+                $due = new Carbon($userProject->expired);
+                
+                if($present->toDayDateTimeString() > $due->toDayDateTimeString()) {
+                    $userProject->status = "expired";
+                    $userProject->due = "expired";
+                }else {
+                    $diff = $due->diffInDays($present);
+
+                    $userProject->status = "on-progress";
+                    $userProject->due = "$diff days";
+                    if($diff <= 7) {
+                        $userProject->status = "alert";
+                    }else if($diff == 1) {
+                        $userProject->status = "today";
+                        $userProject->due = "Today";
+                    }
+                }
+            }
+        }else {
+            $project = "You haven't taken a project yet";
+        }
+
         $temp2 = [];
         if(count($classCompleted) > 0) {
             foreach($classCompleted as $class) {
@@ -100,7 +137,8 @@ class UserController extends Controller
             "class_on_progress" => count($classProgress),
             "completed_classes" => count($classCompleted),
             "class_progress" => $temp,
-            "class_completed" => $temp2
+            "class_completed" => $temp2,
+            "project" => $project
         ];
 
         
