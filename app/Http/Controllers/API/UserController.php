@@ -228,6 +228,7 @@ class UserController extends Controller
             
         $api["data"] = [
             "class" => $class->judul,
+            "learning_path" => "Nahwu Dummyy Path",
             "class_progress" => $classProgress->progress,
             "certificate" => ["status" => "on-progress", "message" => "You haven't finish this class yet"],
             "quiz" => [
@@ -237,6 +238,7 @@ class UserController extends Controller
             "project" =>[
                 "project_title" => "Project Akhir: Nahwu Beginner",
                 "date" => "2013-12-25",
+                "status" => "on-progress"
             ]
         ];
 
