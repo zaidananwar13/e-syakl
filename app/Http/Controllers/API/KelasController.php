@@ -53,11 +53,12 @@ class KelasController extends Controller
             
             foreach($komentar as $kom) {
                 $nama_komentar = DB::table('user')
-                ->select('name')
+                ->select('name', 'avatar_original')
                 ->where('id_user', '=', $kom->id_user)
                 ->first();
     
                 $kom->nama = $nama_komentar->name;
+                $kom->img = $nama_komentar->avatar_original;
             }
 
             $ratings = [];
