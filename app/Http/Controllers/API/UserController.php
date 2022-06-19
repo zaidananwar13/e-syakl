@@ -23,11 +23,13 @@ class UserController extends Controller
         return User::all()->toArray();
     }
 
-    public function register() {
+    public function register()
+    {
         return view('test.register');
     }
 
-    public function registerPost(Request $request) {
+    public function registerPost(Request $request)
+    {
         $this->validate($request, [
             'email' => 'required',
             'password' => 'required',
@@ -52,12 +54,13 @@ class UserController extends Controller
             $data->password = bcrypt($request->password);
             $data->api_token = hash('sha256', Str::random(60));
             $data->save();
-                
+
             return redirect('api/register')->with('success', 'Kamu berhasil Register');
         }
     }
 
-    public function profile(Request $request) {
+    public function profile(Request $request)
+    {
         // header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Quiz API',
@@ -68,28 +71,64 @@ class UserController extends Controller
         $user = User::select("id_user", "name", "email", "created_at")
             ->where("api_token", $request->input("api_token"))
             ->first()->toArray();
-        
+
         $classProgress = ClassProgress::select("id_kelas", "progress")->distinct()
             ->where("id_user", $user["id_user"])
             ->where("progress", "!=", "100")->get()->toArray();
 
         $classCompleted = CompletedClass::where("id_user", $user["id_user"])->get()->toArray();
-
+        
         $temp = [];
-        if(count($classProgress) > 0) {
-            foreach($classProgress as $class) {
+        if (count($classProgress) > 0) {
+            foreach ($classProgress as $class) {
                 $class_temp = Kelas::select("id_kelas", "gambar", "judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
-                $class_temp["days_left"] = 59;
-                $class_temp["progress"] = $class["progress"];
+
+                $project = Project::select("id_project")->where("id_kelas", $class["id_kelas"])
+                    ->first();
+
+                $classProject = ProjectUser::select("id_project", "expired")
+                    ->where("id_project", $project->id_project)
+                    ->where("id_user", $user["id_user"])->first();
+                
+                $class_temp["project_class"] = $classProject;
+                if($classProject != null) {
+                    $projectID = Project::select("judul")->where("id_project", $classProject->id_project)->first();
+                    $class_temp["project_class"]["title"] = $projectID->judul;
+                    $class_temp["project_class"]["status"] = "";
+                    $class_temp["project_class"]["due"] = "";
+                    unset($class["id_project"]);
+        
+                    $present = Carbon::now();
+                    $due = new Carbon($classProject->expired);
+                    
+                    if ($present->toDayDateTimeString() > $due->toDayDateTimeString()) {
+                        $class_temp["project_class"]["status"] = "expired";
+                        $class_temp["project_class"]["due"] = "expired";
+                    } else {
+                        $diff = $due->diffInDays($present);
+
+                        $class_temp["project_class"]["status"] = "on-progress";
+                        $class_temp["project_class"]["due"] = "$diff days";
+                        if ($diff <= 7) {
+                            $class_temp["project_class"]["status"] = "alert";
+                        } else if ($diff == 1) {
+                            $class_temp["project_class"]["status"] = "today";
+                            $class_temp["project_class"]["due"] = "Today";
+                        }
+                    }
+                }else {
+                    $class_temp["project_class"] = "No Project Yet";
+                }
+
+                $class_temp["progress_class"] = $class["progress"];
                 array_push($temp, $class_temp);
             }
         }
-
-        $project = ProjectUser::select("id_project", "expired")
+        $projects = ProjectUser::select("id_project", "expired")
             ->where("id_user", $user["id_user"])->get();
 
-        if(count($project) > 0) {
-            foreach($project as $userProject) {
+        if (count($projects) > 0) {
+            foreach ($projects as $userProject) {
                 $projectID = Project::select("judul")->where("id_project", $userProject->id_project)->first();
                 $userProject->title = $projectID->judul;
                 $userProject->status = "";
@@ -98,30 +137,30 @@ class UserController extends Controller
 
                 $present = Carbon::now();
                 $due = new Carbon($userProject->expired);
-                
-                if($present->toDayDateTimeString() > $due->toDayDateTimeString()) {
+
+                if ($present->toDayDateTimeString() > $due->toDayDateTimeString()) {
                     $userProject->status = "expired";
                     $userProject->due = "expired";
-                }else {
+                } else {
                     $diff = $due->diffInDays($present);
 
                     $userProject->status = "on-progress";
                     $userProject->due = "$diff days";
-                    if($diff <= 7) {
+                    if ($diff <= 7) {
                         $userProject->status = "alert";
-                    }else if($diff == 1) {
+                    } else if ($diff == 1) {
                         $userProject->status = "today";
                         $userProject->due = "Today";
                     }
                 }
             }
-        }else {
-            $project = "You haven't taken a project yet";
+        } else {
+            $projects = "You haven't taken a project yet";
         }
 
         $temp2 = [];
-        if(count($classCompleted) > 0) {
-            foreach($classCompleted as $class) {
+        if (count($classCompleted) > 0) {
+            foreach ($classCompleted as $class) {
                 $class_temp = Kelas::select("id_kelas", "gambar", "judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
                 $class_temp["date"] = CompletedClass::select("created_at")->where("id_kelas", $class["id_kelas"])
                     ->where("id_user", $user["id_user"])->first()->toArray();
@@ -138,10 +177,10 @@ class UserController extends Controller
             "completed_classes" => count($classCompleted),
             "class_progress" => $temp,
             "class_completed" => $temp2,
-            "project" => $project
+            "project" => $projects
         ];
 
-        
+
         $message = [
             'title' => 'E - Syakl | User API',
             'code' => 200,
