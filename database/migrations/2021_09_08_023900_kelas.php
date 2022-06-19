@@ -23,6 +23,7 @@ class Kelas extends Migration
             $table->string('gambar');
             $table->string('langkah');
             $table->string('level');
+            $table->string('key_points');
             $table->string('deskripsi_singkat');
             $table->string('durasi');
             $table->string('deskripsi_kelas');

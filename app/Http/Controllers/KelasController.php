@@ -64,6 +64,7 @@ class KelasController extends Controller
     {
         header('Content-Type: application/json; charset=utf-8');
         $dataForm = $request->all();
+        $dataForm["key_points"] = "keypoints 1,keypoints 3,keypoints 2";
 
         $silabus = [];
         foreach($dataForm as $key => $val) {

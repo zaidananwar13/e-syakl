@@ -104,6 +104,16 @@
             </div>
 
             <div class="row">
+                <div class="form-group mb-4">
+                    <div class="mb-0">
+                        
+                        <label for="judul">Key Points</label>
+                        <input name="key_points" class="form-control" placeholder="Masukkan keypoints" id="key_points_tagify"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group mb-4">
                         <label for="deskripsi_singkat">Deskripsi Singkat</label>
@@ -347,6 +357,13 @@
         console.log(JSON.stringify(kelasContainer));
 
     });
+</script>
+@endsection
+
+@section('js')
+<script>
+    var input = document.querySelector("#key_points_tagify");
+    var tag = new Tagify(input);
 </script>
 
 @endsection

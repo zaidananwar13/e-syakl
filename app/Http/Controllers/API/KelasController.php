@@ -24,8 +24,9 @@ use PHPUnit\Exception;
 class KelasController extends Controller
 {
 
-    public function index($id = null) {
-        if(!is_numeric($id)) {
+    public function index($id = null)
+    {
+        if (!is_numeric($id)) {
             abort(404);
         }
 
@@ -36,80 +37,82 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
-        $kelas = Kelas::select('id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
+        $kelas = Kelas::select('id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi',  'key_points', 'deskripsi_singkat', 'deskripsi_kelas')
             ->where('id_kelas', '=', $id)
             ->get();
 
-        foreach($kelas as $kel) {
+        foreach ($kelas as $kel) {
             $kel->jumlah_user = DB::table('kelas_user')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->count();
+                ->where('id_kelas', '=', $kel->id_kelas)
+                ->count();
 
             $komentar = DB::table('kelas_user')
-            ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->get();
+                ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
+                ->where('id_kelas', '=', $kel->id_kelas)
+                ->get();
 
-            
-            foreach($komentar as $kom) {
+
+            foreach ($komentar as $kom) {
                 $nama_komentar = DB::table('user')
-                ->select('name', 'avatar_original')
-                ->where('id_user', '=', $kom->id_user)
-                ->first();
-    
+                    ->select('name', 'avatar_original')
+                    ->where('id_user', '=', $kom->id_user)
+                    ->first();
+
                 $kom->nama = $nama_komentar->name;
                 $kom->img = $nama_komentar->avatar_original;
             }
 
             $ratings = [];
             $rating = 0;
-            
-            foreach($komentar as $kom) {
-                $ratings[]= $kom->point_review;
+
+            foreach ($komentar as $kom) {
+                $ratings[] = $kom->point_review;
             }
-            
-            foreach($ratings as $rat) {
+
+            foreach ($ratings as $rat) {
                 $rating += $rat;
             }
 
             $kel->rating = 0;
-            if($rating != 0) {            
+            if ($rating != 0) {
                 $kel->rating = (float) number_format($rating /= count($ratings), 2);
-            } 
+            }
 
             $kel->komentar = $komentar;
 
             $kel->silabus = DB::table('kategori_silabus')
-            ->select('id_kategori_silabus', 'judul', 'deskripsi')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->get();
-            
-            foreach($kel->silabus as $silabus) {
-                $silabus->materi = DB::table('sub_kategori_silabus')
-                ->select('id_sub_kategori_silabus', 'judul', 'deskripsi')
-                ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
+                ->select('id_kategori_silabus', 'judul', 'deskripsi')
+                ->where('id_kelas', '=', $kel->id_kelas)
                 ->get();
+
+            foreach ($kel->silabus as $silabus) {
+                $silabus->materi = DB::table('sub_kategori_silabus')
+                    ->select('id_sub_kategori_silabus', 'judul', 'deskripsi')
+                    ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
+                    ->get();
             }
 
             $kel->tim_reviewer = DB::table('reviewer')
-            ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
-            ->where('id_reviewer', '=', $kel->id_reviewer)
-            ->get();
+                ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
+                ->where('id_reviewer', '=', $kel->id_reviewer)
+                ->get();
         }
 
-        if(count($kelas) > 0) {
-            $message = [            'title' => 'E - Syakl | Kategori API',            'title' => 'E - Syakl | Kategori API',
-            'title' => 'E - Syakl | Kelas API',
-                'code'=> 200,
-                'message'=> 'Retrieving data successful!',
+        if (count($kelas) > 0) {
+            $message = [
+                'title' => 'E - Syakl | Kategori API',            'title' => 'E - Syakl | Kategori API',
+                'title' => 'E - Syakl | Kelas API',
+                'code' => 200,
+                'message' => 'Retrieving data successful!',
                 'data' => $kelas
             ];
         }
-        
+
         return $message;
     }
 
-    public function kelas() {
+    public function kelas()
+    {
 
         header('Content-Type: application/json; charset=utf-8');
         $message = [
@@ -118,10 +121,10 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
-        $kelas = Kelas::select('id_kategori', 'id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
+        $kelas = Kelas::select('id_kategori', 'id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'points_review', 'durasi', 'deskripsi_singkat', 'deskripsi_kelas')
             ->get();
 
-        foreach($kelas as $kel) {
+        foreach ($kelas as $kel) {
             $kategori = Kategori::select('judul')
                 ->where('id_kategori', $kel->id_kategori)
                 ->first()
@@ -131,76 +134,84 @@ class KelasController extends Controller
             unset($kel->id_kategori);
 
             $kel->jumlah_user = DB::table('kelas_user')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->count();
+                ->where('id_kelas', '=', $kel->id_kelas)
+                ->count();
 
             $komentar = DB::table('kelas_user')
-            ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->get();
+                ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
+                ->where('id_kelas', '=', $kel->id_kelas)
+                ->get();
 
-            
-            foreach($komentar as $kom) {
+
+            foreach ($komentar as $kom) {
                 $nama_komentar = DB::table('user')
-                ->select('name', 'avatar_original')
-                ->where('id_user', '=', $kom->id_user)
-                ->first();
-    
+                    ->select('name', 'avatar_original')
+                    ->where('id_user', '=', $kom->id_user)
+                    ->first();
+
                 $kom->nama = $nama_komentar->name;
                 $kom->img = $nama_komentar->avatar_original;
             }
 
             $ratings = [];
             $rating = 0;
-            
-            foreach($komentar as $kom) {
-                $ratings[]= $kom->point_review;
+
+            foreach ($komentar as $kom) {
+                $ratings[] = $kom->point_review;
             }
-            
-            foreach($ratings as $rat) {
+
+            foreach ($ratings as $rat) {
                 $rating += $rat;
             }
 
-            $learningPath = LearningPathClass::where("id_kelas",$kel->id_kelas)->first();
+            $learningPath = LearningPathClass::where("id_kelas", $kel->id_kelas)->first();
 
             $kel->rating = (float) number_format($rating /= ((count($ratings) == 0) ? 1 : count($ratings)), 2);
             $kel->komentar = $komentar;
-            $kel->learningPath = LearningPath::select("name")
-                ->where("id_learning_path", $learningPath->id_learning_path)->first();
-            $kel->learningPath = $kel->learningPath->name;
+
+            if ($learningPath != null) {
+                $kel->learningPath = LearningPath::select("name")
+                    ->where("id_learning_path", $learningPath->id_learning_path)->first();
+                $kel->learningPath = $kel->learningPath->name;
+            }else {
+                $kel->learningPath = "Unsorted";
+            }
+
             $kel->classType = "free";
 
             $kel->silabus = DB::table('kategori_silabus')
-            ->select('id_kategori_silabus', 'judul', 'deskripsi')
-            ->where('id_kelas', '=', $kel->id_kelas)
-            ->get();
-            
-            foreach($kel->silabus as $silabus) {
-                $silabus->materi = DB::table('sub_kategori_silabus')
-                ->select('id_sub_kategori_silabus', 'judul', 'deskripsi')
-                ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
+                ->select('id_kategori_silabus', 'judul', 'deskripsi')
+                ->where('id_kelas', '=', $kel->id_kelas)
                 ->get();
+
+            foreach ($kel->silabus as $silabus) {
+                $silabus->materi = DB::table('sub_kategori_silabus')
+                    ->select('id_sub_kategori_silabus', 'judul', 'deskripsi')
+                    ->where('id_kategori_silabus', '=', $silabus->id_kategori_silabus)
+                    ->get();
             }
 
             $kel->tim_reviewer = DB::table('reviewer')
-            ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
-            ->where('id_reviewer', '=', $kel->id_reviewer)
-            ->get();
+                ->select('id_reviewer', 'nama', 'foto', 'jabatan', 'portofolio')
+                ->where('id_reviewer', '=', $kel->id_reviewer)
+                ->get();
         }
 
-        if(count($kelas) > 0) {
-            $message = [            'title' => 'E - Syakl | Kategori API',            'title' => 'E - Syakl | Kategori API',
-            'title' => 'E - Syakl | Kelas API',
-                'code'=> 200,
-                'message'=> 'Retrieving data successful!',
+        if (count($kelas) > 0) {
+            $message = [
+                'title' => 'E - Syakl | Kategori API',            'title' => 'E - Syakl | Kategori API',
+                'title' => 'E - Syakl | Kelas API',
+                'code' => 200,
+                'message' => 'Retrieving data successful!',
                 'data' => $kelas
             ];
         }
-        
+
         return $message;
     }
 
-    public function filter(Request $request, $keywords = null) {
+    public function filter(Request $request, $keywords = null)
+    {
         header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Kelas API',
@@ -208,14 +219,14 @@ class KelasController extends Controller
             'message' => 'Not Found'
         ];
 
-        
+
         $filters = json_decode($request->getContent(), true);
         $filters = $filters['filters'];
 
         $filtered = [];
         $kelas = Kelas::all()->toArray();
 
-        if($keywords != null) {
+        if ($keywords != null) {
             $keywords = strtolower($keywords);
             $kelas = Kelas::select('*')
                 ->orWhere(DB::raw('lower(judul)'), 'like', '%' . $keywords . '%')
@@ -228,42 +239,43 @@ class KelasController extends Controller
             $kelas = $kelas->toArray();
         }
 
-        foreach($kelas as $kel) {
+        foreach ($kelas as $kel) {
             $stats = [];
 
-            foreach($filters['rules'] as $f_key => $f_value) {
-                if(strtolower($kel[$f_key]) == strtolower($f_value)) {
-                    $stats[]= true;
-                }else {
-                    $stats[]= false;
+            foreach ($filters['rules'] as $f_key => $f_value) {
+                if (strtolower($kel[$f_key]) == strtolower($f_value)) {
+                    $stats[] = true;
+                } else {
+                    $stats[] = false;
                 }
             }
 
             $pointer = count($stats);
-            foreach($stats as $stat) {
-                if($stat == true) {
+            foreach ($stats as $stat) {
+                if ($stat == true) {
                     $pointer--;
                 }
             }
 
-            if($pointer == 0) {
-                $filtered[]= $kel;
+            if ($pointer == 0) {
+                $filtered[] = $kel;
             }
         }
 
-        if(count($filtered) > 0) {
+        if (count($filtered) > 0) {
             $message = [
-            'title' => 'E - Syakl | Kelas API',
-                'code'=> 200,
-                'message'=> 'Retrieving data successful!',
+                'title' => 'E - Syakl | Kelas API',
+                'code' => 200,
+                'message' => 'Retrieving data successful!',
                 'data' => $filtered
             ];
         }
-        
+
         return $message;
     }
 
-    public function search(Request $request, $keyword) {
+    public function search(Request $request, $keyword)
+    {
         header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Search API',
@@ -273,11 +285,11 @@ class KelasController extends Controller
 
         $kelas = [];
 
-        if($keyword != null) {
+        if ($keyword != null) {
             $keyword = strtolower($keyword);
             $keyword = explode(' ', $keyword);
-            
-            foreach($keyword as $key) {
+
+            foreach ($keyword as $key) {
                 $data = Kelas::select('*')
                     ->where(DB::raw('lower(judul)'), 'like', '%' . $key . '%')
                     ->orWhere(DB::raw('lower(level)'), 'like', '%' . $key . '%')
@@ -290,19 +302,20 @@ class KelasController extends Controller
             }
         }
 
-        if(count($kelas) > 0) {
+        if (count($kelas) > 0) {
             $message = [
-            'title' => 'E - Syakl | Kelas API',
-                'code'=> 200,
-                'message'=> 'Retrieving data successful!',
+                'title' => 'E - Syakl | Kelas API',
+                'code' => 200,
+                'message' => 'Retrieving data successful!',
                 'data' => $kelas
             ];
         }
-        
+
         return $message;
     }
 
-    public function authKelas(Request $request) {
+    public function authKelas(Request $request)
+    {
         $req = $request->all();
         $message = [
             'title' => 'E - Syakl | Silabus Auth API',
@@ -311,20 +324,20 @@ class KelasController extends Controller
         ];
 
         try {
-            
+
             $user = User::select('id_user')
                 ->where('api_token', $req['api_token'])
                 ->first();
 
-            if($user != null) {
+            if ($user != null) {
                 $user = $user->toArray();
                 $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['kelas']);
 
-                if($userKelas == null) {
+                if ($userKelas == null) {
                     $kelasCheck = Kelas::select('id_kelas')
                         ->where('id_kelas', $req['kelas'])->get()->toArray();
-                    
-                    if($kelasCheck != null) {
+
+                    if ($kelasCheck != null) {
                         $progress = new ClassProgress();
                         $progress->id_user = $user["id_user"];
                         $progress->id_kelas = $req['kelas'];
@@ -334,13 +347,13 @@ class KelasController extends Controller
                         $silabus = Kategori_Silabus::select("id_kategori_silabus")
                             ->first()
                             ->where("id_kelas", $req['kelas'])->get()->toArray();
-			
-			// bakal error kalo silabus kosong
+
+                        // bakal error kalo silabus kosong
                         $silabus = $silabus[0];
 
                         $subSilabus = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
-                        ->first()
-                        ->where("id_kategori_silabus", $silabus['id_kategori_silabus'])->get()->toArray();
+                            ->first()
+                            ->where("id_kategori_silabus", $silabus['id_kategori_silabus'])->get()->toArray();
                         $subSilabus = $subSilabus[0];
 
                         $kelasChecker = new KelasChecker();
@@ -359,66 +372,65 @@ class KelasController extends Controller
                         $message['message'] = 'Class register success!';
 
                         return $message;
-                    }else {
+                    } else {
                         $message['code'] = 410;
                         $message['message'] = 'Illegal class Access!';
                     }
-                }else {
+                } else {
                     $message['code'] = 409;
                     $message['message'] = 'Already registered';
                 }
-
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $error_handler = [
                 "23503" => "Foreign key violates",
                 "23505" => "Duplicate key"
             ];
             $data = json_encode($e);
             $data = json_decode($data);
-            
+
             $message['status'] = $error_handler[$data->errorInfo[0]];
             $message['code'] = 409;
             $message['message'] = 'Already registered';
 
-            switch($message['status']) {
+            switch ($message['status']) {
                 case "Foreign key violates":
                     $message['message'] = 'Illegal access detected ';
-                    
+
                     break;
                 case "Duplicate key":
                     $message['message'] = 'Already registered';
-                    
+
                     break;
                 default:
                     break;
             }
-
         }
 
         return $message;
     }
 
-    
-    public function checkKelas(Request $request) {
+
+    public function checkKelas(Request $request)
+    {
         $req = $request->all();
         $message = [
             'title' => 'E - Syakl | Silabus Auth API',
             'code' => 401,
             'message' => 'Unauthorized'
         ];
-            
+
         $user = User::select('id_user')
             ->where('api_token', $req['api_token'])
             ->first();
-            
+
         $user = $user->toArray();
         $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['kelas']);
 
-        if($userKelas == null) {
+        if ($userKelas == null) {
             $message['code'] = 1919;
             $message['message'] = "Haven't enlisted yet";
-        }else {
+        } else {
             $message['code'] = 409;
             $message['message'] = 'Already registered';
         }
@@ -426,7 +438,8 @@ class KelasController extends Controller
         return $message;
     }
 
-    public function completeClass(Request $request) {
+    public function completeClass(Request $request)
+    {
         $message = [
             'title' => 'E - Syakl | Silabus Auth API',
             'code' => 401,
@@ -436,13 +449,13 @@ class KelasController extends Controller
         $user = User::select("id_user")->where("api_token", $request->input("api_token"))->first()->toArray();
         ClassProgress::where("id_user", $user["id_user"])->where("id_kelas", $request->input("kelas"))
             ->update(["progress" => "100"]);
-            
+
 
         $class = new CompletedClass();
         $class->id_user = $user["id_user"];
         $class->id_kelas = $request->input("kelas");
-        
-        if($class->save()) {
+
+        if ($class->save()) {
             $message = [
                 'title' => 'E - Syakl | Kelas Auth API',
                 'code' => 200,
@@ -453,14 +466,15 @@ class KelasController extends Controller
         return $message;
     }
 
-    public function myClass(Request $request) {
+    public function myClass(Request $request)
+    {
         $api = [
             'title' => 'E - Syakl | Kelas API',
             'code' => 404,
             'message' => "User's Class Not Found"
         ];
 
-        
+
         // $class = Kelas::select("judul")->where("")
 
         return $api;
