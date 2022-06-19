@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bahasa;
 use App\Models\Kategori_Silabus;
 use App\Models\Sub_Kategori_Silabus;
 use Illuminate\Http\Request;
@@ -38,6 +39,8 @@ class Sub_Kategori_SilabusController extends Controller
             return redirect('login');
         } else {
             $kategori_silabuss = Kategori_Silabus::all();
+            $bahasa = Bahasa::all();
+            $data['bahasa'] = $bahasa;
             $data['kategori_silabus'] = $kategori_silabuss;
             $data['action'] = 'sub_kategori_silabus.store';
             return view('sub_kategori_silabus.form', $data);
@@ -64,6 +67,7 @@ class Sub_Kategori_SilabusController extends Controller
         } else {
             $request->validate([
                 'id_kategori_silabus' => 'required',
+                'id_bahasa' => 'required',
                 'judul' => 'required',
                 'deskripsi' => 'required',
                 'konten' => 'required'

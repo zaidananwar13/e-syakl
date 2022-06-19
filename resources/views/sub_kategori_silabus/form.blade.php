@@ -48,6 +48,15 @@
                 @endforeach
             </select>
             <div class="form-group mb-4">
+                <label for="bahasa">Bahasa</label>
+                
+                <select class="form-control" id="bahasa" name="id_bahasa">
+                    <option value="1">Indonesia</option>
+                    <option value="2">English</option>
+                    <option value="3">Malaysia</option>
+                </select>
+            </div>
+            <div class="form-group mb-4">
                 <label for="judul">Judul</label>
                 <input type="text" class="form-control" name="judul" value="{{ ($action!='sub_kategori_silabus.store') ? $sub_kategori_silabus->judul : '' }}" placeholder="Judul">
             </div>

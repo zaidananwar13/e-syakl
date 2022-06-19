@@ -23,6 +23,7 @@ use PHPUnit\Exception;
 
 class KelasController extends Controller
 {
+
     public function index($id = null) {
         if(!is_numeric($id)) {
             abort(404);
@@ -316,22 +317,22 @@ class KelasController extends Controller
 
             if($user != null) {
                 $user = $user->toArray();
-                $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['z-key']);
+                $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['kelas']);
 
                 if($userKelas == null) {
                     $kelasCheck = Kelas::select('id_kelas')
-                        ->where('id_kelas', $req['z-key'])->get()->toArray();
+                        ->where('id_kelas', $req['kelas'])->get()->toArray();
                     
                     if($kelasCheck != null) {
                         $progress = new ClassProgress();
                         $progress->id_user = $user["id_user"];
-                        $progress->id_kelas = $req['z-key'];
+                        $progress->id_kelas = $req['kelas'];
                         $progress->progress = "5";
                         $progress->save();
 
                         $silabus = Kategori_Silabus::select("id_kategori_silabus")
                             ->first()
-                            ->where("id_kelas", $req['z-key'])->get()->toArray();
+                            ->where("id_kelas", $req['kelas'])->get()->toArray();
 			
 			// bakal error kalo silabus kosong
                         $silabus = $silabus[0];
@@ -343,13 +344,14 @@ class KelasController extends Controller
 
                         $kelasChecker = new KelasChecker();
                         $kelasChecker->id_user = $user['id_user'];
-                        $kelasChecker->id_kelas = $req['z-key'];
+                        $kelasChecker->id_kelas = $req['kelas'];
                         $kelasChecker->save();
 
                         $silabuscheck = new SilabusChecker;
                         $silabuscheck->id_user = $user['id_user'];
                         $silabuscheck->id_kategori_silabus = $silabus['id_kategori_silabus'];
                         $silabuscheck->id_sub_kategori_silabus = $subSilabus['id_sub_kategori_silabus'];
+                        $silabuscheck->id_bahasa = $subSilabus['id_sub_kategori_silabus'];
                         $silabuscheck->save();
 
                         $message['code'] = 200;
@@ -410,7 +412,7 @@ class KelasController extends Controller
             ->first();
             
         $user = $user->toArray();
-        $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['z-key']);
+        $userKelas = Help::checkKelasAccessUser($user['id_user'], $req['kelas']);
 
         if($userKelas == null) {
             $message['code'] = 1919;
@@ -431,13 +433,13 @@ class KelasController extends Controller
         ];
 
         $user = User::select("id_user")->where("api_token", $request->input("api_token"))->first()->toArray();
-        ClassProgress::where("id_user", $user["id_user"])->where("id_kelas", $request->input("x-key"))
+        ClassProgress::where("id_user", $user["id_user"])->where("id_kelas", $request->input("kelas"))
             ->update(["progress" => "100"]);
             
 
         $class = new CompletedClass();
         $class->id_user = $user["id_user"];
-        $class->id_kelas = $request->input("x-key");
+        $class->id_kelas = $request->input("kelas");
         
         if($class->save()) {
             $message = [
@@ -448,5 +450,18 @@ class KelasController extends Controller
         }
 
         return $message;
+    }
+
+    public function myClass(Request $request) {
+        $api = [
+            'title' => 'E - Syakl | Kelas API',
+            'code' => 404,
+            'message' => "User's Class Not Found"
+        ];
+
+        
+        // $class = Kelas::select("judul")->where("")
+
+        return $api;
     }
 }

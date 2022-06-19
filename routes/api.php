@@ -46,6 +46,9 @@ Route::get('migrasi/{mode}', [Migrasi::class, 'index']);
 Route::get('register', [UserController::class, 'register']);
 Route::post('registerPost', [UserController::class, 'registerPost']);
 
+Route::get('user-register', [UserController::class, 'register']);
+Route::post('user-registerPost', [UserController::class, 'registerPost']);
+
 Route::post('kelas/filter', [KelasController::class, 'filter']);
 Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
 
@@ -69,8 +72,11 @@ Route::middleware(['checkapitoken'])->group(function () {
     Route::post('/quiz/submit', [QuizController::class, 'submit']);
     Route::post('/quiz/clear', [QuizProgressController::class, 'index']);
     Route::post('/quiz/is-clear', [QuizProgressController::class, 'isClear']);
+
+    // Route::post('/my-class', [KelasController::class, 'myClasss']);
     
-    Route::post('/user/profile', [UserController::class, 'profile']);
+    // Route::post('/user/profile', [UserController::class, 'profile']);
+    Route::post('/my-class', [UserController::class, 'profile']);
 });
 
 

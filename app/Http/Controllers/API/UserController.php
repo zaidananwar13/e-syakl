@@ -55,7 +55,7 @@ class UserController extends Controller
     }
 
     public function profile(Request $request) {
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Quiz API',
             'code' => 404,

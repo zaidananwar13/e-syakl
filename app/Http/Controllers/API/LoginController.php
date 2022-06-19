@@ -14,6 +14,13 @@ use Illuminate\Support\Str;
 class LoginController extends Controller
 {
     /* Email Login */
+    public function login() {
+
+    }
+
+    public function regis() {
+        
+    }
 
     /* Google API */
     public function redirectToProvider() {
