@@ -61,12 +61,17 @@ class UserController extends Controller
 
     public function profile(Request $request)
     {
-        // header('Content-Type: application/json; charset=utf-8');
+        header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Quiz API',
-            'code' => 404,
+            'code' => 403,
             'message' => 'Not Found'
         ];
+
+        if ($request->input("api_token") == null) {
+            $message["message"] = "Access Forbidden! What are you looking for?";
+            return $message;
+        }
 
         $user = User::select("id_user", "name", "email", "created_at")
             ->where("api_token", $request->input("api_token"))
@@ -77,7 +82,7 @@ class UserController extends Controller
             ->where("progress", "!=", "100")->get()->toArray();
 
         $classCompleted = CompletedClass::where("id_user", $user["id_user"])->get()->toArray();
-        
+
         $temp = [];
         if (count($classProgress) > 0) {
             foreach ($classProgress as $class) {
@@ -89,18 +94,18 @@ class UserController extends Controller
                 $classProject = ProjectUser::select("id_project", "expired")
                     ->where("id_project", $project->id_project)
                     ->where("id_user", $user["id_user"])->first();
-                
+
                 $class_temp["project_class"] = $classProject;
-                if($classProject != null) {
+                if ($classProject != null) {
                     $projectID = Project::select("judul")->where("id_project", $classProject->id_project)->first();
                     $class_temp["project_class"]["title"] = $projectID->judul;
                     $class_temp["project_class"]["status"] = "";
                     $class_temp["project_class"]["due"] = "";
                     unset($class["id_project"]);
-        
+
                     $present = Carbon::now();
                     $due = new Carbon($classProject->expired);
-                    
+
                     if ($present->toDayDateTimeString() > $due->toDayDateTimeString()) {
                         $class_temp["project_class"]["status"] = "expired";
                         $class_temp["project_class"]["due"] = "expired";
@@ -116,7 +121,7 @@ class UserController extends Controller
                             $class_temp["project_class"]["due"] = "Today";
                         }
                     }
-                }else {
+                } else {
                     $class_temp["project_class"] = "No Project Yet";
                 }
 
@@ -188,6 +193,53 @@ class UserController extends Controller
             'data' => $profile
         ];
 
-        return $message;
+        return response($message, $message["code"]);
+    }
+
+    public function classroom(Request $request)
+    {
+        // header('Content-Type: application/json; charset=utf-8');
+        $api = [
+            'title' => 'E - Syakl | Classroom API',
+            'code' => 200,
+            'message' => 'Ok.'
+        ];
+
+        $token = $request->input("api_token");
+        $kelas = $request->input("class");
+
+        if ($token == null || $kelas == null) {
+            $api["message"] = "Access Forbidden! What are you looking for?";
+            $api["code"] = 401;
+            return response($api, $api['code']);
+        }
+
+        $user = User::select("id_user", "name", "email", "created_at")
+            ->where("api_token", $request->input("api_token"))
+            ->first()->toArray();
+
+        $classProgress = ClassProgress::select("id_kelas", "progress")->distinct()
+            ->where("id_user", $user["id_user"])
+            ->where("id_kelas", $kelas)->first();
+        
+        $class = Kelas::select("judul")
+            ->where("id_kelas", $classProgress->id_kelas)->first();
+        unset($classProgress->id_kelas);
+            
+        $api["data"] = [
+            "class" => $class->judul,
+            "class_progress" => $classProgress->progress,
+            "certificate" => ["status" => "on-progress", "message" => "You haven't finish this class yet"],
+            "quiz" => [
+                ["quiz_title" => "Pembagian Kata dalam Bahasa Arab", "date" => "2002-04-13", "score" => 87],
+                ["quiz_title" => "Pembagian Kata dalam Bahasa China", "date" => "2002-04-14", "score" => 90],
+            ],
+            "project" =>[
+                "project_title" => "Project Akhir: Nahwu Beginner",
+                "date" => "2013-12-25",
+            ]
+        ];
+
+        return response($api, $api['code']);
     }
 }

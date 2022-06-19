@@ -27,6 +27,9 @@ class CheckApiToken
             }
         }
 
-        return response()->json('Invalid Token', 401);
+        return response()->json([
+            "message" => "Invalid Token! Access Prohibited",
+            "code" => 401
+        ], 401);
     }
 }

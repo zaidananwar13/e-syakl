@@ -77,6 +77,7 @@ Route::middleware(['checkapitoken'])->group(function () {
     
     // Route::post('/user/profile', [UserController::class, 'profile']);
     Route::post('/my-class', [UserController::class, 'profile']);
+    Route::post('/my-class/classroom', [UserController::class, 'classroom']);
 });
 
 
