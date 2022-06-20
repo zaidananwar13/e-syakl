@@ -61,7 +61,7 @@ class Overview extends Controller
         }
 
         $overview = $overview[0];
-        $overview["rating"] = ($reviews / $review_count) . "/5";
+        $overview["rating"] = ($reviews != 0) ? (($reviews / $review_count) . "/5") : 0;
         $overview["votes"] = $review_count;
 
         return $overview;
