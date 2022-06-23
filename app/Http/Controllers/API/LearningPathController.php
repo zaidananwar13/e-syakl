@@ -4,13 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
+use App\Models\KelasChecker;
 use App\Models\LearningPath;
 use App\Models\LearningPathClass;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class LearningPathController extends Controller
 {
-    public function index($id = null)
+    public function index(Request $request, $id = null)
     {
         header('Content-Type: application/json; charset=utf-8');
         $api = [
@@ -19,6 +21,7 @@ class LearningPathController extends Controller
             'message' => "This is an API for Arabic-Go's Learning Path.",
         ];
 
+        $req = $request->all();
         // category: {
         //     title: "judul",
         //     desc: "deskripsi",
@@ -34,6 +37,18 @@ class LearningPathController extends Controller
                 ->where("id_learning_path", $id)
                 ->first();
 
+
+            $learnedClasses = null;
+            if($request["api_token"] != null) {
+                $user = User::select('id_user')
+                    ->where('api_token', $req['api_token'])
+                    ->first();
+
+                $learnedClasses = KelasChecker::where("id_user", $user->id_user)->get();
+
+                unset($user);
+            }
+
             if ($learningPath == null)
                 return response($api = [
                     'title' => 'E - Syakl API V2 | Learning Path API',
@@ -48,9 +63,15 @@ class LearningPathController extends Controller
             foreach($learningClass as $learning) {
                 $learning = Kelas::select("id_kelas", "judul", "deskripsi_singkat", "gambar")
                     ->where("id_kelas", $learning->id_kelas)->first();
-
                 $learning->link = "/class?id=" . $learning->id_kelas;
                 $learning->img = $learning->gambar;
+                if($learnedClasses != null) {
+                    foreach($learnedClasses as $class) {
+                        $learning->status = false;
+                        if($class->id_kelas == $learning->id_kelas) $learning->status = "taken";
+                    }
+                }
+
                 unset($learning->id_kelas);
                 unset($learning->gambar);
                 array_push($temp, $learning->toArray());
