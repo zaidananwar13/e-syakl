@@ -55,6 +55,7 @@ Route::post('kelas/filter/{keywords}', [KelasController::class, 'filter']);
 Route::post('kelas/search/{keywords}', [KelasController::class, 'search']);
 
 Route::get('learningpath', [LearningPathController::class, 'index']);
+Route::get('learningpath/{id}', [LearningPathController::class, 'index']);
 
 // Route::middleware('checkapitoken')->get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
 
