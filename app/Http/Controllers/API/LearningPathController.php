@@ -22,18 +22,11 @@ class LearningPathController extends Controller
         ];
 
         $req = $request->all();
-        // category: {
-        //     title: "judul",
-        //     desc: "deskripsi",
-        //     classes: 5,
-        //     link: "url"
-        //   }
-
         $learningPath = LearningPath::select("id_learning_path", "name", "desc")
             ->get();
 
         if ($id != null) {
-            $learningPath = LearningPath::select("id_learning_path")
+            $learningPath = LearningPath::select("id_learning_path", "name", "desc")
                 ->where("id_learning_path", $id)
                 ->first();
 
@@ -45,16 +38,16 @@ class LearningPathController extends Controller
                     ->first();
 
                 $learnedClasses = KelasChecker::where("id_user", $user->id_user)->get();
-
                 unset($user);
             }
 
-            if ($learningPath == null)
+            if ($learningPath == null){
                 return response($api = [
                     'title' => 'E - Syakl API V2 | Learning Path API',
                     'code' => 404,
                     'message' => "The learning path is found nowhere.",
                 ], $api['code']);
+            }
 
             $learningClass = LearningPathClass::select('id_kelas')
                 ->where("id_learning_path", $learningPath->id_learning_path)->get();
@@ -77,19 +70,20 @@ class LearningPathController extends Controller
                 array_push($temp, $learning->toArray());
             }
 
-            $temp = [
-                "path" => $learningPath->name,
-                "desc" => $learningPath->desc,
-                "classes" => $temp
-            ];
-
-            if($learningClass == null)
+            if($learningClass == null) {
                 return response($api = [
                     'title' => 'E - Syakl API V2 | Learning Path API',
                     'code' => 404,
                     'message' => "There are no classes on this path yet :(.",
                 ], $api['code']);
+            }
 
+
+            $temp = [
+                "path" => $learningPath->name,
+                "desc" => $learningPath->desc,
+                "classes" => $temp
+            ];
             $api["data"] = $temp;
             return response($api, $api['code']);
         }
