@@ -77,6 +77,12 @@ class LearningPathController extends Controller
                 array_push($temp, $learning->toArray());
             }
 
+            $temp = [
+                "path" => $learningPath->name,
+                "desc" => $learningPath->desc,
+                "classes" => $temp
+            ];
+
             if($learningClass == null)
                 return response($api = [
                     'title' => 'E - Syakl API V2 | Learning Path API',
