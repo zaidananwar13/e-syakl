@@ -57,11 +57,11 @@ Route::post('kelas/search/{keywords}', [KelasController::class, 'search']);
 Route::get('learningpath', [LearningPathController::class, 'index']);
 Route::get('learningpath/{id}', [LearningPathController::class, 'index']);
 
-// Route::middleware('checkapitoken')->get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
+// Route::middleware('checkapitoken')->get('/materi/{id}', [SilabusController::class, 'silabus']);
 
 Route::middleware(['checkapitoken'])->group(function () {
-    Route::get('/kategori-silabus/{id_kelas}', [SilabusController::class, 'index']);
-    Route::get('/sub-silabus/{id}', [SilabusController::class, 'silabus']);
+    Route::get('/silabus/{id_kelas}', [SilabusController::class, 'index']);
+    Route::get('/silabus/materi/{id}', [SilabusController::class, 'silabus']);
     
     Route::post('/kelas/auth', [KelasController::class, 'authKelas']);
     Route::post('/kelas/check', [KelasController::class, 'checkKelas']);

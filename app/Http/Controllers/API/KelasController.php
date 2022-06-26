@@ -490,6 +490,9 @@ class KelasController extends Controller
 
         // $class = Kelas::select("judul")->where("")
 
-        return $api;
+        return response(
+            $api, 
+            $api['code']
+        );
     }
 }

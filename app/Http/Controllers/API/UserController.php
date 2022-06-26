@@ -223,7 +223,8 @@ class UserController extends Controller
             ->where("id_kelas", $kelas)->first();
         
         $class = Kelas::select("judul")
-            ->where("id_kelas", $classProgress->id_kelas)->first();
+        // kalo error brati blum daftar kelas 
+            ->where("id_kelas", $classProgress->id_kelas)->first(); 
         unset($classProgress->id_kelas);
             
         $api["data"] = [
