@@ -15,14 +15,14 @@ class Quiz extends Migration
     {
         Schema::create('quiz', function (Blueprint $table) {
             $table->increments('id_quiz');
-            $table->unsignedInteger('id_sub_kategori_silabus');
+            $table->unsignedInteger('id_quiz_container');
             $table->text('soal');
             $table->string('tipe_soal');
             $table->string('pilihan');
             $table->string('kunci');
             $table->timestamps();
             
-            $table->foreign('id_sub_kategori_silabus')->references('id_sub_kategori_silabus')->on('sub_kategori_silabus');
+            $table->foreign('id_quiz_container')->references('id_quiz_container')->on('quiz_container');
         });
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Quiz;
+use App\Models\QuizContainer;
 use App\Models\QuizProgress;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
 class QuizController extends Controller
 {
     public function index(Request $request) {
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Quiz API',
             'code' => 404,
@@ -20,18 +21,25 @@ class QuizController extends Controller
         ];
 
         $silabus = $request->input("silabus");
+        // quiz container must not be null
+        $quizContainer = QuizContainer::select("id_quiz_container", "desc")
+            ->where('id_sub_kategori_silabus', $silabus)
+            ->first();
 
         $quiz = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
-            ->where('id_sub_kategori_silabus', $silabus)
+            ->where('id_quiz_container', $quizContainer->id_quiz_container)
             ->get()
             ->toArray();
+
+        $quizContainer->quizzes = $quiz;
+        unset($quizContainer->id_quiz_container);
 
         if(count($quiz) > 0) {
             $message = [
                 'title' => 'E - Syakl | Quiz API',
                 'code'=> 200,
                 'message'=> 'Retrieving data successful!',
-                'data' => $quiz
+                'data' => $quizContainer
             ];
         }
 

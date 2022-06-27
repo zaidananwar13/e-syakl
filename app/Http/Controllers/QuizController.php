@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kategori_Silabus;
 use App\Models\Quiz;
+use App\Models\QuizContainer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -47,6 +48,11 @@ class QuizController extends Controller
         $count = intval($request->input("count"));
         $bank_soal = [];
 
+        $quizContainer = new QuizContainer();
+        $quizContainer->id_sub_kategori_silabus = $request->input("id_silabus");
+        $quizContainer->desc = $request->input("desc");
+        $quizContainer->save();
+
         for($i = 0; $i < $count; $i++) {
             $soal = $request->input("soal-" . $i);
             $tipe_soal = $request->input("tipe_soal-" . $i);
@@ -66,7 +72,7 @@ class QuizController extends Controller
             
             $input = [
                 "soal" => $soal,
-                "id_sub_kategori_silabus" => $request->input('id_silabus'),
+                "id_quiz_container" => $quizContainer->id_quiz_container,
                 "tipe_soal" => $tipe_soal,
                 "pilihan" => $pilihanStr,
                 "kunci" => $kunciStr

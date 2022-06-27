@@ -12,6 +12,6 @@ class Quiz extends Model
     protected $table = 'quiz';
     protected $primaryKey = 'id_quiz';
     protected $fillable = [
-        'soal', 'id_sub_kategori_silabus', 'tipe_soal', 'pilihan', 'kunci', 'created_at', 'updated_at'
+        'soal', 'id_quiz_container', 'tipe_soal', 'pilihan', 'kunci', 'created_at', 'updated_at'
     ];
 }

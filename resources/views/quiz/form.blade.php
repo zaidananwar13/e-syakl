@@ -62,7 +62,7 @@
                     <div class="card-body">
                         
                         <div class="row">
-                            <div class="col-md-4 mt-3">
+                            <div class="col-md-12 mt-3">
                                 <label for="tipe_soal">Silabus</label>
                                 <select id="tipe_soal" class="form-control mb-4" name="id_silabus">            
                                     @foreach ($silabus as $silab)
@@ -71,7 +71,16 @@
                                 </select>
                             </div>
                         </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <label for="desc">Deskripsi Quiz</label>
+                                <textarea id="desc" class="form-control" name="desc" rows="5">{{ ($action!='quiz.store') ? $quiz->desc : '' }}</textarea>
+                            </div>
+                        </div>
                     </div>
+
+                    <hr>
 
                     <div class="card-body" id="page-0">                    
                         <div class="row">
@@ -216,18 +225,18 @@
 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 <script>
     // let counter = 0;
-    // let createCKEditor = (id) => {
-    //     let konten = document.getElementById(id);
-    //     let editor = CKEDITOR;
-    //     CKFinder.setupCKEditor(editor);
+    let createCKEditor = (id) => {
+        let konten = document.getElementById(id);
+        let editor = CKEDITOR;
+        CKFinder.setupCKEditor(editor);
 
-    //     editor.replace(konten,{
-    //         language:'en-gb'
-    //     });
-    //     editor.editorconfig.allowedContent = true;
-    // }
+        editor.replace(konten,{
+            language:'en-gb'
+        });
+        editor.editorconfig.allowedContent = true;
+    }
 
-    // createCKEditor("konten");
+    createCKEditor("desc");
 </script>
 
 <script>
