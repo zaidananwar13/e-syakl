@@ -27,13 +27,13 @@ use PHPUnit\Exception;
 class KelasController extends Controller
 {
 
-    public function index($id = null)
+    public function index(Request $request, $id = null)
     {
         if (!is_numeric($id)) {
             abort(404);
         }
 
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Kelas API',
             'code' => 404,
@@ -43,6 +43,19 @@ class KelasController extends Controller
         $kelas = Kelas::select('id_kelas', 'id_reviewer', 'judul', 'gambar', 'langkah', 'level', 'durasi',  'key_points', 'deskripsi_singkat', 'deskripsi_kelas')
             ->where('id_kelas', '=', $id)
             ->get();
+
+        $token = $request->input("api_token");
+        if($token != null) {
+            $user = User::select("id_user")->where("api_token", $token)->first();
+            
+            foreach($kelas as $kel) {
+                $status = KelasChecker::where("id_kelas", $kel->id_kelas)
+                    ->where("id_user", $user->id_user)->first();
+                $kel->status = ($status != null) ? "registered" : "unregistered";
+            }
+        }else {
+            echo "ree"; die;
+        }
 
         foreach ($kelas as $kel) {
             $kel->jumlah_user = DB::table('kelas_user')
