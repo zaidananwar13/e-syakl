@@ -53,8 +53,6 @@ class KelasController extends Controller
                     ->where("id_user", $user->id_user)->first();
                 $kel->status = ($status != null) ? "registered" : "unregistered";
             }
-        }else {
-            echo "ree"; die;
         }
 
         foreach ($kelas as $kel) {
