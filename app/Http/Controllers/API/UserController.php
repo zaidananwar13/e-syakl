@@ -108,12 +108,12 @@ class UserController extends Controller
                         ->where("id_project", $project->id_project)
                         ->where("id_user", $user["id_user"])->first();
                 }else {
-                    $classProject = "There are no projects yet";
+                    $classProject["id_project"] = "There are no projects yet";
                 }
 
                 $class_temp["project_class"] = $classProject;
                 if ($classProject != null) {
-                    $projectID = Project::select("judul")->where("id_project", $classProject->id_project)->first();
+                    $projectID = Project::select("judul")->where("id_project", $classProject["id_project"])->first();
                     $class_temp["project_class"]["title"] = $projectID->judul;
                     $class_temp["project_class"]["status"] = "";
                     $class_temp["project_class"]["due"] = "";
