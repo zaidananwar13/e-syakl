@@ -108,7 +108,7 @@ class UserController extends Controller
                         ->where("id_project", $project->id_project)
                         ->where("id_user", $user["id_user"])->first();
                 }else {
-                    $classProject["id_project"] = "There are no projects yet";
+                    $classProject = null;
                 }
 
                 $class_temp["project_class"] = $classProject;
