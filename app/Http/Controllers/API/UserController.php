@@ -103,6 +103,8 @@ class UserController extends Controller
                 $project = Project::select("id_project")->where("id_kelas", $class["id_kelas"])
                     ->first();
 
+                var_dump($project->toArray()); die;
+
                 $classProject = ProjectUser::select("id_project", "expired")
                     ->where("id_project", $project->id_project)
                     ->where("id_user", $user["id_user"])->first();
