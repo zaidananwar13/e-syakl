@@ -248,8 +248,9 @@ class UserController extends Controller
 
         if($history == null)
             $material = "You have never taken your class yet";
-
-        $material = $history->id_sub_kategori_silabus;
+        else
+            $material = $history->id_sub_kategori_silabus;
+            
         $class = Kelas::select("judul")
         // kalo error brati blum daftar kelas 
             ->where("id_kelas", $classProgress->id_kelas)->first(); 
