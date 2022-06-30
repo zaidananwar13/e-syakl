@@ -93,7 +93,12 @@ class UserController extends Controller
                     ->where("id_user", $user["id_user"])
                     ->where("id_kelas", $class["id_kelas"])
                     ->first();
-                $class_temp["last_material"] = $history->id_sub_kategori_silabus;
+                    
+                $class_temp["last_material"] = "You haven't taken a project yet";
+
+                if($history != null) {
+                    $class_temp["last_material"] = $history->id_sub_kategori_silabus;
+                }
 
                 $project = Project::select("id_project")->where("id_kelas", $class["id_kelas"])
                     ->first();
@@ -250,7 +255,7 @@ class UserController extends Controller
             $material = "You have never taken your class yet";
         else
             $material = $history->id_sub_kategori_silabus;
-            
+
         $class = Kelas::select("judul")
         // kalo error brati blum daftar kelas 
             ->where("id_kelas", $classProgress->id_kelas)->first(); 
