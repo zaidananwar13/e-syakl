@@ -244,7 +244,12 @@ class UserController extends Controller
             ->where("id_user", $user["id_user"])
             ->where("id_kelas", $classProgress["id_kelas"])
             ->first();
-        
+        $material = "";
+
+        if($history == null)
+            $material = "You have never taken your class yet";
+
+        $material = $history->id_sub_kategori_silabus;
         $class = Kelas::select("judul")
         // kalo error brati blum daftar kelas 
             ->where("id_kelas", $classProgress->id_kelas)->first(); 
@@ -252,7 +257,7 @@ class UserController extends Controller
             
         $api["data"] = [
             "class" => $class->judul,
-            "last_material" => $history->id_sub_kategori_silabus,
+            "last_material" => $material,
             "learning_path" => "Nahwu Dummyy Path",
             "class_progress" => $classProgress->progress,
             "certificate" => ["status" => "on-progress", "message" => "You haven't finish this class yet"],
