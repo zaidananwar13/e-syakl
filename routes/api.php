@@ -66,6 +66,7 @@ Route::middleware(['checkapitoken'])->group(function () {
     Route::post('/kelas/auth', [KelasController::class, 'authKelas']);
     Route::post('/kelas/check', [KelasController::class, 'checkKelas']);
     Route::post('/kelas/complete', [KelasController::class, 'completeClass']);
+    Route::post('/kelas/user/update/{id_materi}', [KelasController::class, 'update']);
     Route::post('/silabus/auth/kategori', [SilabusController::class, 'authKategori']);
     Route::post('/silabus/auth/sub-kategori', [SilabusController::class, 'authSubKategori']);
     

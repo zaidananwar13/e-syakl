@@ -13,6 +13,7 @@ use App\Models\KelasChecker;
 use Illuminate\Http\Request;
 
 use App\Models\Kelas;
+use App\Models\KelasHistory;
 use App\Models\LearningPath;
 use App\Models\LearningPathClass;
 use App\Models\Project;
@@ -22,6 +23,7 @@ use App\Models\Sub_Kategori_Silabus;
 use Hamcrest\Type\IsString;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use KategoriSilabus;
 use PHPUnit\Exception;
 
 class KelasController extends Controller
@@ -59,6 +61,9 @@ class KelasController extends Controller
             $kel->jumlah_user = DB::table('kelas_user')
                 ->where('id_kelas', '=', $kel->id_kelas)
                 ->count();
+            
+        
+            // $silabus = Kategori_Silabus::where("id_kelas", $)
 
             $komentar = DB::table('kelas_user')
                 ->select('id_kelas_user', 'id_kelas', 'id_user', 'point_review', 'komentar_review')
@@ -505,5 +510,69 @@ class KelasController extends Controller
             $api, 
             $api['code']
         );
+    }
+
+    public function update(Request $request, $id_materi) {
+        // header('Content-Type: application/json; charset=utf-8');
+        $api = [
+            'title' => 'E - Syakl | Silabus API',
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
+
+        $user = User::where("api_token", $request->input("api_token"))->first();
+
+        $materi = Sub_Kategori_Silabus::select("id_kategori_silabus", "id_sub_kategori_silabus")
+            ->where("id_sub_kategori_silabus", $id_materi)->first();
+
+        if($materi == null)
+            return response($api = [
+                'title' => 'E - Syakl | Kelas API',
+                'code' => 405,
+                'message' => "Unauthorized!"
+            ],
+            $api["code"]);
+
+        $silabus = Kategori_Silabus::select("id_kategori_silabus", "id_kelas")
+            ->where("id_kategori_silabus", $materi->id_kategori_silabus)->first();
+
+        $history = KelasHistory::where("id_user", $user->id_user)
+            ->where("id_kelas", $silabus->id_kelas)
+            ->first();
+
+        if($history == null) {
+            $history = new KelasHistory();
+            $history->id_user = $user->id_user;
+            $history->id_kelas = $silabus->id_kelas;
+            $history->id_kategori_silabus = $silabus->id_kategori_silabus;
+            $history->id_sub_kategori_silabus = $id_materi;
+            $history->save();
+
+            return response(
+                $api = [
+                    'title' => 'E - Syakl | Kelas API',
+                    'code' => 200,
+                    'message' => "Update class success!"
+                ],
+                $api["code"]
+            );
+        }else {
+            $history->update([
+                "id_kategori_silabus" => $silabus->id_kategori_silabus,
+                "id_sub_kategori_silabus" => $id_materi,
+                "id_kelas" => $silabus->id_kelas,
+            ]);
+
+            return response(
+                $api = [
+                    'title' => 'E - Syakl | Kelas API',
+                    'code' => 200,
+                    'message' => "Update class success!"
+                ],
+                $api["code"]
+            );
+        }
+
+        return response($api, $api['code']);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ClassProgress;
 use App\Models\CompletedClass;
 use App\Models\Kelas;
+use App\Models\KelasHistory;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\User;
@@ -61,7 +62,7 @@ class UserController extends Controller
 
     public function profile(Request $request)
     {
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Quiz API',
             'code' => 403,
@@ -79,14 +80,20 @@ class UserController extends Controller
 
         $classProgress = ClassProgress::select("id_kelas", "progress")->distinct()
             ->where("id_user", $user["id_user"])
-            ->where("progress", "!=", "100")->get()->toArray();
+            ->where("progress", "!=", "100")->get();
 
         $classCompleted = CompletedClass::where("id_user", $user["id_user"])->get()->toArray();
 
         $temp = [];
         if (count($classProgress) > 0) {
             foreach ($classProgress as $class) {
+
                 $class_temp = Kelas::select("id_kelas", "gambar", "judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
+                $history = KelasHistory::select("id_sub_kategori_silabus")
+                    ->where("id_user", $user["id_user"])
+                    ->where("id_kelas", $class["id_kelas"])
+                    ->first();
+                $class_temp["last_material"] = $history->id_sub_kategori_silabus;
 
                 $project = Project::select("id_project")->where("id_kelas", $class["id_kelas"])
                     ->first();
@@ -101,6 +108,7 @@ class UserController extends Controller
                     $class_temp["project_class"]["title"] = $projectID->judul;
                     $class_temp["project_class"]["status"] = "";
                     $class_temp["project_class"]["due"] = "";
+                    
                     unset($class["id_project"]);
 
                     $present = Carbon::now();
@@ -129,6 +137,9 @@ class UserController extends Controller
                 array_push($temp, $class_temp);
             }
         }
+
+        // var_dump($classProgress->toArray()); die;
+
         $projects = ProjectUser::select("id_project", "expired")
             ->where("id_user", $user["id_user"])->get();
 
@@ -221,6 +232,18 @@ class UserController extends Controller
         $classProgress = ClassProgress::select("id_kelas", "progress")->distinct()
             ->where("id_user", $user["id_user"])
             ->where("id_kelas", $kelas)->first();
+
+        if($classProgress == null)
+            return response($api = [
+                'title' => 'E - Syakl | Classroom API',
+                'code' => 404,
+                'message' => 'Your Class is Found in Nowhere? :/.'
+            ], $api["code"]);
+            
+        $history = KelasHistory::select("id_sub_kategori_silabus")
+            ->where("id_user", $user["id_user"])
+            ->where("id_kelas", $classProgress["id_kelas"])
+            ->first();
         
         $class = Kelas::select("judul")
         // kalo error brati blum daftar kelas 
@@ -229,6 +252,7 @@ class UserController extends Controller
             
         $api["data"] = [
             "class" => $class->judul,
+            "last_material" => $history->id_sub_kategori_silabus,
             "learning_path" => "Nahwu Dummyy Path",
             "class_progress" => $classProgress->progress,
             "certificate" => ["status" => "on-progress", "message" => "You haven't finish this class yet"],
