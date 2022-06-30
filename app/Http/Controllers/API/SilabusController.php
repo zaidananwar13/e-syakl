@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Helper as Help;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori_Silabus;
+use App\Models\Kelas;
 use App\Models\SilabusChecker;
 use App\Models\Sub_Kategori_Silabus;
 use App\Models\User;
@@ -16,7 +17,8 @@ use function Ramsey\Uuid\v1;
 
 class SilabusController extends Controller
 {
-    public function index($id) {
+    public function index(Request $request, $id)
+    {
         header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Silabus API',
@@ -24,19 +26,28 @@ class SilabusController extends Controller
             'message' => 'Not Found'
         ];
 
+        $user = User::select("id_user")
+            ->where("api_token", $request->input("api_token"))->first();
+
+        $history = Kelas::select("id_sub_kategori_silabus")
+            ->where("id_user", $user["id_user"])
+            ->where("id_kategori_silabus", $id)
+            ->first();
+
         $kategori_silabus = Kategori_Silabus::select('id_kategori_silabus', 'id_kelas', 'judul')
             ->where('id_kelas', $id)->get();
 
-        foreach($kategori_silabus as $k_silabus) {
+        foreach ($kategori_silabus as $k_silabus) {
             $k_silabus->sub_kategori_silabus = Sub_Kategori_Silabus::select('id_sub_kategori_silabus', 'id_kategori_silabus', 'judul', 'konten')
                 ->where('id_kategori_silabus', $k_silabus->id_kategori_silabus)->get();
         }
 
-        if(count($kategori_silabus) > 0) {
+        if (count($kategori_silabus) > 0) {
             $message = [
                 'title' => 'E - Syakl | Silabus API',
-                'code'=> 200,
-                'message'=> 'Retrieving data successful!',
+                'code' => 200,
+                'message' => 'Retrieving data successful!',
+                'last_material' => $history->id_sub_kategori_silabus,
                 'data' => $kategori_silabus
             ];
         }
@@ -52,7 +63,7 @@ class SilabusController extends Controller
             ->firstOrFail()
             ->toArray();
         $user = $user['id_user'];
-        
+
         $secureKey = Help::checkSilabusAccess($user, $id);
         $message = [
             'title' => 'E - Syakl | Silabus API',
@@ -60,8 +71,8 @@ class SilabusController extends Controller
             'message' => 'Not Found'
         ];
 
-        if($secureKey == null) {
-            if($id == 1) {    
+        if ($secureKey == null) {
+            if ($id == 1) {
                 $materi = Sub_Kategori_Silabus::select("id_kategori_silabus", "id_sub_kategori_silabus")
                     ->where("id_sub_kategori_silabus", $id)
                     ->get()
@@ -77,7 +88,7 @@ class SilabusController extends Controller
                 $silabusChecker->id_kategori_silabus = $materi["id_kategori_silabus"];
                 $silabusChecker->id_sub_kategori_silabus = $materi["id_sub_kategori_silabus"];
                 $silabusChecker->save();
-            }else {
+            } else {
                 $materi = Sub_Kategori_Silabus::select("id_kategori_silabus", "id_sub_kategori_silabus")
                     ->where("id_sub_kategori_silabus", $id)
                     ->get()
@@ -90,36 +101,35 @@ class SilabusController extends Controller
                     'y-key' => $materi["id_sub_kategori_silabus"],
                 ]);
 
-                if($response->body() == "\"Invalid Token\"") {
+                if ($response->body() == "\"Invalid Token\"") {
                     header('Content-Type: application/json; charset=utf-8');
-    
+
                     $message['code'] = '401';
                     $message['message'] = 'Unauthorized User';
-    
+
                     return $message;
-                }else {
+                } else {
                     $secureKey = [
                         ["id_sub_kategori_silabus" => $materi["id_sub_kategori_silabus"]],
                     ];
                 }
             }
         }
-        
+
         $secureKey = $secureKey[0];
-        
-        if($secureKey['id_sub_kategori_silabus'] == $id) {
+
+        if ($secureKey['id_sub_kategori_silabus'] == $id) {
             $silabus = Sub_Kategori_Silabus::select('id_sub_kategori_silabus', 'id_kategori_silabus', 'judul', 'konten')
                 ->where('id_sub_kategori_silabus', $id)->first();
-            
-            if($silabus != null) {
+
+            if ($silabus != null) {
                 $message = [
                     'title' => 'E - Syakl | Silabus API',
-                    'code'=> 200,
-                    'message'=> 'Retrieving data successful!',
+                    'code' => 200,
+                    'message' => 'Retrieving data successful!',
                     'data' => $silabus
                 ];
             }
-
         }
 
         // echo $message['data']->konten; die;
@@ -127,8 +137,10 @@ class SilabusController extends Controller
         return $message;
     }
 
-    public function authKategori(Request $request) {
-        echo "still demo version"; die;
+    public function authKategori(Request $request)
+    {
+        echo "still demo version";
+        die;
 
         $req = $request->all();
         $message = [
@@ -138,66 +150,65 @@ class SilabusController extends Controller
         ];
 
         try {
-            
+
             $user = User::select('id_user')
                 ->where('api_token', $req['api_token'])
                 ->first();
 
-            if($user != null) {
+            if ($user != null) {
                 $user = $user->toArray();
                 $userSilabus = Help::checkSilabusAccessUser($user['id_user'], $req['x-key']);
 
-                if($userSilabus == null) {
+                if ($userSilabus == null) {
                     $message['code'] = 409;
                     $message['message'] = 'Unauthorized register!';
-                }else {
-                    if($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
+                } else {
+                    if ($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
                         $silabus = new SilabusChecker();
                         $silabus->id_user = $user['id_user'];
                         $silabus->id_kategori_silabus = $req['x-key'];
                         $silabus->id_sub_kategori_silabus = $req['y-key'];
                         $silabus->save();
-        
+
                         $message['code'] = 200;
                         $message['message'] = 'Auth register success!';
-                    }else {
+                    } else {
                         $message['code'] = 409;
                         $message['message'] = 'Already registered';
                     }
                 }
-
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $error_handler = [
                 "23503" => "Foreign key violates",
                 "23505" => "Duplicate key"
             ];
             $data = json_encode($e);
             $data = json_decode($data);
-            
+
             $message['status'] = $error_handler[$data->errorInfo[0]];
             $message['code'] = 409;
             $message['message'] = 'Already registered';
 
-            switch($message['status']) {
+            switch ($message['status']) {
                 case "Foreign key violates":
                     $message['message'] = 'Illegal access detected ';
-                    
+
                     break;
                 case "Duplicate key":
                     $message['message'] = 'Already registered';
-                    
+
                     break;
                 default:
                     break;
             }
-
         }
 
         return $message;
     }
 
-    public function authSubKategori(Request $request) {
+    public function authSubKategori(Request $request)
+    {
         $req = $request->all();
         $message = [
             'title' => 'E - Syakl | Silabus Auth API',
@@ -206,71 +217,69 @@ class SilabusController extends Controller
         ];
 
         try {
-            
+
             $user = User::select('id_user')
                 ->where('api_token', $req['api_token'])
                 ->first();
 
-            if($user != null) {
+            if ($user != null) {
                 $user = $user->toArray();
                 $userSilabus = Help::checkSilabusAccessUser($user['id_user'], $req['x-key']);
 
-                if($userSilabus == null) {
+                if ($userSilabus == null) {
                     $message['code'] = 409;
                     $message['message'] = 'Unauthorized register!';
 
-                    if($user != null) {
+                    if ($user != null) {
                         $silabus = new SilabusChecker();
                         $silabus->id_user = $user['id_user'];
                         $silabus->id_kategori_silabus = $req['x-key'];
                         $silabus->id_sub_kategori_silabus = $req['y-key'];
                         $silabus->save();
-        
+
                         $message['code'] = 200;
                         $message['message'] = 'Auth register success!';
                     }
-                }else {
-                    if($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
+                } else {
+                    if ($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
                         $silabus = new SilabusChecker();
                         $silabus->id_user = $user['id_user'];
                         $silabus->id_kategori_silabus = $req['x-key'];
                         $silabus->id_sub_kategori_silabus = $req['y-key'];
                         $silabus->save();
-        
+
                         $message['code'] = 200;
                         $message['message'] = 'Auth register success!';
-                    }else {
+                    } else {
                         $message['code'] = 409;
                         $message['message'] = 'Already registered';
                     }
                 }
-
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $error_handler = [
                 "23503" => "Foreign key violates",
                 "23505" => "Duplicate key"
             ];
             $data = json_encode($e);
             $data = json_decode($data);
-            
+
             $message['status'] = $error_handler[$data->errorInfo[0]];
             $message['code'] = 409;
             $message['message'] = 'Already registered';
 
-            switch($message['status']) {
+            switch ($message['status']) {
                 case "Foreign key violates":
                     $message['message'] = 'Illegal access detected ';
-                    
+
                     break;
                 case "Duplicate key":
                     $message['message'] = 'Already registered';
-                    
+
                     break;
                 default:
                     break;
             }
-
         }
 
         return $message;

@@ -360,7 +360,7 @@ class KelasController extends Controller
                         $progress = new ClassProgress();
                         $progress->id_user = $user["id_user"];
                         $progress->id_kelas = $req['kelas'];
-                        $progress->progress = "5";
+                        $progress->progress = 1;
                         $progress->save();
 
                         $silabus = Kategori_Silabus::select("id_kategori_silabus")
