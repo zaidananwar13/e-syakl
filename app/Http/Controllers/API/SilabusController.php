@@ -6,6 +6,7 @@ use App\Helper as Help;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori_Silabus;
 use App\Models\Kelas;
+use App\Models\KelasHistory;
 use App\Models\SilabusChecker;
 use App\Models\Sub_Kategori_Silabus;
 use App\Models\User;
@@ -29,10 +30,16 @@ class SilabusController extends Controller
         $user = User::select("id_user")
             ->where("api_token", $request->input("api_token"))->first();
 
-        $history = Kelas::select("id_sub_kategori_silabus")
+        $history = KelasHistory::select("id_sub_kategori_silabus")
             ->where("id_user", $user["id_user"])
             ->where("id_kategori_silabus", $id)
             ->first();
+
+        if($history == null) {
+            $history["id_sub_kategori_silabus"] = 0;
+        }
+
+
 
         $kategori_silabus = Kategori_Silabus::select('id_kategori_silabus', 'id_kelas', 'judul')
             ->where('id_kelas', $id)->get();
@@ -47,7 +54,7 @@ class SilabusController extends Controller
                 'title' => 'E - Syakl | Silabus API',
                 'code' => 200,
                 'message' => 'Retrieving data successful!',
-                'last_material' => $history->id_sub_kategori_silabus,
+                'last_material' => $history["id_sub_kategori_silabus"],
                 'data' => $kategori_silabus
             ];
         }
