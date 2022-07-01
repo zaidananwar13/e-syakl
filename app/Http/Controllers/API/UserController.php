@@ -159,7 +159,7 @@ class UserController extends Controller
 
                 $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
                 $count = 1;
-                for ($i = 0; $i < $silCount; $i++) {
+                for ($i = 0; $i < count($silabus); $i++) {
                     if ($silabus != null) {
 
                         if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
@@ -290,6 +290,34 @@ class UserController extends Controller
             // kalo error brati blum daftar kelas 
             ->where("id_kelas", $classProgress->id_kelas)->first();
         unset($classProgress->id_kelas);
+
+        // class progress
+        $histories = KelasHistory::select("id_kategori_silabus")
+            ->where("id_kelas", $class->id_kelas)
+            ->where("id_user", $user["id_user"])
+            ->first();
+
+        if ($histories == null) {
+            $histories["id_kategori_silabus"] = 0;
+        } else {
+            $histories = $histories->toArray();
+        }
+        $silabus = Kategori_Silabus::select("id_kelas", "id_kategori_silabus")
+            ->where("id_kelas", $class["id_kelas"])
+            ->get()->toArray();
+
+        $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
+        $count = 1;
+        for ($i = 0; $i < $silCount; $i++) {
+            if ($silabus != null) {
+
+                if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
+                    $count = $i + 1;
+                }
+            }
+        }
+
+        $classProgress->progress = "$count of $silCount";
 
         $api["data"] = [
             "class" => $class->judul,
