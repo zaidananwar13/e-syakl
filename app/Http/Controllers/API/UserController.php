@@ -94,21 +94,21 @@ class UserController extends Controller
                     ->where("id_user", $user["id_user"])
                     ->where("id_kelas", $class["id_kelas"])
                     ->first();
-                    
+
                 $class_temp["last_material"] = "You haven't taken a syllabus yet";
 
-                if($history != null) {
+                if ($history != null) {
                     $class_temp["last_material"] = $history->id_sub_kategori_silabus;
                 }
 
                 $project = Project::select("id_project")->where("id_kelas", $class["id_kelas"])
                     ->first();
 
-                if($project != null) {
+                if ($project != null) {
                     $classProject = ProjectUser::select("id_project", "expired")
                         ->where("id_project", $project->id_project)
                         ->where("id_user", $user["id_user"])->first();
-                }else {
+                } else {
                     $classProject = null;
                 }
 
@@ -118,7 +118,7 @@ class UserController extends Controller
                     $class_temp["project_class"]["title"] = $projectID->judul;
                     $class_temp["project_class"]["status"] = "";
                     $class_temp["project_class"]["due"] = "";
-                    
+
                     unset($class["id_project"]);
 
                     $present = Carbon::now();
@@ -148,20 +148,23 @@ class UserController extends Controller
                     ->where("id_user", $user["id_user"])
                     ->first();
 
-                if($histories == null) {
+                if ($histories == null) {
                     $histories["id_kategori_silabus"] = 0;
-                }else {
+                } else {
                     $histories = $histories->toArray();
                 }
                 $silabus = Kategori_Silabus::select("id_kelas", "id_kategori_silabus")
                     ->where("id_kelas", $class["id_kelas"])
                     ->get()->toArray();
 
-                $silCount = (count($silabus) > 1) ? count($silabus)." chapters" : "1 chapter";
+                $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
                 $count = 1;
-                for($i = 0; $i < $silCount; $i++) {
-                    if($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
-                        $count = $i + 1;
+                for ($i = 0; $i < $silCount; $i++) {
+                    if ($histories != null) {
+
+                        if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
+                            $count = $i + 1;
+                        }
                     }
                 }
 
@@ -265,29 +268,29 @@ class UserController extends Controller
             ->where("id_user", $user["id_user"])
             ->where("id_kelas", $kelas)->first();
 
-        if($classProgress == null)
+        if ($classProgress == null)
             return response($api = [
                 'title' => 'E - Syakl | Classroom API',
                 'code' => 404,
                 'message' => 'Your Class is Found in Nowhere? :/.'
             ], $api["code"]);
-            
+
         $history = KelasHistory::select("id_sub_kategori_silabus")
             ->where("id_user", $user["id_user"])
             ->where("id_kelas", $classProgress["id_kelas"])
             ->first();
         $material = "";
 
-        if($history == null)
+        if ($history == null)
             $material = "You have never taken your class yet";
         else
             $material = $history->id_sub_kategori_silabus;
 
         $class = Kelas::select("judul")
-        // kalo error brati blum daftar kelas 
-            ->where("id_kelas", $classProgress->id_kelas)->first(); 
+            // kalo error brati blum daftar kelas 
+            ->where("id_kelas", $classProgress->id_kelas)->first();
         unset($classProgress->id_kelas);
-            
+
         $api["data"] = [
             "class" => $class->judul,
             "last_material" => $material,
@@ -298,7 +301,7 @@ class UserController extends Controller
                 ["quiz_title" => "Pembagian Kata dalam Bahasa Arab", "date" => "2002-04-13", "score" => 87],
                 ["quiz_title" => "Pembagian Kata dalam Bahasa China", "date" => "2002-04-14", "score" => 90],
             ],
-            "project" =>[
+            "project" => [
                 "project_title" => "Project Akhir: Nahwu Beginner",
                 "date" => "2013-12-25",
                 "status" => "on-progress"
