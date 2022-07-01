@@ -160,7 +160,7 @@ class UserController extends Controller
                 $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
                 $count = 1;
                 for ($i = 0; $i < $silCount; $i++) {
-                    if ($histories != null) {
+                    if ($silabus != null) {
 
                         if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
                             $count = $i + 1;
