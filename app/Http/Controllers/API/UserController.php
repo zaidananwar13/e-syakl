@@ -165,7 +165,7 @@ class UserController extends Controller
                     }
                 }
 
-                $class_temp["progress_class"] = "$count of ";
+                $class_temp["progress_class"] = "$count of $silCount";
                 array_push($temp, $class_temp);
             }
         }
