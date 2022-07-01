@@ -88,9 +88,6 @@ class UserController extends Controller
         $temp = [];
         if (count($classProgress) > 0) {
             foreach ($classProgress as $class) {
-                $silabus = Kategori_Silabus::select("id_kelas", "id_kategori_silabus")
-                    ->where("id_kelas", $class["id_kelas"])
-                    ->get()->toArray();
 
                 $class_temp = Kelas::select("id_kelas", "gambar", "judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
                 $history = KelasHistory::select("id_sub_kategori_silabus", "id_kategori_silabus")
@@ -156,8 +153,11 @@ class UserController extends Controller
                 }else {
                     $histories = $histories->toArray();
                 }
+                $silabus = Kategori_Silabus::select("id_kelas", "id_kategori_silabus")
+                    ->where("id_kelas", $class["id_kelas"])
+                    ->get()->toArray();
 
-                $silCount = count($silabus);
+                $silCount = (count($silabus) > 1) ? count($silabus)." chapters" : "1 chapter";
                 $count = 1;
                 for($i = 0; $i < $silCount; $i++) {
                     if($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
@@ -165,7 +165,7 @@ class UserController extends Controller
                     }
                 }
 
-                $class_temp["progress_class"] = "$count of $silCount chapters";
+                $class_temp["progress_class"] = "$count of ";
                 array_push($temp, $class_temp);
             }
         }
