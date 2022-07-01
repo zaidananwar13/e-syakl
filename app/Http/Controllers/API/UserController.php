@@ -149,10 +149,12 @@ class UserController extends Controller
                 $histories = KelasHistory::select("id_kategori_silabus")
                     ->where("id_kelas", $class->id_kelas)
                     ->where("id_user", $user["id_user"])
-                    ->first()->toArray();
+                    ->first();
 
                 if($histories == null) {
                     $histories["id_kategori_silabus"] = 0;
+                }else {
+                    $histories = $histories->toArray();
                 }
 
                 $silCount = count($silabus);
