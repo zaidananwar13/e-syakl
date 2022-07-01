@@ -6,6 +6,7 @@ use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\ClassProgress;
 use App\Models\CompletedClass;
+use App\Models\Kategori_Silabus;
 use App\Models\Kelas;
 use App\Models\KelasHistory;
 use App\Models\Project;
@@ -87,14 +88,17 @@ class UserController extends Controller
         $temp = [];
         if (count($classProgress) > 0) {
             foreach ($classProgress as $class) {
+                $silabus = Kategori_Silabus::select("id_kelas", "id_kategori_silabus")
+                    ->where("id_kelas", $class["id_kelas"])
+                    ->get()->toArray();
 
                 $class_temp = Kelas::select("id_kelas", "gambar", "judul")->where("id_kelas", $class["id_kelas"])->first()->toArray();
-                $history = KelasHistory::select("id_sub_kategori_silabus")
+                $history = KelasHistory::select("id_sub_kategori_silabus", "id_kategori_silabus")
                     ->where("id_user", $user["id_user"])
                     ->where("id_kelas", $class["id_kelas"])
                     ->first();
                     
-                $class_temp["last_material"] = "You haven't taken a project yet";
+                $class_temp["last_material"] = "You haven't taken a syllabus yet";
 
                 if($history != null) {
                     $class_temp["last_material"] = $history->id_sub_kategori_silabus;
@@ -142,7 +146,24 @@ class UserController extends Controller
                     $class_temp["project_class"] = "No Project Yet";
                 }
 
-                $class_temp["progress_class"] = $class["progress"];
+                $histories = KelasHistory::select("id_kategori_silabus")
+                    ->where("id_kelas", $class->id_kelas)
+                    ->where("id_user", $user["id_user"])
+                    ->first()->toArray();
+
+                if($histories == null) {
+                    $histories["id_kategori_silabus"] = 0;
+                }
+
+                $silCount = count($silabus);
+                $count = 1;
+                for($i = 0; $i < $silCount; $i++) {
+                    if($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
+                        $count = $i + 1;
+                    }
+                }
+
+                $class_temp["progress_class"] = "$count of $silCount chapters";
                 array_push($temp, $class_temp);
             }
         }

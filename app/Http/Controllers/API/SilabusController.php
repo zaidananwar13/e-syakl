@@ -39,8 +39,6 @@ class SilabusController extends Controller
             $history["id_sub_kategori_silabus"] = 0;
         }
 
-
-
         $kategori_silabus = Kategori_Silabus::select('id_kategori_silabus', 'id_kelas', 'judul')
             ->where('id_kelas', $id)->get();
 
