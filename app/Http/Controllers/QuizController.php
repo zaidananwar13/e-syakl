@@ -49,7 +49,7 @@ class QuizController extends Controller
         $bank_soal = [];
 
         $quizContainer = new QuizContainer();
-        $quizContainer->id_sub_kategori_silabus = $request->input("id_silabus");
+        $quizContainer->id_kategori_silabus = $request->input("id_silabus");
         $quizContainer->desc = $request->input("desc");
         $quizContainer->save();
 
@@ -97,7 +97,7 @@ class QuizController extends Controller
         if (!Session::get('login')) {
             return redirect('login');
         } else {
-            $quizContainer = QuizContainer::where("id_sub_kategori_silabus", $id)->first();
+            $quizContainer = QuizContainer::where("id_kategori_silabus", $id)->first();
 
             $quiz = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
             ->where('id_quiz_container', $quizContainer->id_quiz_container)->get();

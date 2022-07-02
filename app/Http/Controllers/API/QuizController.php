@@ -49,7 +49,7 @@ class QuizController extends Controller
             ];
         }
 
-        return $message;
+        return response($message, $message["code"]);
     }
 
     public function submit(Request $request)
