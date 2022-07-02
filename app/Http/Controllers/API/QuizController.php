@@ -11,6 +11,7 @@ use App\Models\QuizProgress;
 use App\Models\Sub_Kategori_Silabus;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class QuizController extends Controller
 {
@@ -53,7 +54,7 @@ class QuizController extends Controller
             ->get();
 
         foreach ($quizHistories as $hist) {
-            $hist->date = $hist->created_at;
+            $hist->date = Carbon::parse($hist->created_at)->format('d F Y');
             $hist->score = $hist->grade;
             $hist->status = ($hist->grade > 78) ? "Pass" : "Not Pass";
             unset($hist->created_at);

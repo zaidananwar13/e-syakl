@@ -277,7 +277,7 @@ class UserController extends Controller
                 ->first();
 
             $hist->quiz_title = $syllabus->judul;
-            $hist->date = $hist->created_at;
+            $hist->date = Carbon::parse($hist->created_at)->format('d F Y');
             $hist->score = $hist->grade;
             unset($hist->created_at);
             unset($hist->grade);
