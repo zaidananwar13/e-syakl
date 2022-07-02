@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Kategori_Silabus;
 use App\Models\Quiz;
 use App\Models\QuizContainer;
 use App\Models\QuizProgress;
@@ -23,7 +24,7 @@ class QuizController extends Controller
         ];
 
         $silabus = $request->input("silabus");
-        $materi = Sub_Kategori_Silabus::select("judul")
+        $materi = Kategori_Silabus::select("judul")
             ->where("id_kategori_silabus", $silabus)->first();
         // quiz container must not be null
         $quizContainer = QuizContainer::select("id_quiz_container", "desc")
