@@ -308,8 +308,6 @@ class UserController extends Controller
 
         $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
 
-        var_dump(count($silabus)); die;
-
         $count = 1;
         for ($i = 0; $i < $silCount; $i++) {
             if ($silabus != null) {
