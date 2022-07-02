@@ -11,7 +11,7 @@ class Kelas extends Model
     protected $table = 'kelas';
     protected $primaryKey = 'id_kelas';
     protected $fillable = [
-        'id_kategori', 'id_reviewer', 'judul', 'key_points', 'langkah', 'level', 'deskripsi_singkat', 'durasi', 'deskripsi_kelas', 'gambar', 'tipe_kelas'
+        'id_kategori', 'id_reviewer',  'id_bahasa', 'judul', 'key_points', 'langkah', 'level', 'deskripsi_singkat', 'durasi', 'deskripsi_kelas', 'gambar', 'tipe_kelas'
     ];
     public $timestamps = false;
 }

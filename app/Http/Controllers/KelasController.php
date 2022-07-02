@@ -67,24 +67,24 @@ class KelasController extends Controller
         $dataForm["key_points"] = "keypoints 1,keypoints 3,keypoints 2";
 
         $silabus = [];
-        foreach($dataForm as $key => $val) {
-            if(strpos($key, 'judul_') !== false || strpos($key, 'deskripsi_') !== false && $key != "deskripsi_singkat" && $key != "deskripsi_kelas") {               
-                $silabus[]= [$key => $val];
+        foreach ($dataForm as $key => $val) {
+            if (strpos($key, 'judul_') !== false || strpos($key, 'deskripsi_') !== false && $key != "deskripsi_singkat" && $key != "deskripsi_kelas") {
+                $silabus[] = [$key => $val];
             }
-            
-            if(strpos($key, "modal") !== false) {               
-                $materi[]= [$key => $val];
+
+            if (strpos($key, "modal") !== false) {
+                $materi[] = [$key => $val];
             }
         }
 
-        if(count($silabus) > 0) {
+        if (count($silabus) > 0) {
             // Silabus decrypt
             $count = 0;
-            for($i = 1; $i <= count($silabus); $i++) {
+            for ($i = 1; $i <= count($silabus); $i++) {
 
-                if($i % 2 != 0) {
-                    $dataSilabus[]= [
-                        "judul" => $silabus[$i-1]["judul_" . $count],
+                if ($i % 2 != 0) {
+                    $dataSilabus[] = [
+                        "judul" => $silabus[$i - 1]["judul_" . $count],
                         "deskripsi" => $silabus[$i]["deskripsi_" . $count],
                         "materi" => []
                     ];
@@ -98,53 +98,55 @@ class KelasController extends Controller
             $count3 = 0;
 
             $dataMateri[$count] = [];
-            for($i = 0; $i < count($materi); $i++) {
-                if($i % 3 == 0) {
-                    foreach($materi as $key => $val) {
+            for ($i = 0; $i < count($materi); $i++) {
+                if ($i % 3 == 0) {
+                    foreach ($materi as $key => $val) {
                         $tempKey = array_keys($val);
                         $tempKey = $tempKey[0];
-                        if(strpos($tempKey, "modal" . $count . "_") !== false ) {
+                        if (strpos($tempKey, "modal" . $count . "_") !== false) {
                             $count2++;
-                        }$count3 = $count2 / 3;
+                        }
+                        $count3 = $count2 / 3;
                     }
 
-            var_dump("count1: " . $count);
-            var_dump("count2: " . $count2);
-            var_dump("count3: " . $count3);
-            var_dump($materi[$i]);
-            echo "iteration: ". $i . "<br>";
+                    var_dump("count1: " . $count);
+                    var_dump("count2: " . $count2);
+                    var_dump("count3: " . $count3);
+                    var_dump($materi[$i]);
+                    echo "iteration: " . $i . "<br>";
 
-            if($count3 > 0) {
-                for($c = 1; $c <= $count3; $c++) {
-            echo "angka: " . ($i * $c ) . "<br>";
+                    if ($count3 > 0) {
+                        for ($c = 1; $c <= $count3; $c++) {
+                            echo "angka: " . ($i * $c) . "<br>";
 
-                    $tempData = [
-                        "judul" => $materi[$i * $c]["modal" . $count . "_" . ($c - 1) .  "-judul"],
-                        "deskripsi" => $materi[$i * $c + 1]["modal" . $count . "_" . ($c - 1) .  "-deskripsi"],
-                        "konten" => $materi[$i * $c + 2]["modal" . $count . "_" . ($c - 1) .  "_konten"],
-                    ];
+                            $tempData = [
+                                "judul" => $materi[$i * $c]["modal" . $count . "_" . ($c - 1) .  "-judul"],
+                                "deskripsi" => $materi[$i * $c + 1]["modal" . $count . "_" . ($c - 1) .  "-deskripsi"],
+                                "konten" => $materi[$i * $c + 2]["modal" . $count . "_" . ($c - 1) .  "_konten"],
+                            ];
 
-                    array_push($dataMateri[$count], $tempData);
-                }
-            }
+                            array_push($dataMateri[$count], $tempData);
+                        }
+                    }
 
 
 
-                
-            $count++;
-            $count2 = 0;
+
+                    $count++;
+                    $count2 = 0;
                     $dataMateri[$count] = [];
                 }
-            }array_pop($dataMateri);
+            }
+            array_pop($dataMateri);
 
-            
-            for($i = 0; $i < count($dataMateri); $i++) {
-                for($j = 0; $j < count($dataMateri[$i]); $j++) {
+
+            for ($i = 0; $i < count($dataMateri); $i++) {
+                for ($j = 0; $j < count($dataMateri[$i]); $j++) {
                     array_push($dataSilabus[$i]["materi"], $dataMateri[$i][$j]);
                 }
             }
         }
-        
+
 
         // $kelas = new Kelas;
         // $kelas->id_kategori = $request->id_kategori;
@@ -178,6 +180,8 @@ class KelasController extends Controller
             $input = $request->all();
             $input['tipe_kelas'] = false;
             $input['id_bahasa'] = 1;
+            $input['key_points'] = "Sed ut perspiciatis unde omnis iste natus.,Sed ut perspiciatis unde omnis.,Sed ut perspiciatis.";
+
 
 
             if ($image = $request->file('gambar')) {
@@ -190,9 +194,9 @@ class KelasController extends Controller
             $idKelas = Kelas::create($input);
             $idKelas = $idKelas->id_kelas;
 
-            if(count($silabus) > 0) {
+            if (count($silabus) > 0) {
                 // Inserting Silabus
-                foreach($dataSilabus as $dS) {
+                foreach ($dataSilabus as $dS) {
                     $input = [
                         "id_kelas" => $idKelas,
                         "judul" => $dS["judul"],
@@ -203,17 +207,16 @@ class KelasController extends Controller
                     $idSilabus = $idSilabus->id_kategori_silabus;
 
                     // Inserting Materi
-                    foreach($dS["materi"] as $dSM) {
+                    foreach ($dS["materi"] as $dSM) {
                         $input = [
                             "id_kategori_silabus" => $idSilabus,
                             "judul" => $dSM["judul"],
                             "deskripsi" => $dSM["deskripsi"],
                             "konten" => $dSM["konten"]
                         ];
-                        
+
                         Sub_Kategori_Silabus::create($input);
                     }
-                    
                 }
             }
 
