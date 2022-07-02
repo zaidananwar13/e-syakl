@@ -43,7 +43,7 @@ class QuizController extends Controller
 
         $quizHistories = QuizProgress::select("id_kategori_silabus", "created_at", "grade")
             ->where("id_user", $user["id_user"])
-            ->where('id_quiz_container', $quizContainer->id_quiz_container)
+            ->where('id_kategori_silabus', $quizContainer->id_kategori_silabus)
             ->get();
 
         foreach ($quizHistories as $hist) {
