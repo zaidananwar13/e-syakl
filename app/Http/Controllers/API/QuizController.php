@@ -28,22 +28,28 @@ class QuizController extends Controller
             ->first();
 
         $silabus = $request->input("silabus");
-        $materi = Kategori_Silabus::select("judul")
+        $materi = Kategori_Silabus::select("judul", "id_kategori_silabus")
             ->where("id_kategori_silabus", $silabus)->first();
 
         // quiz container must not be null
         $quizContainer = QuizContainer::select("id_quiz_container", "id_kategori_silabus", "desc")
             ->where('id_kategori_silabus', $silabus)
-            ->first();
+            ->get();
 
-        $quiz = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
-            ->where('id_quiz_container', $quizContainer->id_quiz_container)
+        foreach($quizContainer as $container) {
+            $quizzez = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
+            ->where('id_quiz_container', $container->id_quiz_container)
             ->get()
             ->toArray();
+            
+            unset($container->id_quiz_container);
+            unset($container->id_kategori_silabus);
+            $container->quizzes = $quizzez;
+        }
 
         $quizHistories = QuizProgress::select("id_kategori_silabus", "created_at", "grade")
             ->where("id_user", $user["id_user"])
-            ->where('id_kategori_silabus', $quizContainer->id_kategori_silabus)
+            ->where('id_kategori_silabus', $materi->id_kategori_silabus)
             ->get();
 
         foreach ($quizHistories as $hist) {
@@ -55,18 +61,16 @@ class QuizController extends Controller
             unset($hist->id_kategori_silabus);
         }
 
-        $quizContainer->title = $materi->judul;
-        $quizContainer->quizzes = $quiz;
-        unset($quizContainer->id_quiz_container);
-
-        $quizContainer->history = $quizHistories;
-
-        if (count($quiz) > 0) {
+        if (count($quizContainer) > 0) {
             $message = [
                 'title' => 'E - Syakl | Quiz API',
                 'code' => 200,
                 'message' => 'Retrieving data successful!',
-                'data' => $quizContainer
+                'data' => [
+                    "title" => $materi->judul,
+                    "quizzes" => $quizContainer,
+                    "history" => $quizHistories,
+                ]
             ];
         }
 
