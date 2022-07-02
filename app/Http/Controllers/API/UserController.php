@@ -11,10 +11,12 @@ use App\Models\Kelas;
 use App\Models\KelasHistory;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use App\Models\QuizProgress as ModelsQuizProgress;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use QuizProgress;
 
 class UserController extends Controller
 {
@@ -263,6 +265,24 @@ class UserController extends Controller
         $user = User::select("id_user", "name", "email", "created_at")
             ->where("api_token", $request->input("api_token"))
             ->first()->toArray();
+            
+        // quiz history
+        $quizHistories = ModelsQuizProgress::select("id_kategori_silabus", "created_at", "grade")
+            ->where("id_user", $user["id_user"])
+            ->get();
+
+        foreach($quizHistories as $hist) {
+            $syllabus = Kategori_Silabus::select("judul")
+                ->where("id_kategori_silabus", $hist->id_kategori_silabus)
+                ->first();
+
+            $hist->quiz_title = $syllabus->judul;
+            $hist->date = $hist->created_at;
+            $hist->score = $hist->grade;
+            unset($hist->created_at);
+            unset($hist->grade);
+            unset($hist->id_kategori_silabus);
+        }
 
         $classProgress = ClassProgress::select("id_kelas", "progress")->distinct()
             ->where("id_user", $user["id_user"])
