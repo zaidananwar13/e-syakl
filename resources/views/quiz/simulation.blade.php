@@ -62,25 +62,29 @@
             <div class="container">
               <div class="card-columns">
               @foreach ($quizzes as $quiz)
+              @foreach($quiz as $q)
+              
               <div class="card card-bordered mx-auto border-primary mb-4 w-100">
-                  <div class="card-header bg-primary">
-                      <h3 class="card-title text-white">Soal {{ $i }}</h3>
-                  </div>
-                  <div class="card-body">
-                    <input type="hidden" value="{{ $quiz->id_quiz }}" name="id_quiz_{{ $i }}"/>
-                    <p class="font-weight-bold">{{ $quiz['soal'] }}</p>
+                <div class="card-header bg-primary">
+                    <h3 class="card-title text-white">Soal {{ $i }}</h3>
+                </div>
+                <div class="card-body">
+                  <input type="hidden" value="{{ $q->id_quiz }}" name="id_quiz_{{ $i }}"/>
+                  <p class="font-weight-bold">{{ $q['soal'] }}</p>
 
-                      @foreach (explode(',', $quiz->pilihan) as $pilih)
-                      <div class="form-check form-check-custom form-check-solid">
-                          <input class="form-check-input" name="pilihan_{{ $i }}" type="radio" value="{{ $pilih }}" id="flexCheckDefault_{{ $i }}"/>
-                          <label class="form-check-label" for="flexCheckDefault_{{ $i }}">
+                    @foreach (explode(',', $q->pilihan) as $pilih)
+                    <div class="form-check form-check-custom form-check-solid">
+                        <input class="form-check-input" name="pilihan_{{ $i }}" type="radio" value="{{ $pilih }}" id="flexCheckDefault_{{ $i }}"/>
+                        <label class="form-check-label" for="flexCheckDefault_{{ $i }}">
                             {{ ucfirst($pilih) }}
-                          </label>
-                      </div>
-                      @endforeach
-                  </div>
-              </div>
-              <?php $i++; ?>
+                        </label>
+                    </div>
+                    @endforeach
+                    </div>
+                </div>
+                <?php $i++; ?>
+              @endforeach
+              <hr>
               @endforeach
               </div>
             </div>

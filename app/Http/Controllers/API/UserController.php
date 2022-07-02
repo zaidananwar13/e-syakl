@@ -331,10 +331,11 @@ class UserController extends Controller
         $count = 1;
         for ($i = 0; $i < count($silabus); $i++) {
             if ($silabus != null) {
-
                 if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
-                    $count = $i + 1;
+                    break;
                 }
+
+                $count = $i + 1;
             }
         }
 

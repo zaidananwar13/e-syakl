@@ -97,10 +97,18 @@ class QuizController extends Controller
         if (!Session::get('login')) {
             return redirect('login');
         } else {
-            $quizContainer = QuizContainer::where("id_kategori_silabus", $id)->first();
+            $quizContainer = QuizContainer::where("id_kategori_silabus", $id)->get();
 
-            $quiz = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
-            ->where('id_quiz_container', $quizContainer->id_quiz_container)->get();
+            $quiz = [];
+
+            foreach($quizContainer as $container) {
+                $temp = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
+                    ->where('id_quiz_container', $container->id_quiz_container)
+                    ->get();
+
+                array_push($quiz, $temp);
+            }
+
             $data['quizzes'] = $quiz;
             $data['id'] = $id;
 
