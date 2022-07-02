@@ -113,7 +113,8 @@ class QuizController extends Controller
                 'title' => 'E - Syakl | Quiz API',
                 'code' => 200,
                 'message' => "Congrats, you answer precisely $rightChoice out of $counter!",
-                "grade" => $grade
+                "grade" => $grade,
+                "status" => ($grade > 78) ? "Pass" : "Not Pass"
             ];
         } else {
             $message = [
@@ -123,6 +124,6 @@ class QuizController extends Controller
             ];
         }
 
-        return $message;
+        return response($message, $message["code"]);
     }
 }
