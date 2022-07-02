@@ -286,7 +286,7 @@ class UserController extends Controller
         else
             $material = $history->id_sub_kategori_silabus;
 
-        $class = Kelas::select("judul")
+        $class = Kelas::select("judul", "id_kelas")
             // kalo error brati blum daftar kelas 
             ->where("id_kelas", $classProgress->id_kelas)->first();
         unset($classProgress->id_kelas);
@@ -309,7 +309,7 @@ class UserController extends Controller
         $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
 
         $count = 1;
-        for ($i = 0; $i < $silCount; $i++) {
+        for ($i = 0; $i < count($silabus); $i++) {
             if ($silabus != null) {
 
                 if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
