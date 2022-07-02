@@ -23,11 +23,16 @@ class QuizController extends Controller
             'message' => 'Not Found'
         ];
 
+        $user = User::select("id_user")
+            ->where("api_token", $request->input("api_token"))
+            ->first();
+
         $silabus = $request->input("silabus");
         $materi = Kategori_Silabus::select("judul")
             ->where("id_kategori_silabus", $silabus)->first();
+
         // quiz container must not be null
-        $quizContainer = QuizContainer::select("id_quiz_container", "desc")
+        $quizContainer = QuizContainer::select("id_quiz_container", "id_kategori_silabus", "desc")
             ->where('id_kategori_silabus', $silabus)
             ->first();
 
@@ -36,9 +41,25 @@ class QuizController extends Controller
             ->get()
             ->toArray();
 
+        $quizHistories = QuizProgress::select("id_kategori_silabus", "created_at", "grade")
+            ->where("id_user", $user["id_user"])
+            ->where('id_quiz_container', $quizContainer->id_quiz_container)
+            ->get();
+
+        foreach ($quizHistories as $hist) {
+            $hist->date = $hist->created_at;
+            $hist->score = $hist->grade;
+            $hist->status = ($hist->grade > 78) ? "Pass" : "Not Pass";
+            unset($hist->created_at);
+            unset($hist->grade);
+            unset($hist->id_kategori_silabus);
+        }
+
         $quizContainer->title = $materi->judul;
         $quizContainer->quizzes = $quiz;
         unset($quizContainer->id_quiz_container);
+
+        $quizContainer->history = $quizHistories;
 
         if (count($quiz) > 0) {
             $message = [
