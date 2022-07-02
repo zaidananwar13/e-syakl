@@ -36,7 +36,7 @@ class QuizController extends Controller
             ->get()
             ->toArray();
 
-        var_dump($quizContainer->id_quiz_container); die;
+        var_dump($quiz); die;
 
         $quizContainer->title = $materi->judul;
         $quizContainer->quizzes = $quiz;
