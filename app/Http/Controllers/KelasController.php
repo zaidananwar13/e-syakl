@@ -177,6 +177,7 @@ class KelasController extends Controller
 
             $input = $request->all();
             $input['tipe_kelas'] = false;
+            $input['id_bahasa'] = 1;
 
 
             if ($image = $request->file('gambar')) {
