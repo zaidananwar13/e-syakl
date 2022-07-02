@@ -24,10 +24,10 @@ class QuizController extends Controller
 
         $silabus = $request->input("silabus");
         $materi = Sub_Kategori_Silabus::select("judul")
-            ->where("id_sub_kategori_silabus", $silabus)->first();
+            ->where("id_kategori_silabus", $silabus)->first();
         // quiz container must not be null
         $quizContainer = QuizContainer::select("id_quiz_container", "desc")
-            ->where('id_sub_kategori_silabus', $silabus)
+            ->where('id_kategori_silabus', $silabus)
             ->first();
 
         $quiz = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
