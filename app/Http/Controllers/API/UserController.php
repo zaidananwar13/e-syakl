@@ -346,10 +346,7 @@ class UserController extends Controller
             "learning_path" => "Nahwu Dummyy Path",
             "class_progress" => $classProgress->progress,
             "certificate" => ["status" => "on-progress", "message" => "You haven't finish this class yet"],
-            "quiz" => [
-                ["quiz_title" => "Pembagian Kata dalam Bahasa Arab", "date" => "2002-04-13", "score" => 87],
-                ["quiz_title" => "Pembagian Kata dalam Bahasa China", "date" => "2002-04-14", "score" => 90],
-            ],
+            "quiz" => $quizHistories,
             "project" => [
                 "project_title" => "Project Akhir: Nahwu Beginner",
                 "date" => "2013-12-25",
