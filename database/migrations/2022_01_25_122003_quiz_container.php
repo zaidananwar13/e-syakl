@@ -15,11 +15,11 @@ class QuizContainer extends Migration
     {
         Schema::create('quiz_container', function (Blueprint $table) {
             $table->increments('id_quiz_container');
-            $table->unsignedInteger('id_sub_kategori_silabus');
+            $table->unsignedInteger('id_kategori_silabus');
             $table->text('desc');
             $table->timestamps();
             
-            $table->foreign('id_sub_kategori_silabus')->references('id_sub_kategori_silabus')->on('sub_kategori_silabus');
+            $table->foreign('id_kategori_silabus')->references('id_kategori_silabus')->on('kategori_silabus');
         });
     }
 
