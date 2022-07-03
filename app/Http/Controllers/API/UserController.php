@@ -179,7 +179,7 @@ class UserController extends Controller
                     }array_push($temps, $feCounter);$feCounter++;
 
                     array_push($syllData, $temps);
-                }var_dump($syllData); die;
+                }
 
                 $feAuth = FEAuthorizer::select("unlocked")
                     ->where("id_user", $user["id_user"])
