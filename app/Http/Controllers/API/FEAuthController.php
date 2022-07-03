@@ -44,7 +44,7 @@ class FEAuthController extends Controller
 
     public function feAuthorizer(Request $request)
     {
-        // header('Content-Type: application/json; charset=utf-8');
+        header('Content-Type: application/json; charset=utf-8');
         $api = [
             'title' => 'E - Syakl | Authorizer API',
             'code' => 404,
@@ -74,13 +74,15 @@ class FEAuthController extends Controller
             $feAuth->unlocked = 1;
             $feAuth->save();
         } else {
-            FEAuthorizer::select("id_kelas", "unlocked")
-                ->where("id_kelas", $class)
-                ->where("id_user", $user->id_user)
-                ->update([
-                    "unlocked" => $material,
-                    "updated_at" => Carbon::now(),
-                ]);
+            if ($material > $feAuth->unlocked) {
+                FEAuthorizer::select("id_kelas", "unlocked")
+                    ->where("id_kelas", $class)
+                    ->where("id_user", $user->id_user)
+                    ->update([
+                        "unlocked" => $material,
+                        "updated_at" => Carbon::now(),
+                    ]);
+            }
         }
 
         return response($api = [

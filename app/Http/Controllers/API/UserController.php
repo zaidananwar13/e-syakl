@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\ClassProgress;
 use App\Models\CompletedClass;
+use App\Models\FEAuthorizer;
 use App\Models\Kategori_Silabus;
 use App\Models\Kelas;
 use App\Models\KelasHistory;
@@ -158,22 +159,47 @@ class UserController extends Controller
                 } else {
                     $histories = $histories->toArray();
                 }
+
+                // chapter counter
                 $silabus = Kategori_Silabus::select("id_kelas", "id_kategori_silabus")
                     ->where("id_kelas", $class["id_kelas"])
                     ->get()->toArray();
 
-                $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
-                $count = 1;
-                for ($i = 0; $i < count($silabus); $i++) {
-                    if ($silabus != null) {
+                $syllData = [];
+                $feCounter = 1;
+                foreach ($silabus as $syll) {
+                    $material = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
+                        ->where("id_kategori_silabus", $syll["id_kategori_silabus"])
+                        ->get();
 
-                        if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
-                            $count = $i + 1;
-                        }
+                    $temp = [];
+                    for ($i = 1; $i <= count($material); $i++) {
+                        array_push($temp, $feCounter);
+                        $feCounter++;
                     }
+
+                    array_push($syllData, $temp);
                 }
 
-                $class_temp["progress_class"] = "$count of $silCount";
+                $feAuth = FEAuthorizer::select("unlocked")
+                    ->where("id_user", $user["id_user"])
+                    ->where("id_kelas", $class->id_kelas)
+                    ->first();
+
+                $chapter = 0;
+                $chapters = count($silabus);
+                $status = true;
+                foreach ($syllData as $data) {
+                    $chapter++;
+                    for ($i = 0; $i < count($data); $i++) {
+                        if ($feAuth->unlocked == $data[$i]) {
+                            $status = false;
+                        }
+                    }
+                    if ($status == false) break;
+                }
+
+                $class_temp["progress_class"] = "$chapter of $chapters chapters.";;
                 array_push($temp, $class_temp);
             }
         }
@@ -339,24 +365,47 @@ class UserController extends Controller
         } else {
             $histories = $histories->toArray();
         }
+
+        // chapter counter
         $silabus = Kategori_Silabus::select("id_kelas", "id_kategori_silabus")
             ->where("id_kelas", $class["id_kelas"])
             ->get()->toArray();
 
-        $silCount = (count($silabus) > 1) ? count($silabus) . " chapters" : "1 chapter";
+        $syllData = [];
+        $feCounter = 1;
+        foreach ($silabus as $syll) {
+            $material = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
+                ->where("id_kategori_silabus", $syll["id_kategori_silabus"])
+                ->get();
 
-        $count = 1;
-        for ($i = 0; $i < count($silabus); $i++) {
-            if ($silabus != null) {
-                if ($histories["id_kategori_silabus"] == $silabus[$i]["id_kategori_silabus"]) {
-                    break;
-                }
-
-                $count = $i + 1;
+            $temp = [];
+            for ($i = 1; $i <= count($material); $i++) {
+                array_push($temp, $feCounter);
+                $feCounter++;
             }
+
+            array_push($syllData, $temp);
         }
 
-        $classProgress->progress = "$count of $silCount";
+        $feAuth = FEAuthorizer::select("unlocked")
+            ->where("id_user", $user["id_user"])
+            ->where("id_kelas", $class->id_kelas)
+            ->first();
+
+        $chapter = 0;
+        $chapters = count($silabus);
+        $status = true;
+        foreach ($syllData as $data) {
+            $chapter++;
+            for ($i = 0; $i < count($data); $i++) {
+                if ($feAuth->unlocked == $data[$i]) {
+                    $status = false;
+                }
+            }
+            if ($status == false) break;
+        }
+
+        $classProgress->progress = "$chapter of $chapters chapters.";
 
         // certificate
         $certificate = Certificate::select("created_at")
@@ -375,7 +424,7 @@ class UserController extends Controller
             unset($certificate->created_at);
             unset($certificate->date);
             unset($certificate->expired);
-        }else {
+        } else {
             $certificate = [
                 "status" => "on-progress", "message" => "You haven't finish this class yet"
             ];
