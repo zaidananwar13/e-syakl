@@ -51,6 +51,16 @@ class CertificateController extends Controller
                     ->where("id_kelas", $class)
                     ->first();
 
+                if($certificate == null) {
+                    return response(
+                        $api = [
+                            "code" => 404,
+                            "message" => "No certificate found"
+                        ],
+                        $api["code"]
+                    );
+                }
+
                 $kelas = Kelas::select("judul")->where("id_kelas", $certificate->id_kelas)->first();
                 $certificate->user = $user->name;
                 $certificate->title = $kelas->judul;
