@@ -493,7 +493,7 @@ class KelasController extends Controller
                 'message' => "Class Completed!"
             ];
 
-            // $status = CertificateController::create($user["id_user"], $request->input("kelas"));
+            $status = CertificateController::create($user["id_user"], $request->input("kelas"));
             // var_dump($status); die;
         }
 
