@@ -58,12 +58,12 @@ class CertificateController extends Controller
         } else {
             return Help::unauthorized("Certificate");
         }
-        
+
         return response($api = [
             'title' => 'E - Syakl | Certificate API',
             'code' => 404,
             'data' => $certificate
-        ], $api["response"]);
+        ], $api["code"]);
     }
 
     public static function create($user, $class)
