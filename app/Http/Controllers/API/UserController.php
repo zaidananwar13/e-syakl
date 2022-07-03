@@ -287,8 +287,6 @@ class UserController extends Controller
             unset($teacher->id_reviewer);
         }
 
-        var_dump($teachers->toArray()); die;
-
         foreach($quizHistories as $hist) {
             $syllabus = Kategori_Silabus::select("judul")
                 ->where("id_kategori_silabus", $hist->id_kategori_silabus)
@@ -361,10 +359,13 @@ class UserController extends Controller
 
         $api["data"] = [
             "class" => $class->judul,
+            "teachers" => $teachers,
             "last_material" => $material,
             "learning_path" => "Nahwu Dummyy Path",
             "class_progress" => $classProgress->progress,
-            "certificate" => ["status" => "on-progress", "message" => "You haven't finish this class yet"],
+            "certificate" => [
+                "status" => "on-progress", "message" => "You haven't finish this class yet"
+            ],
             "quiz" => $quizHistories,
             "project" => [
                 "project_title" => "Project Akhir: Nahwu Beginner",
