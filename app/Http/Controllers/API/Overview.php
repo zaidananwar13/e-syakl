@@ -51,7 +51,7 @@ class Overview extends Controller
     {
         $overview = ModelsOverview::select("title", "desc")
             ->where("id_overview", 1)->get();
-        $rating = Kelas_User::select("point_review")->where("id_kelas", 1)->get()->toArray();
+        $rating = Kelas_User::select("point_review")->where("id_kelas", 5)->get()->toArray();
 
         $reviews = 0;
         $review_count = 0;
