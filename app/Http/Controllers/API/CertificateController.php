@@ -39,6 +39,10 @@ class CertificateController extends Controller
                     $cert->title = $kelas->judul;
                     $cert->date = Carbon::parse($cert->created_at)->format('d F Y');
 
+                    $expired = Carbon::createFromFormat('Y-m-d H:i:s', $cert->created_at)->addYears(2)->format('d F Y');
+                    $cert->expired = $expired;
+                    $cert->status = ($expired < Carbon::now()->format('d F Y')) ? "expired" : "available";
+    
                     unset($cert->created_at);
                 }
             } else {

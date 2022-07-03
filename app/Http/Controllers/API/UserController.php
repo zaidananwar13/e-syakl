@@ -12,6 +12,7 @@ use App\Models\KelasHistory;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\QuizProgress as ModelsQuizProgress;
+use App\Models\Reviewer;
 use App\Models\Sub_Kategori_Silabus;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -271,6 +272,22 @@ class UserController extends Controller
         $quizHistories = ModelsQuizProgress::select("id_kategori_silabus", "created_at", "grade")
             ->where("id_user", $user["id_user"])
             ->get();
+
+        // teacher
+        $class = Kelas::select("id_reviewer")
+            ->where("id_kelas", $kelas)
+            ->first();
+
+        $teachers = Reviewer::select("id_reviewer", "nama", "foto")
+            ->where("id_reviewer", $class->id_reviewer)
+            ->get();
+
+        foreach($teachers as $teacher) {
+            $teacher->id_teacher = $teacher->id_reviewer;
+            unset($teacher->id_reviewer);
+        }
+
+        var_dump($teachers->toArray()); die;
 
         foreach($quizHistories as $hist) {
             $syllabus = Kategori_Silabus::select("judul")
