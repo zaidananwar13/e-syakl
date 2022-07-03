@@ -16,7 +16,7 @@ class CertificateController extends Controller
 
     public function index(Request $request)
     {
-        // header('Content-Type: application/json; charset=utf-8');
+        header('Content-Type: application/json; charset=utf-8');
         $api = [
             'title' => 'E - Syakl | Certificate API',
             'code' => 404,
@@ -67,6 +67,7 @@ class CertificateController extends Controller
 
     public static function create($user, $class)
     {
+        header('Content-Type: application/json; charset=utf-8');
         $cert = Certificate::select("token")
             ->where("id_user", $user)
             ->where("id_kelas", $class)
