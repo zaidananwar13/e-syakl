@@ -16,7 +16,7 @@ class CertificateController extends Controller
 
     public function index(Request $request)
     {
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         $api = [
             'title' => 'E - Syakl | Certificate API',
             'code' => 404,
@@ -51,6 +51,10 @@ class CertificateController extends Controller
                 $certificate->user = $user->name;
                 $certificate->title = $kelas->judul;
                 $certificate->date = Carbon::parse($certificate->created_at)->format('d F Y');
+
+                $expired = Carbon::createFromFormat('Y-m-d H:i:s', $certificate->created_at)->addYears(2)->format('d F Y');
+                $certificate->expired = $expired;
+                $certificate->status = ($expired < Carbon::now()->format('d F Y')) ? "expired" : "available";
 
                 unset($certificate->created_at);
             }
