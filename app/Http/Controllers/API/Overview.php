@@ -59,11 +59,9 @@ class Overview extends Controller
             $reviews += $review["point_review"];
             $review_count++;
         }
-        
-        echo number_format((($reviews / $review_count) . "/5"), 1, ''); die;
 
         $overview = $overview[0];
-        $overview["rating"] = ($reviews != 0) ? (($reviews / $review_count) . "/5") : 0;
+        $overview["rating"] = ($reviews != 0) ? (number_format(($reviews / $review_count), 1, "") . "/5") : 0;
         $overview["votes"] = $review_count;
 
         return $overview;
