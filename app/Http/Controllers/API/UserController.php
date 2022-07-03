@@ -176,10 +176,10 @@ class UserController extends Controller
                     for ($i = 1; $i <= count($material); $i++) {
                         array_push($temps, $feCounter);
                         $feCounter++;
-                    }
+                    }array_push($temps, $feCounter);$feCounter++;
 
                     array_push($syllData, $temps);
-                }
+                }var_dump($syllData); die;
 
                 $feAuth = FEAuthorizer::select("unlocked")
                     ->where("id_user", $user["id_user"])
