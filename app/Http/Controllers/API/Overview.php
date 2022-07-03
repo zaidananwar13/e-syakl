@@ -179,7 +179,7 @@ class Overview extends Controller
         $overview = $overview[0];
         $overview["items"] = "on working";
 
-        $review = Kelas_User::select("id_user", "komentar_review", "point_review")->take(5);
+        $review = Kelas_User::select("id_user", "komentar_review", "point_review")->get();
         foreach($review as $view) {
             $view->comment = $view->komentar_review;
             unset($view->komentar_review);
