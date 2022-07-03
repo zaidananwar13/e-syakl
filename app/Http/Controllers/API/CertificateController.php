@@ -23,7 +23,6 @@ class CertificateController extends Controller
             'message' => 'Not Found, You have nothing achieved yet.'
         ];
 
-
         $token = $request->input("api_token");
         $class = $request->input("class");
         if ($token != null) {
@@ -61,7 +60,7 @@ class CertificateController extends Controller
 
         return response($api = [
             'title' => 'E - Syakl | Certificate API',
-            'code' => 404,
+            'code' => 200,
             'data' => $certificate
         ], $api["code"]);
     }

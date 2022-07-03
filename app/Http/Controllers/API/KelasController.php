@@ -469,6 +469,8 @@ class KelasController extends Controller
 
     public function completeClass(Request $request)
     {
+        
+        header('Content-Type: application/json; charset=utf-8');
         $message = [
             'title' => 'E - Syakl | Silabus Auth API',
             'code' => 401,
