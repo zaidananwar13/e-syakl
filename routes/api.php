@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CertificateController;
 use App\Http\Controllers\API\KategoriController;
 use App\Http\Controllers\API\KelasController;
 use App\Http\Controllers\API\LearningPathController;
@@ -67,13 +68,16 @@ Route::middleware(['checkapitoken'])->group(function () {
     Route::post('/kelas/check', [KelasController::class, 'checkKelas']);
     Route::post('/kelas/complete', [KelasController::class, 'completeClass']);
     Route::post('/kelas/user/update/{id_materi}', [KelasController::class, 'update']);
-    Route::post('/silabus/auth/kategori', [SilabusController::class, 'authKategori']);
-    Route::post('/silabus/auth/sub-kategori', [SilabusController::class, 'authSubKategori']);
+    Route::post('/auth/silabus', [SilabusController::class, 'authKategori']);
+    Route::post('/auth/materi', [SilabusController::class, 'authSubKategori']);
     
     Route::post('/quiz', [QuizController::class, 'index']);
     Route::post('/quiz/submit', [QuizController::class, 'submit']);
     Route::post('/quiz/clear', [QuizProgressController::class, 'index']);
     Route::post('/quiz/is-clear', [QuizProgressController::class, 'isClear']);
+
+    Route::post('/certificate', [CertificateController::class, 'index']);
+    Route::post('/certificate/create', [CertificateController::class, 'create']);
 
     // Route::post('/my-class', [KelasController::class, 'myClasss']);
     

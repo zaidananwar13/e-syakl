@@ -512,7 +512,7 @@ class KelasController extends Controller
         );
     }
 
-    public function update(Request $request, $id_materi) {
+    public function update(Request $request, $id_silabus) {
         // header('Content-Type: application/json; charset=utf-8');
         $api = [
             'title' => 'E - Syakl | Silabus API',
@@ -522,30 +522,29 @@ class KelasController extends Controller
 
         $user = User::where("api_token", $request->input("api_token"))->first();
 
-        $materi = Sub_Kategori_Silabus::select("id_kategori_silabus", "id_sub_kategori_silabus")
-            ->where("id_sub_kategori_silabus", $id_materi)->first();
-
-        if($materi == null)
-            return response($api = [
-                'title' => 'E - Syakl | Kelas API',
-                'code' => 405,
-                'message' => "Unauthorized!"
-            ],
-            $api["code"]);
-
         $silabus = Kategori_Silabus::select("id_kategori_silabus", "id_kelas")
-            ->where("id_kategori_silabus", $materi->id_kategori_silabus)->first();
+            ->where("id_kategori_silabus", $id_silabus)->first();
+
+        if($silabus == null)
+            Help::unauthorized("Kelas");
 
         $history = KelasHistory::where("id_user", $user->id_user)
             ->where("id_kelas", $silabus->id_kelas)
             ->first();
+
+        $materi = Sub_Kategori_Silabus::select("id_sub_kategori_silabus")
+            ->where("id_kategori_silabus", $id_silabus)
+            ->first();
+
+            // di sini terakhir
+        var_dump($materi->toArray());
 
         if($history == null) {
             $history = new KelasHistory();
             $history->id_user = $user->id_user;
             $history->id_kelas = $silabus->id_kelas;
             $history->id_kategori_silabus = $silabus->id_kategori_silabus;
-            $history->id_sub_kategori_silabus = $id_materi;
+            $history->id_sub_kategori_silabus = $materi->id_sub_kategori_silabus;
             $history->save();
 
             return response(
@@ -559,7 +558,7 @@ class KelasController extends Controller
         }else {
             $history->update([
                 "id_kategori_silabus" => $silabus->id_kategori_silabus,
-                "id_sub_kategori_silabus" => $id_materi,
+                "id_sub_kategori_silabus" => $materi->id_sub_kategori_silabus,
                 "id_kelas" => $silabus->id_kelas,
             ]);
 

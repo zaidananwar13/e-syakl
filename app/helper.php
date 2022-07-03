@@ -124,8 +124,20 @@ class Helper
     return $string ? implode(', ', $string) . ' ago' : 'just now';
   }
 
-  public function unique_code($limit)
+  public static function unique_code($limit)
   {
     return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
+  }
+
+  public static function unauthorized($api)
+  {
+    return response(
+      $api = [
+        'title' => "E - Syakl | $api API",
+        'code' => 405,
+        'message' => "Unauthorized!"
+      ],
+      $api["code"]
+    );
   }
 }

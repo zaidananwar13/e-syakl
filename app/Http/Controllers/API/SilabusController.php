@@ -102,8 +102,8 @@ class SilabusController extends Controller
 
                 $response = Http::post('https://dashboard.e-syakl.org/api/silabus/auth/sub-kategori', [
                     'api_token' => $request->input("api_token"),
-                    'x-key' => $materi["id_kategori_silabus"],
-                    'y-key' => $materi["id_sub_kategori_silabus"],
+                    'silabus' => $materi["id_kategori_silabus"],
+                    'material' => $materi["id_sub_kategori_silabus"],
                 ]);
 
                 if ($response->body() == "\"Invalid Token\"") {
@@ -144,9 +144,6 @@ class SilabusController extends Controller
 
     public function authKategori(Request $request)
     {
-        echo "still demo version";
-        die;
-
         $req = $request->all();
         $message = [
             'title' => 'E - Syakl | Silabus Auth API',
@@ -162,17 +159,18 @@ class SilabusController extends Controller
 
             if ($user != null) {
                 $user = $user->toArray();
-                $userSilabus = Help::checkSilabusAccessUser($user['id_user'], $req['x-key']);
+                $userSilabus = Help::checkSilabusAccessUser($user['id_user'], $req['silabus']);
 
                 if ($userSilabus == null) {
                     $message['code'] = 409;
                     $message['message'] = 'Unauthorized register!';
                 } else {
-                    if ($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
+                    if ($userSilabus['id_sub_kategori_silabus'] != $req['material'] && $userSilabus['id_sub_kategori_silabus'] < $req['material']) {
                         $silabus = new SilabusChecker();
                         $silabus->id_user = $user['id_user'];
-                        $silabus->id_kategori_silabus = $req['x-key'];
-                        $silabus->id_sub_kategori_silabus = $req['y-key'];
+                        $silabus->id_kategori_silabus = $req['silabus'];
+                        $silabus->id_sub_kategori_silabus = $req['material'];
+                        $silabus->id_bahasa = 1;
                         $silabus->save();
 
                         $message['code'] = 200;
@@ -183,12 +181,14 @@ class SilabusController extends Controller
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (Exception $ex) {
+            var_dump($ex->getMessage()); die;
+
             $error_handler = [
                 "23503" => "Foreign key violates",
                 "23505" => "Duplicate key"
             ];
-            $data = json_encode($e);
+            $data = json_encode($ex);
             $data = json_decode($data);
 
             $message['status'] = $error_handler[$data->errorInfo[0]];
@@ -229,7 +229,7 @@ class SilabusController extends Controller
 
             if ($user != null) {
                 $user = $user->toArray();
-                $userSilabus = Help::checkSilabusAccessUser($user['id_user'], $req['x-key']);
+                $userSilabus = Help::checkSilabusAccessUser($user['id_user'], $req['silabus']);
 
                 if ($userSilabus == null) {
                     $message['code'] = 409;
@@ -238,19 +238,19 @@ class SilabusController extends Controller
                     if ($user != null) {
                         $silabus = new SilabusChecker();
                         $silabus->id_user = $user['id_user'];
-                        $silabus->id_kategori_silabus = $req['x-key'];
-                        $silabus->id_sub_kategori_silabus = $req['y-key'];
+                        $silabus->id_kategori_silabus = $req['silabus'];
+                        $silabus->id_sub_kategori_silabus = $req['material'];
                         $silabus->save();
 
                         $message['code'] = 200;
                         $message['message'] = 'Auth register success!';
                     }
                 } else {
-                    if ($userSilabus['id_sub_kategori_silabus'] != $req['y-key'] && $userSilabus['id_sub_kategori_silabus'] < $req['y-key']) {
+                    if ($userSilabus['id_sub_kategori_silabus'] != $req['material'] && $userSilabus['id_sub_kategori_silabus'] < $req['material']) {
                         $silabus = new SilabusChecker();
                         $silabus->id_user = $user['id_user'];
-                        $silabus->id_kategori_silabus = $req['x-key'];
-                        $silabus->id_sub_kategori_silabus = $req['y-key'];
+                        $silabus->id_kategori_silabus = $req['silabus'];
+                        $silabus->id_sub_kategori_silabus = $req['material'];
                         $silabus->save();
 
                         $message['code'] = 200;
