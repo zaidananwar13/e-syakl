@@ -55,14 +55,15 @@ class CertificateController extends Controller
 
                 unset($certificate->created_at);
             }
-
-            var_dump($certificate->toArray());
-            die;
         } else {
             return Help::unauthorized("Certificate");
         }
-
-        return response($api, $api["response"]);
+        
+        return response($api = [
+            'title' => 'E - Syakl | Certificate API',
+            'code' => 404,
+            'data' => $certificate
+        ], $api["response"]);
     }
 
     public static function create($user, $class)
