@@ -172,13 +172,13 @@ class UserController extends Controller
                         ->where("id_kategori_silabus", $syll["id_kategori_silabus"])
                         ->get();
 
-                    $temp = [];
+                    $temps = [];
                     for ($i = 1; $i <= count($material); $i++) {
-                        array_push($temp, $feCounter);
+                        array_push($temps, $feCounter);
                         $feCounter++;
                     }
 
-                    array_push($syllData, $temp);
+                    array_push($syllData, $temps);
                 }
 
                 $feAuth = FEAuthorizer::select("unlocked")
@@ -378,13 +378,13 @@ class UserController extends Controller
                 ->where("id_kategori_silabus", $syll["id_kategori_silabus"])
                 ->get();
 
-            $temp = [];
+            $temps = [];
             for ($i = 1; $i <= count($material); $i++) {
-                array_push($temp, $feCounter);
+                array_push($temps, $feCounter);
                 $feCounter++;
             }
 
-            array_push($syllData, $temp);
+            array_push($syllData, $temps);
         }
 
         $feAuth = FEAuthorizer::select("unlocked")
