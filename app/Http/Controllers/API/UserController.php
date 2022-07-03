@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Certificate;
 use App\Models\ClassProgress;
 use App\Models\CompletedClass;
 use App\Models\Kategori_Silabus;
@@ -267,7 +268,7 @@ class UserController extends Controller
         $user = User::select("id_user", "name", "email", "created_at")
             ->where("api_token", $request->input("api_token"))
             ->first()->toArray();
-            
+
         // quiz history
         $quizHistories = ModelsQuizProgress::select("id_kategori_silabus", "created_at", "grade")
             ->where("id_user", $user["id_user"])
@@ -282,12 +283,12 @@ class UserController extends Controller
             ->where("id_reviewer", $class->id_reviewer)
             ->get();
 
-        foreach($teachers as $teacher) {
+        foreach ($teachers as $teacher) {
             $teacher->id_teacher = $teacher->id_reviewer;
             unset($teacher->id_reviewer);
         }
 
-        foreach($quizHistories as $hist) {
+        foreach ($quizHistories as $hist) {
             $syllabus = Kategori_Silabus::select("judul")
                 ->where("id_kategori_silabus", $hist->id_kategori_silabus)
                 ->first();
@@ -357,15 +358,36 @@ class UserController extends Controller
 
         $classProgress->progress = "$count of $silCount";
 
+        // certificate
+        $certificate = Certificate::select("created_at")
+            ->where("id_user", $user["id_user"])
+            ->where("id_kelas", $class["id_kelas"])
+            ->first();
+
+        if ($certificate != null) {
+            $certificate->date = Carbon::parse($certificate->created_at)->format('d F Y');
+
+            $expired = Carbon::createFromFormat('Y-m-d H:i:s', $certificate->created_at)->addYears(2)->format('d F Y');
+            $certificate->expired = $expired;
+            $certificate->status = ($expired < Carbon::now()->format('d F Y')) ? "expired" : "available";
+            $certificate->message = ($expired < Carbon::now()->format('d F Y')) ? "Expired at $certificate->expired" : "Available until $certificate->expired";
+
+            unset($certificate->created_at);
+            unset($certificate->date);
+            unset($certificate->expired);
+        }else {
+            $certificate = [
+                "status" => "on-progress", "message" => "You haven't finish this class yet"
+            ];
+        }
+
         $api["data"] = [
             "class" => $class->judul,
             "teachers" => $teachers,
             "last_material" => $material,
             "learning_path" => "Nahwu Dummyy Path",
             "class_progress" => $classProgress->progress,
-            "certificate" => [
-                "status" => "on-progress", "message" => "You haven't finish this class yet"
-            ],
+            "certificate" => $certificate,
             "quiz" => $quizHistories,
             "project" => [
                 "project_title" => "Project Akhir: Nahwu Beginner",
