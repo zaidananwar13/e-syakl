@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CertificateController;
+use App\Http\Controllers\API\FEAuthController;
 use App\Http\Controllers\API\KategoriController;
 use App\Http\Controllers\API\KelasController;
 use App\Http\Controllers\API\LearningPathController;
@@ -67,7 +68,7 @@ Route::middleware(['checkapitoken'])->group(function () {
     Route::post('/kelas/auth', [KelasController::class, 'authKelas']);
     Route::post('/kelas/check', [KelasController::class, 'checkKelas']);
     Route::post('/kelas/complete', [KelasController::class, 'completeClass']);
-    Route::post('/kelas/user/update/{id_materi}', [KelasController::class, 'update']);
+    Route::post('/kelas/user/update/', [FEAuthController::class, 'feAuthorizer']);
     Route::post('/auth/silabus', [SilabusController::class, 'authKategori']);
     Route::post('/auth/materi', [SilabusController::class, 'authSubKategori']);
     
@@ -84,6 +85,9 @@ Route::middleware(['checkapitoken'])->group(function () {
     // Route::post('/user/profile', [UserController::class, 'profile']);
     Route::post('/my-class', [UserController::class, 'profile']);
     Route::post('/my-class/classroom', [UserController::class, 'classroom']);
+
+
+    Route::post('/auth/syllabus', [FEAuthController::class, 'index']);
 });
 
 
