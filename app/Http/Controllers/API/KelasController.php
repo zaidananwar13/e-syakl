@@ -344,7 +344,7 @@ class KelasController extends Controller
 
         try {
 
-            $user = User::select('id_user')
+            $user = User::select('id_user', "api_token")
                 ->where('api_token', $req['api_token'])
                 ->first();
 
@@ -396,6 +396,8 @@ class KelasController extends Controller
                             $project->expired = Carbon::now()->addDays(30);
                             $project->save();
                         }
+
+                        FEAuthController::staticFEAuthorizer($user["api_token"], $req["kelas"], 1);
 
                         $message['code'] = 200;
                         $message['message'] = 'Class register success!';

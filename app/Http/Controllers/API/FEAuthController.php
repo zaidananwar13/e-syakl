@@ -91,4 +91,55 @@ class FEAuthController extends Controller
             'message' => 'Success'
         ], $api["code"]);
     }
+    
+
+    public static function staticFEAuthorizer($token, $class, $material)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        $api = [
+            'title' => 'E - Syakl | Authorizer API',
+            'code' => 404,
+            'message' => 'Not Found'
+        ];
+
+        $token = $token;
+        $class = $class;
+        $material = $material;
+
+        if ($token == null) return Helper::unauthorized("Authorizer");
+        $user = User::select("id_user")
+            ->where("api_token", $token)
+            ->first();
+
+        if ($user == null) return Helper::unauthorized("Authorizer");
+
+        $feAuth = FEAuthorizer::select("id_kelas", "unlocked")
+            ->where("id_kelas", $class)
+            ->where("id_user", $user->id_user)
+            ->first();
+
+        if ($feAuth == null) {
+            $feAuth = new FEAuthorizer();
+            $feAuth->id_user = $user->id_user;
+            $feAuth->id_kelas = $class;
+            $feAuth->unlocked = 1;
+            $feAuth->save();
+        } else {
+            if ($material > $feAuth->unlocked) {
+                FEAuthorizer::select("id_kelas", "unlocked")
+                    ->where("id_kelas", $class)
+                    ->where("id_user", $user->id_user)
+                    ->update([
+                        "unlocked" => $material,
+                        "updated_at" => Carbon::now(),
+                    ]);
+            }
+        }
+
+        return response($api = [
+            'title' => 'E - Syakl | Authorizer API',
+            'code' => 200,
+            'message' => 'Success'
+        ], $api["code"]);
+    }
 }
