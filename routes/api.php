@@ -77,7 +77,7 @@ Route::middleware(['checkapitoken'])->group(function () {
     Route::post('/quiz/is-clear', [QuizProgressController::class, 'isClear']);
 
     Route::post('/certificate', [CertificateController::class, 'index']);
-    Route::post('/certificate/create', [CertificateController::class, 'create']);
+    // Route::post('/certificate/create', [CertificateController::class, 'create']);
 
     // Route::post('/my-class', [KelasController::class, 'myClasss']);
     

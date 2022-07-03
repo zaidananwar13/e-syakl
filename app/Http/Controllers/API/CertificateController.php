@@ -9,6 +9,7 @@ use App\Models\Kelas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class CertificateController extends Controller
 {
@@ -62,5 +63,27 @@ class CertificateController extends Controller
         }
 
         return response($api, $api["response"]);
+    }
+
+    public static function create($user, $class)
+    {
+        $cert = Certificate::select("token")
+            ->where("id_user", $user)
+            ->where("id_kelas", $class)
+            ->first();
+
+        if ($cert == null) {
+            $cert = new Certificate();
+            $cert->id_user = $user;
+            $cert->id_kelas = $class;
+            $cert->token = hash('sha256', Str::random(60));
+            $cert->created_at = Carbon::now()->format('Y-m-d H:i:s');
+            $cert->updated_at = Carbon::now()->format('Y-m-d H:i:s');
+            $cert->save();
+
+            return true;
+        }else {
+            return false;
+        }
     }
 }
