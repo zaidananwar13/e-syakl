@@ -39,7 +39,6 @@ class CertificateController extends Controller
                     $cert->title = $kelas->judul;
                     $cert->date = Carbon::parse($cert->created_at)->format('d F Y');
 
-                    unset($cert->id_kelas);
                     unset($cert->created_at);
                 }
             } else {
@@ -53,7 +52,6 @@ class CertificateController extends Controller
                 $certificate->title = $kelas->judul;
                 $certificate->date = Carbon::parse($certificate->created_at)->format('d F Y');
 
-                unset($certificate->id_kelas);
                 unset($certificate->created_at);
             }
 
