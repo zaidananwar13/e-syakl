@@ -34,7 +34,7 @@ class QuizController extends Controller
             ->where("id_kategori_silabus", $silabus)->first();
 
         // quiz container must not be null
-        $quizContainer = QuizContainer::select("id_quiz_container", "id_kategori_silabus", "title", "desc")
+        $quizContainer = QuizContainer::select("id_quiz_container", "id_kategori_silabus", "question", "desc")
             ->where('id_kategori_silabus', $silabus)
             ->get();
 
