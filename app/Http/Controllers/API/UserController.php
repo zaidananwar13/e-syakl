@@ -321,7 +321,7 @@ class UserController extends Controller
 
             $hist->quiz_title = $syllabus->judul;
             $hist->date = Carbon::parse($hist->created_at)->format('d F Y');
-            $hist->score = $hist->grade;
+            $hist->score = number_format(($hist->grade), 1, ".", "");
             unset($hist->created_at);
             unset($hist->grade);
             unset($hist->id_kategori_silabus);

@@ -56,7 +56,7 @@ class QuizController extends Controller
 
         foreach ($quizHistories as $hist) {
             $hist->date = Carbon::parse($hist->created_at)->format('d F Y');
-            $hist->score = $hist->grade;
+            $hist->score = number_format(($hist->grade), 1, ".", "");
             $hist->status = ($hist->grade > 78) ? "Pass" : "Not Pass";
             unset($hist->created_at);
             unset($hist->grade);
