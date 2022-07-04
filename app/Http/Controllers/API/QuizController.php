@@ -17,7 +17,8 @@ class QuizController extends Controller
 {
     public function index(Request $request)
     {
-        // header('Content-Type: application/json; charset=utf-8');
+        header('Content-Type: application/json; charset=utf-8');
+
         $message = [
             'title' => 'E - Syakl | Quiz API',
             'code' => 404,
@@ -33,7 +34,7 @@ class QuizController extends Controller
             ->where("id_kategori_silabus", $silabus)->first();
 
         // quiz container must not be null
-        $quizContainer = QuizContainer::select("id_quiz_container", "id_kategori_silabus", "desc")
+        $quizContainer = QuizContainer::select("id_quiz_container", "id_kategori_silabus", "title", "desc")
             ->where('id_kategori_silabus', $silabus)
             ->get();
 

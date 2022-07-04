@@ -16,6 +16,7 @@ class QuizContainer extends Migration
         Schema::create('quiz_container', function (Blueprint $table) {
             $table->increments('id_quiz_container');
             $table->unsignedInteger('id_kategori_silabus');
+            $table->string('question');
             $table->text('desc');
             $table->timestamps();
             
