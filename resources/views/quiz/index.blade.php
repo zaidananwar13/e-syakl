@@ -28,8 +28,7 @@
         <thead>
             <tr>
                 <th>No.</th>
-                <th>Soal</th>
-                <th>Jawaban</th>
+                <th>Desc</th>
 
 
                 <th>Aksi</th>
@@ -39,12 +38,9 @@
             @foreach($quiz as $key => $value)
             <tr>
                 <td>{{$key+1}}</td>
-                <td>{{$value->soal}}</td>
-                <td>{{$value->jawaban}}</td>
-                
-                <td>{{$value->judul}}</td>
-                <td><a href="{{url('quiz/'.$value->id_quiz.'/edit')}}" class="btn btn-warning"><i class="fa fa-edit"></i></a> |
-                    <a href="{{url('quiz/delete/'.$value->id_quiz)}}" onclick="return confirm('Are you sure to proceed?')" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                <td>{!! $value->desc !!}</td>
+                <td><a href="{{url('quiz/'.$value->id_quiz_container.'/edit')}}" class="btn btn-warning"><i class="fa fa-edit"></i></a> |
+                    <a href="{{url('quiz/delete/'.$value->id_quiz_container)}}" onclick="return confirm('Are you sure to proceed?')" class="btn btn-danger"><i class="fa fa-trash"></i></a>
                 </td>
             </tr>
             @endforeach

@@ -10,18 +10,38 @@ use Illuminate\Support\Facades\Session;
 
 class QuizController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         if (!Session::get('login')) {
             return redirect('login');
         } else {
-            $quiz = Quiz::all();
+            $quiz = QuizContainer::all();
             $data['quiz'] = $quiz;
 
             return view('quiz.index', $data);
         }
     }
 
-    public function create() {
+    public function edit(Request $request, $id)
+    {
+        if (!Session::get('login')) {
+            return redirect('login');
+        } else {
+            $quiz = QuizContainer::where("id_quiz_container", $id)
+                ->first();
+
+            $data = [
+                'silabus' => Kategori_Silabus::all(),
+                'quiz' => $quiz,
+                'action' => 'quiz.edit'
+            ];
+
+            return view('quiz.edit', $data);
+        }
+    }
+
+    public function create()
+    {
         if (!Session::get('login')) {
             return redirect('login');
         } else {
@@ -31,12 +51,30 @@ class QuizController extends Controller
                 'quiz' => $quiz,
                 'action' => 'quiz.store'
             ];
-            
+
             return view('quiz.form', $data);
         }
     }
 
-        /**
+    /**
+     * Update the selected resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request)
+    {
+
+        QuizContainer::where("id_kategori_silabus", $request->input("old_id_quiz_container"))
+            ->where("id_quiz_container", $request->input("id_quiz_container"))
+            ->update([
+                "id_kategori_silabus" => $request->input("id_silabus"),
+                "desc" => $request->input("desc")
+            ]);
+        return redirect('/quiz')->with('success', 'Data Update  Success!');
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -53,23 +91,23 @@ class QuizController extends Controller
         $quizContainer->desc = $request->input("desc");
         $quizContainer->save();
 
-        for($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $soal = $request->input("soal-" . $i);
             $tipe_soal = $request->input("tipe_soal-" . $i);
             $pilihan = json_decode($request->input("pilihan-" . $i));
             $kunci = json_decode($request->input("kunci-" . $i));
             $pilihanStr = $kunciStr = "";
 
-            for($j = 0; $j < count($pilihan); $j++) {
+            for ($j = 0; $j < count($pilihan); $j++) {
                 $pilihanStr .= $pilihan[$j]->value;
-                $pilihanStr .= ($j == (count($pilihan) - 1)) ? "" : ",";    
+                $pilihanStr .= ($j == (count($pilihan) - 1)) ? "" : ",";
             }
 
-            for($j = 0; $j < count($kunci); $j++) {
+            for ($j = 0; $j < count($kunci); $j++) {
                 $kunciStr .= $kunci[$j]->value;
-                $kunciStr .= ($j == (count($kunci) - 1)) ? "" : ",";    
+                $kunciStr .= ($j == (count($kunci) - 1)) ? "" : ",";
             }
-            
+
             $input = [
                 "soal" => $soal,
                 "id_quiz_container" => $quizContainer->id_quiz_container,
@@ -82,9 +120,9 @@ class QuizController extends Controller
             Quiz::create($input);
         }
 
-	return redirect('/quiz')->with('success', 'Data Input  Success!');
+        return redirect('/quiz')->with('success', 'Data Input  Success!');
     }
-    
+
     public function delete($id = "")
     {
         $kelas_user = Quiz::find($id);
@@ -101,7 +139,7 @@ class QuizController extends Controller
 
             $quiz = [];
 
-            foreach($quizContainer as $container) {
+            foreach ($quizContainer as $container) {
                 $temp = Quiz::select('id_quiz', 'soal', 'tipe_soal', 'pilihan')
                     ->where('id_quiz_container', $container->id_quiz_container)
                     ->get();
