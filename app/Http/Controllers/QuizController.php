@@ -69,6 +69,7 @@ class QuizController extends Controller
             ->where("id_quiz_container", $request->input("id_quiz_container"))
             ->update([
                 "id_kategori_silabus" => $request->input("id_silabus"),
+                "question" => $request->input("question"),
                 "desc" => $request->input("desc")
             ]);
         return redirect('/quiz')->with('success', 'Data Update  Success!');

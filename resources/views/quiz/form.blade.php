@@ -74,6 +74,13 @@
                         
                         <div class="row">
                             <div class="col-md-12 mt-3">
+                                <label for="question">Pertanyaan</label>
+                                <input type="text" class="form-control mb-4" id="question" name=question value="{{ ($action!='quiz.store') ? $quiz->question : '' }}">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
                                 <label for="desc">Deskripsi Quiz</label>
                                 <textarea id="desc" class="form-control" name="desc" rows="5">{{ ($action!='quiz.store') ? $quiz->desc : '' }}</textarea>
                             </div>
