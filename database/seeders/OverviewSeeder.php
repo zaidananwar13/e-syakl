@@ -15,8 +15,8 @@ class OverviewSeeder extends Seeder
     public function run()
     {
         DB::table('overview')->insert([
-            'title' => "A new different way to started learning Arabic",
-            'desc' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat libero quis leo tincidunt, ut commodo ante eleifend."
+            'title' => "A new different way to start learning Arabic",
+            'desc' => "The first free learning platform that focused in Arabic. With our various excellent features, start your learning arabic journey with us!"
         ]);
         
         DB::table('overview')->insert([
