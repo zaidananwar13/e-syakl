@@ -31,7 +31,7 @@ class OverviewSeeder extends Seeder
         
         DB::table('overview')->insert([
             'title' => "Learning is easier with the giving harakat featured",
-            'desc' => "Confused in reading arabic without harakat? No worries, we\'ll do it for you! Introducing, our giving harakat feature."
+            'desc' => "Confused in reading arabic without harakat? No worries, we'll do it for you! Introducing, our giving harakat feature."
         ]);
         
         DB::table('overview')->insert([
