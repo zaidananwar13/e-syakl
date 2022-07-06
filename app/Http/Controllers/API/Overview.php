@@ -160,7 +160,7 @@ class Overview extends Controller
 
         $overview["items"] = [
             "title" => "Learning is easier with the giving harakat featured",
-            "desc" => "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore mag.",
+            "desc" => "Confused in reading arabic without harakat? No worries, we'll do it for you! Introducing, our giving harakat feature.",
             "link" => "https://e-syakl.org/",
             "comments" => [
                 "name" => $user->name,
